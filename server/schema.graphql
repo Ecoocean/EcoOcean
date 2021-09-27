@@ -1,0 +1,15 @@
+type Beach {
+    name: String!
+    altitude: Float!
+    longitude: Float!
+}
+
+type Mutation {
+    addBeach(name: String!, altitude: Float!, longitude: Float!): Beach
+    setBeach(name: String!, altitude: Float!, longitude: Float!): Beach
+}
+
+type Query {
+    beaches: [Beach]!
+    beach(name: String!): Beach
+}
