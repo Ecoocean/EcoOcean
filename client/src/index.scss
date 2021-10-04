@@ -107,13 +107,31 @@ html {
 .question_text {
   direction: rtl;
 }
+.modal-title {
+  direction: ltr;
+  text-align: right;
+}
 
-#disclaimer {
-  padding-right: 20em;
+#map {
+  margin-top: 5em;
+  padding-left: 0;
   padding-bottom: 10em;
-  background-image: url("/images/bgu.png");
   background-position: 100% 0;
   background-repeat: no-repeat;
+}
+#map-left-panel {
+  margin-top: 5em;
+  padding-right: 0;
+  padding-bottom: 10em;
+  background-position: 100% 0;
+  background-repeat: no-repeat;
+}
+#map-operations {
+  align-items: center;
+  padding-right: 0;
+}
+#map-element-list {
+  padding-right: 0;
 }
 
 #top_banner {

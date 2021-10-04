@@ -1,8 +1,7 @@
 from fireo.models import Model
-from fireo.fields import IDField, NumberField
+from fireo.fields import IDField, GeoPoint
 
 
 class Beach(Model):
     name = IDField()
-    altitude = NumberField()
-    longitude = NumberField()
+    location = GeoPoint()

@@ -1,15 +1,34 @@
+scalar Date
+enum PollutionType {
+    TRASH
+    TAR
+    OIL
+}
+
+type GeoLocation {
+    latitude: Float!
+    longitude: Float!
+}
+
+type PollutionReport {
+    location: GeoLocation!
+    created_at: Date!
+    type: PollutionType!
+}
+
 type Beach {
     name: String!
-    altitude: Float!
-    longitude: Float!
+    location: GeoLocation!
 }
 
 type Mutation {
     addBeach(name: String!, altitude: Float!, longitude: Float!): Beach
     setBeach(name: String!, altitude: Float!, longitude: Float!): Beach
+    createPollutionReport(altitude: Float!, longitude: Float!, type: PollutionType!): PollutionReport
 }
 
 type Query {
+    getAllPollutionReports: [PollutionReport]!
     beaches: [Beach]!
     beach(name: String!): Beach
 }
