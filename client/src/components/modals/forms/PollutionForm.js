@@ -6,18 +6,17 @@ import PollutionTypePicker from './PollutionTypePicker'
 import { useMutation } from '@apollo/client';
 import {CREATE_POLLUTION_REPORT} from '../../../GraphQL/Mutations'
 import {GET_ALL_POLLUTION_REPORTS} from '../../../GraphQL/Queries'
-import ImagePreview from './../../reusables/ImagePreview'
+import ImageUploaderComp from '../../reusables/ImageUploaderComp'
+import MyLocationMap from '../../map/MyLocationMap'
 const PollutionForm = ({show, handleClose}) => {
   
   const { Formik } = formik;
 
   const formRef = useRef();
   const imagePickerRef = useRef();
+  const locationMapRef = useRef();
 
-  const schema = yup.object().shape({
-    latitude: yup.number().min(-90).max(90).required("Field is Required"),
-    longitude: yup.number().min(-180).max(180).required("Field is Required"),
-    
+  const schema = yup.object().shape({ 
   });
   const [CreatePollutionReport, { loading, error, data }] = useMutation(CREATE_POLLUTION_REPORT, {
     refetchQueries: [
@@ -29,8 +28,8 @@ const PollutionForm = ({show, handleClose}) => {
     try {
       const { data } = await CreatePollutionReport({
         variables: {
-          latitude: parseFloat(formRef.current.values.latitude),
-          longitude: parseFloat(formRef.current.values.longitude),
+          latitude: locationMapRef.current.state.currentLocation.lat,
+          longitude: locationMapRef.current.state.currentLocation.lng,
           type: imagePickerRef.current.state.image.value
         }
       })
@@ -51,8 +50,7 @@ const PollutionForm = ({show, handleClose}) => {
       validationSchema={schema}
       onSubmit={addPollutionReport}
       initialValues={{
-        latitude: '',
-        longitude: '',
+        
       }}
     >
       {({
@@ -69,45 +67,9 @@ const PollutionForm = ({show, handleClose}) => {
         <Modal.Title>Add Pollution Report</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form.Group controlId="validationFormik01">
-          <Form.Label>Latitude</Form.Label>
-          <Form.Control
-            className="ltr"
-            type="decimal"
-            name="latitude"
-            value={values.latitude}
-            placeholder="Please Enter a Number"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            isValid={!errors.latitude && touched.latitude}
-            isInvalid={touched.latitude && errors.latitude}
-          />
-          <Form.Control.Feedback type="valid">Looks good!</Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-              {errors.latitude}
-          </Form.Control.Feedback>
-          
-        </Form.Group>
-        <Form.Group controlId="validationFormik02">
-          <Form.Label>Longitude</Form.Label>
-          <Form.Control
-            className="ltr"
-            type="decimal"
-            name="longitude"
-            value={values.longitude}
-            placeholder="Please Enter a Number"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            isValid={touched.longitude && !errors.longitude}
-            isInvalid={touched.longitude && errors.longitude}
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.longitude}
-          </Form.Control.Feedback>
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-        </Form.Group>
+        <MyLocationMap ref={locationMapRef} />
         <PollutionTypePicker ref={imagePickerRef} />
-        <ImagePreview />
+        <ImageUploaderComp />
       </Modal.Body>
       <Modal.Footer>
       <Button type="submit" variant="primary" disabled={loading}>
