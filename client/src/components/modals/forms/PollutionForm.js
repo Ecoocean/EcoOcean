@@ -1,11 +1,12 @@
 import React, {useRef} from "react";
 import * as formik from 'formik';
 import * as yup from 'yup';
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal, Form, Spinner } from "react-bootstrap";
 import PollutionTypePicker from './PollutionTypePicker'
 import { useMutation } from '@apollo/client';
 import {CREATE_POLLUTION_REPORT} from '../../../GraphQL/Mutations'
 import {GET_ALL_POLLUTION_REPORTS} from '../../../GraphQL/Queries'
+import ImagePreview from './../../reusables/ImagePreview'
 const PollutionForm = ({show, handleClose}) => {
   
   const { Formik } = formik;
@@ -18,23 +19,25 @@ const PollutionForm = ({show, handleClose}) => {
     longitude: yup.number().min(-180).max(180).required("Field is Required"),
     
   });
-  const [CreatePollutionReport, { error }] = useMutation(CREATE_POLLUTION_REPORT, {
+  const [CreatePollutionReport, { loading, error, data }] = useMutation(CREATE_POLLUTION_REPORT, {
     refetchQueries: [
       GET_ALL_POLLUTION_REPORTS, // DocumentNode object parsed with gql
       'GetAllPollutionReports' // Query name
     ],
   });
-  const addPollutionReport = () => {
-    CreatePollutionReport({
-      variables: {
-        latitude: parseFloat(formRef.current.values.latitude),
-        longitude: parseFloat(formRef.current.values.longitude),
-        type: imagePickerRef.current.state.image.value
-      }
-    });
-    handleClose();
-
-    if (error) {
+  const addPollutionReport = async () => {
+    try {
+      const { data } = await CreatePollutionReport({
+        variables: {
+          latitude: parseFloat(formRef.current.values.latitude),
+          longitude: parseFloat(formRef.current.values.longitude),
+          type: imagePickerRef.current.state.image.value
+        }
+      })
+      console.log(data)
+      handleClose();
+    }
+    catch (e) {
       console.log(error);
     }
   }
@@ -104,12 +107,22 @@ const PollutionForm = ({show, handleClose}) => {
           <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
         </Form.Group>
         <PollutionTypePicker ref={imagePickerRef} />
+        <ImagePreview />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+      <Button type="submit" variant="primary" disabled={loading}>
+      {loading && <Spinner
+          as="span"
+          animation="border"
+          size="sm"
+          role="status"
+          aria-hidden="true"
+        />}
+        {loading? "" : "Sumbit"}
+      </Button>
+        <Button variant="secondary" onClick={handleClose} >
           Close
         </Button>
-        <Button type="submit">Submit form</Button>
       </Modal.Footer>
       </Form>
       )}

@@ -43,7 +43,9 @@ export default function Map() {
       <GoogleMapReact
         bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_KEY }}
         defaultCenter={{ lat: 31.4117257, lng: 35.0818155 }}
+        
         options = {{
+          minZoom: 8,
           gestureHandling:'greedy'
         }}
         defaultZoom={8}
@@ -78,8 +80,8 @@ export default function Map() {
                 <div
                   className="cluster-marker"
                   style={{
-                    width: `${10 + (pointCount / points.length) * 20}px`,
-                    height: `${10 + (pointCount / points.length) * 20}px`
+                    width: `${10 + (pointCount / points.length) * 30}px`,
+                    height: `${10 + (pointCount / points.length) * 30}px`
                   }}
                   onClick={() => {
                     const expansionZoom = Math.min(
@@ -108,7 +110,9 @@ export default function Map() {
 
           return (
             <Marker
+              style={{position: 'absolute', textAlign: 'center', transform: 'translate(-50%, -50%)'}}
               key={`report-${cluster.properties.reportId}`}
+              text={cluster.id}
               lat={latitude}
               lng={longitude}
             >
