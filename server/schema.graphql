@@ -22,9 +22,9 @@ type Beach {
 }
 
 type Mutation {
-    addBeach(name: String!, altitude: Float!, longitude: Float!): Beach
-    setBeach(name: String!, altitude: Float!, longitude: Float!): Beach
-    createPollutionReport(altitude: Float!, longitude: Float!, type: PollutionType!): PollutionReport
+    addBeach(name: String!, latitude: Float!, longitude: Float!): Beach
+    setBeach(name: String!, latitude: Float!, longitude: Float!): Beach
+    createPollutionReport(latitude: Float!, longitude: Float!, type: PollutionType!): PollutionReport
 }
 
 type Query {

@@ -2,27 +2,37 @@ import React, {useRef} from "react";
 import * as formik from 'formik';
 import * as yup from 'yup';
 import { Button, Modal, Form } from "react-bootstrap";
+import PollutionTypePicker from './PollutionTypePicker'
 import { useMutation } from '@apollo/client';
 import {CREATE_POLLUTION_REPORT} from '../../../GraphQL/Mutations'
-const MarkerForm = ({show, handleClose}) => {
+import {GET_ALL_POLLUTION_REPORTS} from '../../../GraphQL/Queries'
+const PollutionForm = ({show, handleClose}) => {
   
   const { Formik } = formik;
+
   const formRef = useRef();
+  const imagePickerRef = useRef();
 
   const schema = yup.object().shape({
-    altitude: yup.number().min(-90).max(90).required("Field is Required"),
+    latitude: yup.number().min(-90).max(90).required("Field is Required"),
     longitude: yup.number().min(-180).max(180).required("Field is Required"),
     
   });
-  const [CreatePollutionReport, { error }] = useMutation(CREATE_POLLUTION_REPORT);
+  const [CreatePollutionReport, { error }] = useMutation(CREATE_POLLUTION_REPORT, {
+    refetchQueries: [
+      GET_ALL_POLLUTION_REPORTS, // DocumentNode object parsed with gql
+      'GetAllPollutionReports' // Query name
+    ],
+  });
   const addPollutionReport = () => {
     CreatePollutionReport({
       variables: {
-        altitude: parseFloat(formRef.current.values.altitude),
+        latitude: parseFloat(formRef.current.values.latitude),
         longitude: parseFloat(formRef.current.values.longitude),
-        type: "TRASH"
+        type: imagePickerRef.current.state.image.value
       }
     });
+    handleClose();
 
     if (error) {
       console.log(error);
@@ -38,7 +48,7 @@ const MarkerForm = ({show, handleClose}) => {
       validationSchema={schema}
       onSubmit={addPollutionReport}
       initialValues={{
-        altitude: '',
+        latitude: '',
         longitude: '',
       }}
     >
@@ -53,25 +63,25 @@ const MarkerForm = ({show, handleClose}) => {
       }) => (
         <Form onSubmit={handleSubmit}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Marker</Modal.Title>
+        <Modal.Title>Add Pollution Report</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form.Group controlId="validationFormik01">
-          <Form.Label>Altitude</Form.Label>
+          <Form.Label>Latitude</Form.Label>
           <Form.Control
             className="ltr"
             type="decimal"
-            name="altitude"
-            value={values.altitude}
+            name="latitude"
+            value={values.latitude}
             placeholder="Please Enter a Number"
             onChange={handleChange}
             onBlur={handleBlur}
-            isValid={!errors.altitude && touched.altitude}
-            isInvalid={touched.altitude && errors.altitude}
+            isValid={!errors.latitude && touched.latitude}
+            isInvalid={touched.latitude && errors.latitude}
           />
           <Form.Control.Feedback type="valid">Looks good!</Form.Control.Feedback>
           <Form.Control.Feedback type="invalid">
-              {errors.altitude}
+              {errors.latitude}
           </Form.Control.Feedback>
           
         </Form.Group>
@@ -92,7 +102,8 @@ const MarkerForm = ({show, handleClose}) => {
             {errors.longitude}
           </Form.Control.Feedback>
           <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-        </Form.Group>   
+        </Form.Group>
+        <PollutionTypePicker ref={imagePickerRef} />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
@@ -107,4 +118,4 @@ const MarkerForm = ({show, handleClose}) => {
   );
 };
 
-export default MarkerForm;
+export default PollutionForm;

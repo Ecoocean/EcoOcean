@@ -8,11 +8,11 @@
   align-items: center;
 }
 
-.crime-marker {
+.report-marker {
   background: none;
   border: none;
 }
 
-.crime-marker img {
+.report-marker img {
   width: 25px;
 }

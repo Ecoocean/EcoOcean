@@ -23,6 +23,7 @@
     "react-draft-wysiwyg": "^1.14.5",
     "react-dropzone": "^11.0.2",
     "react-gmaps": "^1.9.0",
+    "react-image-picker": "^1.1.1",
     "react-markdown": "^6.0.0",
     "react-redux": "^7.2.1",
     "react-router": "^6.0.0-beta.0",

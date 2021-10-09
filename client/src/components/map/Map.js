@@ -1,10 +1,9 @@
 import React, { useState, useRef } from "react";
-import useSwr from "swr";
 import GoogleMapReact from "google-map-react";
 import useSupercluster from "use-supercluster";
 import "./Map.css";
-
-const fetcher = (...args) => fetch(...args).then(response => response.json());
+import { useQuery } from "@apollo/client";
+import {GET_ALL_POLLUTION_REPORTS} from '../../GraphQL/Queries'
 
 const Marker = ({ children }) => children;
 
@@ -13,38 +12,41 @@ export default function Map() {
   const [bounds, setBounds] = useState(null);
   const [zoom, setZoom] = useState(10);
 
-  const url =
-    "https://data.police.uk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592&date=2019-10";
-  const { data, error } = useSwr(url, { fetcher });
-  const crimes = data && !error ? data.slice(0, 2000) : [];
-  const points = crimes.map(crime => ({
+  const { loading, error, data} = useQuery(GET_ALL_POLLUTION_REPORTS);
+
+  const pollutionReports = data && !error && !loading ? data.getAllPollutionReports : [];
+
+  const points = (pollutionReports.map(report => ({
     type: "Feature",
-    properties: { cluster: false, crimeId: crime.id, category: crime.category },
+    properties: { cluster: false, reportId: report.created_at, category: report.type },
     geometry: {
       type: "Point",
       coordinates: [
-        parseFloat(crime.location.longitude),
-        parseFloat(crime.location.latitude)
+        parseFloat(report.location.longitude),
+        parseFloat(report.location.latitude)
       ]
     }
-  }));
+  })))
 
-  const { clusters, supercluster } = useSupercluster({
+  const {clusters, supercluster } = useSupercluster({
     points,
     bounds,
     zoom,
     options: { radius: 75, maxZoom: 20 }
   });
 
+
+
   return (
+    
     <div style={{ height: "100vh", width: "100%" }}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_KEY }}
-        defaultCenter={{ lat: 52.6376, lng: -1.135171 }}
+        defaultCenter={{ lat: 31.4117257, lng: 35.0818155 }}
         options = {{
           gestureHandling:'greedy'
         }}
-        defaultZoom={10}
+        defaultZoom={8}
         yesIWantToUseGoogleMapApiInternals
         onGoogleApiLoaded={({ map }) => {
           mapRef.current = map;
@@ -93,15 +95,25 @@ export default function Map() {
               </Marker>
             );
           }
+          let imageUrl = ''
+          if(cluster.properties.category ==='TRASH') {
+            imageUrl = "/images/trash.png";
+          }
+          else if (cluster.properties.category === 'OIL'){
+            imageUrl = "/images/oil.png"
+          }
+          else if (cluster.properties.category === 'TAR'){
+            imageUrl = "/images/tar.png"
+          }
 
           return (
             <Marker
-              key={`crime-${cluster.properties.crimeId}`}
+              key={`report-${cluster.properties.reportId}`}
               lat={latitude}
               lng={longitude}
             >
-              <button className="crime-marker">
-                <img src="/custody.svg" alt="crime doesn't pay" />
+              <button className="report-marker">
+                <img src={imageUrl} alt="cant load pic" />
               </button>
             </Marker>
           );
