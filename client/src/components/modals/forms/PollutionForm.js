@@ -22,7 +22,6 @@ const PollutionForm = ({show,  handleClose}) => {
     {
       refetchQueries: [
         GET_ALL_POLLUTION_REPORTS, // DocumentNode object parsed with gql
-        "GetAllPollutionReports", // Query name
       ],
     }
   );
@@ -40,11 +39,10 @@ const PollutionForm = ({show,  handleClose}) => {
             type: pollutionTypePickerRef.current.state.image.value,
           },
         });
-        console.log(data);
-        handleClose();
+        handleClose('Pollution report sucssefully submitted', 'success');
       }
-    } catch (e) {
-      console.log(error);
+    } catch (err) {
+      handleClose(err, 'error');
     }
   };
 
