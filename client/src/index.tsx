@@ -3,10 +3,12 @@ import ReactDOM from "react-dom";
 import "./index.scss";
 import App from "./App";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { createUploadLink } from "apollo-upload-client";
 
+const link = createUploadLink({ uri: "http://localhost:5000/graphql" });
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: "http://localhost:5000/graphql",
+  link: link,
 });
 
 ReactDOM.render(

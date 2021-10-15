@@ -1,37 +1,49 @@
-scalar Date
-scalar Upload
+import { gql } from "apollo-server";
 
-enum PollutionType {
+// The GraphQL schema
+const typeDefs = gql`
+  scalar Date
+  scalar Upload
+
+  enum PollutionType {
     TRASH
     TAR
     OIL
-}
+  }
 
-type GeoLocation {
+  type GeoLocation {
     latitude: Float!
     longitude: Float!
-}
+  }
 
-type PollutionReport {
+  type PollutionReport {
     location: GeoLocation!
     created_at: Date!
     type: PollutionType!
     images: [Upload]
-}
+  }
 
-type Beach {
+  type Beach {
     name: String!
     location: GeoLocation!
-}
+  }
 
-type Mutation {
+  type Mutation {
     addBeach(name: String!, latitude: Float!, longitude: Float!): Beach
     setBeach(name: String!, latitude: Float!, longitude: Float!): Beach
-    createPollutionReport(latitude: Float!, longitude: Float!, type: PollutionType! images: [Upload]): PollutionReport
-}
+    createPollutionReport(
+      latitude: Float!
+      longitude: Float!
+      type: PollutionType!
+      images: [Upload]
+    ): PollutionReport
+  }
 
-type Query {
+  type Query {
     getAllPollutionReports: [PollutionReport]!
     beaches: [Beach]!
     beach(name: String!): Beach
-}
+  }
+`;
+
+export default typeDefs;

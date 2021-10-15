@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import * as formik from "formik";
 import * as yup from "yup";
 import { Button, Modal, Form, Spinner } from "react-bootstrap";
@@ -8,13 +8,14 @@ import { CREATE_POLLUTION_REPORT } from "../../../GraphQL/Mutations";
 import { GET_ALL_POLLUTION_REPORTS } from "../../../GraphQL/Queries";
 import ImageUploaderComp from "../../reusables/ImageUploaderComp";
 import MyLocationMap from "../../map/MyLocationMap";
-const PollutionForm = ({show,  handleClose}) => {
+const PollutionForm = ({show, setSnackBar,  handleClose, }) => {
   const { Formik } = formik;
 
   const formRef = useRef(null);
   const pollutionTypePickerRef = useRef(null);
   const locationMapRef = useRef(null);
-  const imagePickerRef = useRef(null);
+  const imageUploaderRef = useRef(null);
+  const [locationFound, setLocationFound] = useState(false);
 
   const schema = yup.object().shape({});
   const [CreatePollutionReport, { loading, error, data }] = useMutation(
@@ -30,21 +31,28 @@ const PollutionForm = ({show,  handleClose}) => {
       if (
         locationMapRef.current &&
         pollutionTypePickerRef.current &&
-        imagePickerRef.current
+        imageUploaderRef.current
       ) {
         const { data } = await CreatePollutionReport({
           variables: {
             latitude: locationMapRef.current.state.currentLocation.lat,
             longitude: locationMapRef.current.state.currentLocation.lng,
             type: pollutionTypePickerRef.current.state.image.value,
+            images: imageUploaderRef.current.state.picturesData
           },
         });
-        handleClose('Pollution report sucssefully submitted', 'success');
+        setSnackBar('Pollution report sucssefully submitted', 'success');
+        handleClose();
       }
     } catch (err) {
-      handleClose(err, 'error');
+      setSnackBar(err, 'error');
+      handleClose();
     }
   };
+
+  const onLocationFound = () => {
+    setLocationFound(true);
+  }
 
   return (
     <Modal show={show} onHide={handleClose} animation={true}>
@@ -70,12 +78,12 @@ const PollutionForm = ({show,  handleClose}) => {
               <Modal.Title>Add Pollution Report</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <MyLocationMap ref={locationMapRef} />
+              <MyLocationMap ref={locationMapRef} onLocationFound={onLocationFound} />
               <PollutionTypePicker ref={pollutionTypePickerRef} />
-              <ImageUploaderComp ref={imagePickerRef} />
+              <ImageUploaderComp ref={imageUploaderRef} />
             </Modal.Body>
             <Modal.Footer>
-              <Button type="submit" variant="primary" disabled={loading}>
+              <Button type="submit" variant="primary" disabled={loading || !locationFound}>
                 {loading && (
                   <Spinner
                     as="span"

@@ -9,13 +9,13 @@ const MapOperations = () => {
   const [msgSnackBar, setMsgSnackBar] = useState("");
   const [severitySnackBar, setSeveritySnackBar] = useState("");
 
-  const handleClose = (msg: string, severity: string) => {
-    if (msg) {
-      // if recived any message
-      setMsgSnackBar(msg);
-      setShowSnackBar(true);
-      setSeveritySnackBar(severity);
-    }
+  const setSnackBar = (msg: string, severity: string) => {
+    setMsgSnackBar(msg);
+    setShowSnackBar(true);
+    setSeveritySnackBar(severity);
+  };
+
+  const handleClose = () => {
     setShow(false);
   };
 
@@ -25,7 +25,11 @@ const MapOperations = () => {
       <Button variant="outline-primary" onClick={handleShow}>
         Add Pollutin Report
       </Button>{" "}
-      <PollutionForm show={show} handleClose={handleClose} />
+      <PollutionForm
+        show={show}
+        setSnackBar={setSnackBar}
+        handleClose={handleClose}
+      />
       <CustomizedSnackbar
         severity={severitySnackBar}
         msg={msgSnackBar}

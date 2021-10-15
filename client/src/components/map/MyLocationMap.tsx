@@ -13,7 +13,7 @@ const initialState = {
 };
 
 type State = Readonly<typeof initialState>;
-class MyLocationMap extends Component<any, State> {
+class MyLocationMap extends Component<{ onLocationFound: any }, State> {
   private locationWatchID: any;
   readonly state: State = initialState;
 
@@ -32,6 +32,7 @@ class MyLocationMap extends Component<any, State> {
             const pos = { lat, lng };
             this.setState({ currentLocation: pos });
             this.setState({ locationFound: true });
+            this.props.onLocationFound();
           }
         },
         (err) => console.log(err),
@@ -48,6 +49,18 @@ class MyLocationMap extends Component<any, State> {
     return (
       <div>
         <div style={{ height: "400px", width: "100%" }}>
+          {!this.state.locationFound && (
+            <Button variant="primary">
+              <Spinner
+                as="span"
+                animation="grow"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+              getting accurate location...
+            </Button>
+          )}
           <GoogleMapReact
             bootstrapURLKeys={googleKey}
             defaultCenter={{ lat: 40.756795, lng: -73.954298 }}
@@ -60,24 +73,6 @@ class MyLocationMap extends Component<any, State> {
             yesIWantToUseGoogleMapApiInternals
             onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps)}
           >
-            {!this.state.locationFound && (
-              <Marker
-                lat={this.state.currentLocation.lat}
-                lng={this.state.currentLocation.lng}
-              >
-                <Button variant="primary">
-                  <Spinner
-                    as="span"
-                    animation="grow"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  getting accurate location...
-                </Button>
-              </Marker>
-            )}
-
             {this.state.locationFound && (
               <Marker
                 lat={this.state.currentLocation.lat}

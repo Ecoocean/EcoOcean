@@ -1,19 +1,19 @@
 import React from "react";
 import { Row, Col, Container } from "react-bootstrap";
-import MapOperations from './MapOperations';
-import MapElementList from './MapElementList';
+import MapOperations from "./MapOperations";
+import AlignItemsList from "../reusables/AlignItemsList";
 
 const MapLeftPanel = () => {
   return (
     <Container fluid="md">
       <Row>
         <Col id="map-operations">
-        <MapOperations  />
+          <MapOperations />
         </Col>
       </Row>
       <Row>
         <Col id="map-element-list">
-          <MapElementList />
+          <AlignItemsList />
         </Col>
       </Row>
     </Container>

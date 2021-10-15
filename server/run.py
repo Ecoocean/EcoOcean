@@ -1,9 +1,7 @@
 from flask import request, jsonify
 from ariadne import graphql_sync
 from ariadne.constants import PLAYGROUND_HTML
-
 from setup import app, schema
-
 
 @app.route("/graphql", methods=["GET"])
 def graphql_playground():
