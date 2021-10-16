@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import MapOperations from "./MapOperations";
-import AlignItemsList from "../reusables/AlignItemsList";
+import MapElementList from './MapElementList'
 
 const MapLeftPanel = () => {
   return (
@@ -13,7 +13,7 @@ const MapLeftPanel = () => {
       </Row>
       <Row>
         <Col id="map-element-list">
-          <AlignItemsList />
+          <MapElementList />
         </Col>
       </Row>
     </Container>

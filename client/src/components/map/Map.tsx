@@ -13,6 +13,7 @@ interface GeoLoaction {
 }
 
 interface Report {
+  id: string
   created_at: Date;
   location: GeoLoaction;
   type: string;
@@ -32,7 +33,7 @@ export default function Map() {
     type: "Feature",
     properties: {
       cluster: false,
-      reportId: report.created_at,
+      reportId: report.id,
       category: report.type,
     },
     geometry: {

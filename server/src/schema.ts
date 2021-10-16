@@ -17,20 +17,21 @@ const typeDefs = gql`
   }
 
   type PollutionReport {
+    id: ID
     location: GeoLocation!
     created_at: Date!
     type: PollutionType!
     images: [Upload]
   }
 
-  type Beach {
-    name: String!
-    location: GeoLocation!
+  type User {
+    id: ID!
+    email: String!
+    profileImage: String
+    token: String
   }
 
   type Mutation {
-    addBeach(name: String!, latitude: Float!, longitude: Float!): Beach
-    setBeach(name: String!, latitude: Float!, longitude: Float!): Beach
     createPollutionReport(
       latitude: Float!
       longitude: Float!
@@ -41,9 +42,7 @@ const typeDefs = gql`
 
   type Query {
     getAllPollutionReports: [PollutionReport]!
-    beaches: [Beach]!
-    beach(name: String!): Beach
   }
 `;
 
-export default typeDefs;
+export default  typeDefs;
