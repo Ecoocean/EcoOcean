@@ -27,7 +27,7 @@ class MyLocationMap extends Component<{ onLocationFound: any }, State> {
       this.locationWatchID = navigator.geolocation.watchPosition(
         ({ coords: { latitude: lat, longitude: lng, accuracy: acc } }) => {
           console.log(acc);
-          if (acc < 4000) {
+          if (acc < 5000) {
             // if the location is within 50 meters
             const pos = { lat, lng };
             this.setState({ currentLocation: pos });
