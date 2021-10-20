@@ -23,16 +23,20 @@ const typeDefs = gql`
 
   type PollutionReport {
     id: ID
+    reporter: String!
     location: GeoLocation!
     created_at: Date!
     type: PollutionType!
+    address: String
     photoUrls: [String]
+    reporterImageUrl: String
   }
 
   type User {
     id: ID!
+    username: String!
     email: String!
-    profileImage: String
+    profileImageUrl: String
     token: String
   }
 
@@ -40,6 +44,7 @@ const typeDefs = gql`
     createPollutionReport(
       latitude: Float!
       longitude: Float!
+      reporter: String!
       type: PollutionType!
       files: [Upload]
     ): PollutionReport

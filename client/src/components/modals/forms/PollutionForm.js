@@ -8,6 +8,8 @@ import { CREATE_POLLUTION_REPORT } from "../../../GraphQL/Mutations";
 import { GET_ALL_POLLUTION_REPORTS } from "../../../GraphQL/Queries";
 import ImageUploaderComp from "../../reusables/ImageUploaderComp";
 import MyLocationMap from "../../map/MyLocationMap";
+import * as firebase from "firebase/app";
+import 'firebase/auth';
 const PollutionForm = ({show, setSnackBar,  handleClose, }) => {
   const { Formik } = formik;
 
@@ -35,6 +37,7 @@ const PollutionForm = ({show, setSnackBar,  handleClose, }) => {
       ) {
         const { data } = await CreatePollutionReport({
           variables: {
+            reporter: firebase.auth().currentUser.displayName,
             latitude: locationMapRef.current.state.currentLocation.lat,
             longitude: locationMapRef.current.state.currentLocation.lng,
             type: pollutionTypePickerRef.current.state.image.value,

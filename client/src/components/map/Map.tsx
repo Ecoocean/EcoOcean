@@ -4,20 +4,9 @@ import useSupercluster from "use-supercluster";
 import "./Map.css";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_POLLUTION_REPORTS } from "../../GraphQL/Queries";
+import { PollutionReport } from "../../types/PollutionReport";
 
 const Marker = (props: any) => props.children;
-
-interface GeoLoaction {
-  latitude: number;
-  longitude: number;
-}
-
-interface Report {
-  id: string
-  created_at: Date;
-  location: GeoLoaction;
-  type: string;
-}
 
 export default function Map() {
   const mapRef = useRef<any>();
@@ -26,10 +15,10 @@ export default function Map() {
 
   const { loading, error, data } = useQuery(GET_ALL_POLLUTION_REPORTS);
 
-  const pollutionReports: Report[] =
+  const pollutionReports: PollutionReport[] =
     data && !error && !loading ? data.getAllPollutionReports : [];
 
-  const points = pollutionReports.map((report: Report) => ({
+  const points = pollutionReports.map((report: PollutionReport) => ({
     type: "Feature",
     properties: {
       cluster: false,

@@ -2,6 +2,7 @@ import { db, admin } from "./firestore";
 import { GeoPoint } from "@google-cloud/firestore";
 import { GraphQLUpload } from "graphql-upload";
 import { saveFileToFireStorage } from "./fileUploader";
+const openGeocoder = require("node-open-geocoder");
 
 export const resolvers = {
   Upload: GraphQLUpload,
@@ -20,17 +21,25 @@ export const resolvers = {
           return await saveFileToFireStorage(filename, createReadStream());
         })
       );
-
       const timestamp = admin.firestore.Timestamp.fromDate(new Date());
       const ref = db.collection("pollution_report").doc();
       const pollutionReport = {
         id: ref.id,
+        reporter: args.reporter,
         location: new GeoPoint(args.latitude, args.longitude),
         type: args.type,
         created_at: timestamp,
-        urls: urls,
+        photoUrls: urls,
       };
       await ref.set(pollutionReport);
+      openGeocoder()
+        .reverse(args.longitude, args.latitude)
+        .end((err, res) => {
+          if (res) {
+            console.log(res.address);
+            ref.update({ address: res.display_name });
+          }
+        });
       return pollutionReport;
     },
   },

@@ -30,7 +30,8 @@
     "firebase-admin": "^10.0.0",
     "graphql": "^15.6.1",
     "graphql-upload": "^12.0.0",
-    "koa": "^2.13.4",
+    "node-open-geocoder": "^4.0.1",
+    "react-firebaseui": "^5.0.2",
     "stream": "0.0.2",
     "stream-promise": "^3.2.0",
     "typescript": "^4.4.4"
