@@ -33,7 +33,11 @@ export default function PollutionReportCard(props: {
           <Grid item xs={6}>
             <Avatar
               alt={props.report.reporter}
-              src="/static/images/avatar/1.jpg"
+              src={
+                !!props.report.reporterImageUrl
+                  ? props.report.reporterImageUrl
+                  : "/"
+              }
             />
             {`Reporter: ${props.report.reporter}`}
           </Grid>

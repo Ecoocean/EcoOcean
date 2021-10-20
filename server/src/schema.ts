@@ -47,6 +47,7 @@ const typeDefs = gql`
       reporter: String!
       type: PollutionType!
       files: [Upload]
+      reporterImageUrl: String
     ): PollutionReport
 
     singleUpload(file: Upload!): File!

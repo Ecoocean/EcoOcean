@@ -7,6 +7,7 @@ export const CREATE_POLLUTION_REPORT = gql`
     $reporter: String!
     $type: PollutionType!
     $files: [Upload]
+    $reporterImageUrl: String
   ) {
     createPollutionReport(
       latitude: $latitude
@@ -14,6 +15,7 @@ export const CREATE_POLLUTION_REPORT = gql`
       reporter: $reporter
       type: $type
       files: $files
+      reporterImageUrl: $reporterImageUrl
     ) {
       created_at
     }

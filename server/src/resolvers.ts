@@ -25,6 +25,7 @@ export const resolvers = {
       const ref = db.collection("pollution_report").doc();
       const pollutionReport = {
         id: ref.id,
+        reporterImageUrl: args.reporterImageUrl,
         reporter: args.reporter,
         location: new GeoPoint(args.latitude, args.longitude),
         type: args.type,

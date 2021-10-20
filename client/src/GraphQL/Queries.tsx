@@ -8,6 +8,7 @@ export const GET_ALL_POLLUTION_REPORTS = gql`
         latitude
         longitude
       }
+      reporterImageUrl
       address
       created_at
       reporter

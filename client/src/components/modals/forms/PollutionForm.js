@@ -38,6 +38,7 @@ const PollutionForm = ({show, setSnackBar,  handleClose, }) => {
         const { data } = await CreatePollutionReport({
           variables: {
             reporter: firebase.auth().currentUser.displayName,
+            reporterImageUrl: firebase.auth().currentUser.photoURL,
             latitude: locationMapRef.current.state.currentLocation.lat,
             longitude: locationMapRef.current.state.currentLocation.lng,
             type: pollutionTypePickerRef.current.state.image.value,
