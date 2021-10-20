@@ -5,6 +5,11 @@ const typeDefs = gql`
   scalar Date
   scalar Upload
 
+  type File {
+    url: String!
+    filename: String!
+  }
+
   enum PollutionType {
     TRASH
     TAR
@@ -21,7 +26,7 @@ const typeDefs = gql`
     location: GeoLocation!
     created_at: Date!
     type: PollutionType!
-    images: [Upload]
+    photoUrls: [String]
   }
 
   type User {
@@ -36,8 +41,10 @@ const typeDefs = gql`
       latitude: Float!
       longitude: Float!
       type: PollutionType!
-      images: [Upload]
+      files: [Upload]
     ): PollutionReport
+
+    singleUpload(file: Upload!): File!
   }
 
   type Query {
@@ -45,4 +52,4 @@ const typeDefs = gql`
   }
 `;
 
-export default  typeDefs;
+export default typeDefs;

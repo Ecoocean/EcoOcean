@@ -5,21 +5,15 @@ export const CREATE_POLLUTION_REPORT = gql`
     $latitude: Float!
     $longitude: Float!
     $type: PollutionType!
-    $images: [Upload]
+    $files: [Upload]
   ) {
     createPollutionReport(
       latitude: $latitude
       longitude: $longitude
       type: $type
-      images: $images
+      files: $files
     ) {
       created_at
     }
-  }
-`;
-
-export const UPLOAD_FILE_MUTATION = gql`
-  mutation ($file: Upload!) {
-    uploadFile(file: $file)
   }
 `;

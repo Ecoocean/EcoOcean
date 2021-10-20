@@ -38,7 +38,7 @@ const PollutionForm = ({show, setSnackBar,  handleClose, }) => {
             latitude: locationMapRef.current.state.currentLocation.lat,
             longitude: locationMapRef.current.state.currentLocation.lng,
             type: pollutionTypePickerRef.current.state.image.value,
-            images: imageUploaderRef.current.state.picturesData
+            files: imageUploaderRef.current.state.pictures
           },
         });
         setSnackBar('Pollution report sucssefully submitted', 'success');

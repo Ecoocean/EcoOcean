@@ -1,37 +1,26 @@
-import { ApolloServer } from "apollo-server";
 import typeDefs from "./schema";
 import { resolvers } from "./resolvers";
-import { graphqlUploadKoa } from "graphql-upload";
-import Koa from "koa";
+const express = require("express");
+const { ApolloServer } = require("apollo-server-express");
+const { graphqlUploadExpress } = require("graphql-upload");
 
-/**
- * Starts the API server.
- */
 async function startServer() {
-  const apolloServer = new ApolloServer({
+  const server = new ApolloServer({
     typeDefs,
     resolvers,
   });
+  await server.start();
 
-  await apolloServer.listen();
+  const app = express();
 
-  new Koa()
-    .use(
-      graphqlUploadKoa({
-        // Limits here should be stricter than config for surrounding
-        // infrastructure such as Nginx so errors can be handled elegantly by
-        // `graphql-upload`:
-        // https://github.com/jaydenseric/graphql-upload#type-processrequestoptions
-        maxFileSize: 10000000, // 10 MB
-        maxFiles: 20,
-      })
-    )
-    .use(apolloServer.getMiddleware())
-    .listen(4000, (error) => {
-      if (error) throw error;
+  // This middleware should be added before calling `applyMiddleware`.
+  app.use(graphqlUploadExpress());
 
-      console.info(`Serving http://localhost:4000`);
-    });
+  server.applyMiddleware({ app });
+
+  await new Promise((r) => app.listen({ port: 4000 }, r));
+
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 
 startServer();

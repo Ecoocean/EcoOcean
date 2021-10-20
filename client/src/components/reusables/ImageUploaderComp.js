@@ -1,6 +1,7 @@
 import React from "react";
 import ImageUploader from "react-images-upload";
 
+
 class ImageUploaderComp extends React.Component {
   constructor(props) {
     super(props);
@@ -9,6 +10,7 @@ class ImageUploaderComp extends React.Component {
   }
 
   onDrop(pictureFiles, pictureDataURLs) {
+    
     this.setState({
       picturesData: this.state.picturesData.concat(pictureDataURLs),
       pictures: this.state.pictures.concat(pictureFiles)
