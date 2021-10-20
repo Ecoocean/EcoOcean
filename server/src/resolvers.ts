@@ -1,42 +1,7 @@
-import { db, admin, bucket } from "./firestore";
+import { db, admin } from "./firestore";
 import { GeoPoint } from "@google-cloud/firestore";
-const { GraphQLUpload } = require("graphql-upload");
-
-const options = {
-  action: "read",
-  expires: "03-17-2025",
-};
-
-async function saveImage(filename, readable) {
-  return new Promise((resolve, reject) => {
-    const data = [];
-
-    readable.on("data", (chunk) => {
-      data.push(chunk);
-    });
-
-    readable.on("end", () => {
-      var imageBuffer = new Uint8Array(Buffer.concat(data));
-      var file = bucket.file(filename);
-      file.save(
-        imageBuffer,
-        {
-          metadata: { contentType: "image/png" },
-        },
-        (error) => {
-          if (error) {
-            console.log("error");
-          }
-          file.getSignedUrl(options).then((results) => {
-            const url = results[0];
-            console.log(`The signed url for ${filename} is ${url}.`);
-            resolve(url);
-          });
-        }
-      );
-    });
-  });
-}
+import { GraphQLUpload } from "graphql-upload";
+import { saveFileToFireStorage } from "./fileUploader";
 
 export const resolvers = {
   Upload: GraphQLUpload,
@@ -52,7 +17,7 @@ export const resolvers = {
       const urls = await Promise.all(
         args.files.map(async (file) => {
           const { createReadStream, filename } = await file;
-          return await saveImage(filename, createReadStream());
+          return await saveFileToFireStorage(filename, createReadStream());
         })
       );
 
