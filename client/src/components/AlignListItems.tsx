@@ -5,27 +5,35 @@ import ListItemButton from "@mui/material/CardContent";
 import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
 import { GET_ALL_POLLUTION_REPORTS } from "../GraphQL/Queries";
-import { useQuery } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import { PollutionReport } from "../types/PollutionReport";
 import PollutionReportCard from "./PollutionReportCard";
 import FlipMove from "react-flip-move";
+import { allPollutionReportsVar, filteredPollutionReportsVar } from "../cache";
+
 export default function AlignItemsList() {
   const [checked, setChecked] = React.useState<PollutionReport | null>(null);
-
+  const [firstLoad, setFirstLoad] = React.useState<boolean>(true);
+  const pollutionReports = useReactiveVar(allPollutionReportsVar);
+  const filteredPollutionReports = useReactiveVar(filteredPollutionReportsVar);
   const handleToggle = (selectedReport: PollutionReport) => () => {
     setChecked(selectedReport);
   };
 
   const { loading, error, data } = useQuery(GET_ALL_POLLUTION_REPORTS);
 
-  const pollutionReports: PollutionReport[] =
-    data && !error && !loading ? data.getAllPollutionReports : [];
-
+  if (data) {
+    allPollutionReportsVar(data.getAllPollutionReports);
+    if (firstLoad) {
+      filteredPollutionReportsVar(data.getAllPollutionReports);
+      setFirstLoad(false);
+    }
+  }
   return (
     <Paper style={{ maxHeight: 950, overflow: "auto" }}>
       <FlipMove style={{ overflowAnchor: "none" }}>
         <List>
-          {pollutionReports.map((report: PollutionReport) => {
+          {filteredPollutionReports.map((report: PollutionReport) => {
             return (
               <div>
                 <ListItem key={report.id}>

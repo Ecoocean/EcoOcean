@@ -1,17 +1,44 @@
 import React, { useState, useRef } from "react";
-import GoogleMapReact from "google-map-react";
+import GoogleMapReact, { ChangeEventValue } from "google-map-react";
 import useSupercluster from "use-supercluster";
 import "./Map.css";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_POLLUTION_REPORTS } from "../../GraphQL/Queries";
 import { PollutionReport } from "../../types/PollutionReport";
-
+import {
+  allPollutionReportsVar,
+  filteredPollutionReportsVar,
+} from "../../cache";
 const Marker = (props: any) => props.children;
 
 export default function Map() {
   const mapRef = useRef<any>();
   const [bounds, setBounds] = useState<number[]>([]);
   const [zoom, setZoom] = useState(10);
+
+  const onMapChange = (changes: ChangeEventValue) => {
+    setZoom(changes.zoom);
+    const newBounds: number[] = [
+      changes.bounds.nw.lng,
+      changes.bounds.se.lat,
+      changes.bounds.se.lng,
+      changes.bounds.nw.lat,
+    ];
+    setBounds(newBounds);
+    const BBoxPollutionReports = allPollutionReportsVar().filter(
+      (report: PollutionReport) => {
+        return (
+          report.location.latitude > changes.bounds.se.lat &&
+          report.location.latitude < changes.bounds.nw.lat &&
+          report.location.longitude > changes.bounds.nw.lng &&
+          report.location.longitude < changes.bounds.se.lng
+        );
+      }
+    );
+
+    filteredPollutionReportsVar(BBoxPollutionReports);
+    console.log(changes.bounds);
+  };
 
   const { loading, error, data } = useQuery(GET_ALL_POLLUTION_REPORTS);
 
@@ -43,6 +70,7 @@ export default function Map() {
   return (
     <div style={{ height: "100vh", width: "100%" }}>
       <GoogleMapReact
+        onChange={onMapChange}
         bootstrapURLKeys={googleKey}
         defaultCenter={{ lat: 31.4117257, lng: 35.0818155 }}
         options={{
@@ -53,16 +81,6 @@ export default function Map() {
         yesIWantToUseGoogleMapApiInternals
         onGoogleApiLoaded={({ map }) => {
           mapRef.current = map;
-        }}
-        onChange={({ zoom, bounds }) => {
-          setZoom(zoom);
-          const newBounds: number[] = [
-            bounds.nw.lng,
-            bounds.se.lat,
-            bounds.se.lng,
-            bounds.nw.lat,
-          ];
-          setBounds(newBounds);
         }}
       >
         {clusters.map((cluster) => {
