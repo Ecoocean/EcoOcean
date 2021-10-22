@@ -56,6 +56,10 @@ const typeDefs = gql`
   type Query {
     getAllPollutionReports: [PollutionReport]!
   }
+
+  type Subscription {
+    reportAdded: PollutionReport
+  }
 `;
 
 export default typeDefs;

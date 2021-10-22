@@ -2,19 +2,48 @@ import React, { useState, useRef } from "react";
 import GoogleMapReact, { ChangeEventValue } from "google-map-react";
 import useSupercluster from "use-supercluster";
 import "./Map.css";
-import { useQuery } from "@apollo/client";
-import { GET_ALL_POLLUTION_REPORTS } from "../../GraphQL/Queries";
+import { useQuery, useSubscription } from "@apollo/client";
 import { PollutionReport } from "../../types/PollutionReport";
+import { REPORTS_SUBSCRIPTION } from "../../GraphQL/Subscriptions";
 import {
   allPollutionReportsVar,
   filteredPollutionReportsVar,
 } from "../../cache";
+import { GET_ALL_POLLUTION_REPORTS_LOCAL } from "../../GraphQL/Queries";
+import { PollutionReportModal } from "../modals/PollutionReportModal";
+
 const Marker = (props: any) => props.children;
 
 export default function Map() {
   const mapRef = useRef<any>();
   const [bounds, setBounds] = useState<number[]>([]);
   const [zoom, setZoom] = useState(10);
+  const [openInfoWindow, setOpenInfoWindow] = useState(false);
+  const [selectedReport, setSelectedReport] = useState(false);
+
+  const handleClose = () => {
+    setOpenInfoWindow(false);
+  };
+
+  const IncomingReport = ({ subscriptionData: { data } }: any) => {
+    const allReports = allPollutionReportsVar();
+    allPollutionReportsVar([data.reportAdded].concat(allReports));
+
+    if (
+      data.reportAdded.location.latitude > bounds[1] &&
+      data.reportAdded.location.latitude < bounds[3] &&
+      data.reportAdded.location.longitude > bounds[0] &&
+      data.reportAdded.location.longitude < bounds[2]
+    ) {
+      const currentFilteredReports: PollutionReport[] =
+        filteredPollutionReportsVar();
+      filteredPollutionReportsVar(
+        [data.reportAdded].concat(currentFilteredReports)
+      );
+    }
+  };
+
+  useSubscription(REPORTS_SUBSCRIPTION, { onSubscriptionData: IncomingReport });
 
   const onMapChange = (changes: ChangeEventValue) => {
     setZoom(changes.zoom);
@@ -37,20 +66,19 @@ export default function Map() {
     );
 
     filteredPollutionReportsVar(BBoxPollutionReports);
-    console.log(changes.bounds);
   };
 
-  const { loading, error, data } = useQuery(GET_ALL_POLLUTION_REPORTS);
+  const { loading, error, data } = useQuery(GET_ALL_POLLUTION_REPORTS_LOCAL);
 
   const pollutionReports: PollutionReport[] =
-    data && !error && !loading ? data.getAllPollutionReports : [];
+    data && !error && !loading ? data.allPollutionReports : [];
 
   const points = pollutionReports.map((report: PollutionReport) => ({
     type: "Feature",
     properties: {
       cluster: false,
-      reportId: report.id,
-      category: report.type,
+      report: report,
+      openWindow: false,
     },
     geometry: {
       type: "Point",
@@ -67,6 +95,7 @@ export default function Map() {
   const googleKey: GoogleMapReact.BootstrapURLKeys = {
     key: process.env.REACT_APP_GOOGLE_TOKEN!,
   };
+
   return (
     <div style={{ height: "100vh", width: "100%" }}>
       <GoogleMapReact
@@ -118,32 +147,45 @@ export default function Map() {
             );
           }
           let imageUrl = "";
-          if (cluster.properties.category === "TRASH") {
+          const reportType = cluster.properties.report.type;
+          if (reportType === "TRASH") {
             imageUrl = "/images/trash.png";
-          } else if (cluster.properties.category === "OIL") {
+          } else if (reportType === "OIL") {
             imageUrl = "/images/oil.png";
-          } else if (cluster.properties.category === "TAR") {
+          } else if (reportType === "TAR") {
             imageUrl = "/images/tar.png";
           }
 
           return (
             <Marker
+              className="report-marker"
               style={{
                 position: "absolute",
                 textAlign: "center",
                 transform: "translate(-50%, -50%)",
               }}
-              key={`report-${cluster.properties.reportId}`}
+              key={`report-${cluster.properties.report.id}`}
               text={cluster.id}
               lat={latitude}
               lng={longitude}
             >
-              <button className="report-marker">
+              <button
+                className="report-marker"
+                onClick={() => {
+                  setSelectedReport(cluster.properties.report);
+                  setOpenInfoWindow(true);
+                }}
+              >
                 <img src={imageUrl} alt="cant load pic" />
               </button>
             </Marker>
           );
         })}
+        <PollutionReportModal
+          report={selectedReport}
+          show={openInfoWindow}
+          handleClose={handleClose}
+        />
       </GoogleMapReact>
     </div>
   );

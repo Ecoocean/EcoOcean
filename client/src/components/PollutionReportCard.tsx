@@ -13,10 +13,10 @@ export default function PollutionReportCard(props: {
   report: PollutionReport;
 }) {
   return (
-    <Card sx={{ display: "flex" }}>
+    <Card sx={{ maxWidth: "100%", display: "flex" }}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <CardContent sx={{ flex: "1 0 auto" }}>
-          <Typography component="div" variant="h5">
+          <Typography component="div" variant="h6">
             {`Report ID: ${props.report.id}`}
           </Typography>
           <Typography

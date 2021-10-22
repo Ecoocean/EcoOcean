@@ -2,13 +2,23 @@ import { db, admin } from "./firestore";
 import { GeoPoint } from "@google-cloud/firestore";
 import { GraphQLUpload } from "graphql-upload";
 import { saveFileToFireStorage } from "./fileUploader";
-const openGeocoder = require("node-open-geocoder");
+import { pubsub } from "./index";
+import openGeocoder from "node-open-geocoder";
 
 export const resolvers = {
   Upload: GraphQLUpload,
+  Subscription: {
+    reportAdded: {
+      // More on pubsub below
+      subscribe: () => pubsub.asyncIterator(["REPORT_ADDED"]),
+    },
+  },
   Query: {
     getAllPollutionReports: async () => {
-      const snapshot = await db.collection("pollution_report").get();
+      const snapshot = await db
+        .collection("pollution_report")
+        .orderBy("created_at", "desc")
+        .get();
       const output = snapshot.docs.map((doc) => doc.data());
       return output;
     },
@@ -41,6 +51,7 @@ export const resolvers = {
             ref.update({ address: res.display_name });
           }
         });
+      pubsub.publish("REPORT_ADDED", { reportAdded: pollutionReport });
       return pollutionReport;
     },
   },
