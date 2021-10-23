@@ -7,7 +7,7 @@ import ImageListItem from "@mui/material/ImageListItem";
 export const PollutionReportModal = ({ report, show, handleClose }: any) => {
   return (
     report && (
-      <Modal show={show} onHide={handleClose} animation={true}>
+      <Modal size="lg" show={show} onHide={handleClose} animation={true}>
         <Modal.Header closeButton>
           <Modal.Title>Pollution Report</Modal.Title>
         </Modal.Header>
@@ -16,15 +16,11 @@ export const PollutionReportModal = ({ report, show, handleClose }: any) => {
           {report.address
             ? `Address: ${report.address}`
             : `Coordinates: lat: ${report.location.latitude}, lng: ${report.location.longitude}`}
-          <ImageList
-            sx={{ width: 450, maxWidth: 450, height: 450 }}
-            cols={3}
-            rowHeight={164}
-          >
+          <ImageList sx={{ width: 350, height: 350 }} cols={2}>
             {report.photoUrls.map((photoUrl: string) => (
-              <ImageListItem key={photoUrl} sx={{ width: 150, height: 40 }}>
+              <ImageListItem key={photoUrl}>
                 <a href={photoUrl} target="_blank">
-                  <img width="220" height="auto" src={photoUrl} />
+                  <img width="164" height="164" src={photoUrl} />
                 </a>
               </ImageListItem>
             ))}

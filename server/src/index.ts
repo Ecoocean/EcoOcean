@@ -8,6 +8,7 @@ import { execute, subscribe } from "graphql";
 import { SubscriptionServer } from "subscriptions-transport-ws";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { PubSub } from "graphql-subscriptions";
+import { testPlugin } from "./eventLogger";
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
@@ -17,6 +18,7 @@ async function startServer() {
   const server = new ApolloServer({
     schema,
     plugins: [
+      testPlugin,
       {
         async serverWillStart() {
           return {
@@ -27,6 +29,15 @@ async function startServer() {
         },
       },
     ],
+    formatError: (err) => {
+      // Don't give the specific errors to the client.
+      if (err.message.startsWith("Database Error: ")) {
+        return new Error("Internal server error");
+      }
+      // Otherwise return the original error. The error can also
+      // be manipulated in other ways, as long as it's returned.
+      return err;
+    },
   });
   const app = express();
   // This `app` is the returned value from `express()`.

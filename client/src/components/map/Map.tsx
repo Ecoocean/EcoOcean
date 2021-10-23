@@ -8,9 +8,13 @@ import { REPORTS_SUBSCRIPTION } from "../../GraphQL/Subscriptions";
 import {
   allPollutionReportsVar,
   filteredPollutionReportsVar,
+  loadingPollutionReportsVar,
 } from "../../cache";
 import { GET_ALL_POLLUTION_REPORTS_LOCAL } from "../../GraphQL/Queries";
 import { PollutionReportModal } from "../modals/PollutionReportModal";
+import PollutionReportToolTip from "../PollutionReportToolTip";
+import { IconButton } from "@mui/material";
+import RoomSharpIcon from "@mui/icons-material/RoomSharp";
 
 const Marker = (props: any) => props.children;
 
@@ -45,7 +49,10 @@ export default function Map() {
 
   useSubscription(REPORTS_SUBSCRIPTION, { onSubscriptionData: IncomingReport });
 
-  const onMapChange = (changes: ChangeEventValue) => {
+  const onMapChange = async (changes: ChangeEventValue) => {
+    const minTimeForLoadingSimulation = 700; // in miliseconds
+    loadingPollutionReportsVar(true);
+    const startTime = performance.now();
     setZoom(changes.zoom);
     const newBounds: number[] = [
       changes.bounds.nw.lng,
@@ -64,8 +71,18 @@ export default function Map() {
         );
       }
     );
-
     filteredPollutionReportsVar(BBoxPollutionReports);
+    const endTime = performance.now();
+    const TotalTime = endTime - startTime; // in miliseconds
+
+    const timeToWait = minTimeForLoadingSimulation - TotalTime;
+    if (timeToWait > 0) {
+      console.log(timeToWait);
+      // if operation was too fast and took less than a second (1000)
+      // we will wait the diff time
+      await new Promise((resolve) => setTimeout(resolve, timeToWait));
+    }
+    loadingPollutionReportsVar(false);
   };
 
   const { loading, error, data } = useQuery(GET_ALL_POLLUTION_REPORTS_LOCAL);
@@ -146,19 +163,18 @@ export default function Map() {
               </Marker>
             );
           }
-          let imageUrl = "";
+          let labelColor = "";
           const reportType = cluster.properties.report.type;
           if (reportType === "TRASH") {
-            imageUrl = "/images/trash.png";
+            labelColor = "green";
           } else if (reportType === "OIL") {
-            imageUrl = "/images/oil.png";
+            labelColor = "brown";
           } else if (reportType === "TAR") {
-            imageUrl = "/images/tar.png";
+            labelColor = "black";
           }
 
           return (
             <Marker
-              className="report-marker"
               style={{
                 position: "absolute",
                 textAlign: "center",
@@ -169,15 +185,19 @@ export default function Map() {
               lat={latitude}
               lng={longitude}
             >
-              <button
-                className="report-marker"
-                onClick={() => {
-                  setSelectedReport(cluster.properties.report);
-                  setOpenInfoWindow(true);
-                }}
-              >
-                <img src={imageUrl} alt="cant load pic" />
-              </button>
+              <PollutionReportToolTip report={cluster.properties.report}>
+                <IconButton
+                  size="large"
+                  style={{ color: labelColor }}
+                  className="report-marker"
+                  onClick={() => {
+                    setSelectedReport(cluster.properties.report);
+                    setOpenInfoWindow(true);
+                  }}
+                >
+                  <RoomSharpIcon />
+                </IconButton>
+              </PollutionReportToolTip>
             </Marker>
           );
         })}
