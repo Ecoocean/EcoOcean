@@ -2,13 +2,15 @@ import React, { useState, useRef } from "react";
 import GoogleMapReact, { ChangeEventValue } from "google-map-react";
 import useSupercluster from "use-supercluster";
 import "./Map.css";
-import { useQuery, useSubscription } from "@apollo/client";
+import { useQuery, useReactiveVar, useSubscription } from "@apollo/client";
 import { PollutionReport } from "../../types/PollutionReport";
 import { REPORTS_SUBSCRIPTION } from "../../GraphQL/Subscriptions";
 import {
   allPollutionReportsVar,
   filteredPollutionReportsVar,
   loadingPollutionReportsVar,
+  selectedReportVar,
+  selectedItemReportVar,
 } from "../../cache";
 import { GET_ALL_POLLUTION_REPORTS_LOCAL } from "../../GraphQL/Queries";
 import { PollutionReportModal } from "../modals/PollutionReportModal";
@@ -23,7 +25,16 @@ export default function Map() {
   const [bounds, setBounds] = useState<number[]>([]);
   const [zoom, setZoom] = useState(10);
   const [openInfoWindow, setOpenInfoWindow] = useState(false);
-  const [selectedReport, setSelectedReport] = useState(false);
+  const selectedReport = useReactiveVar(selectedReportVar);
+  const selectedItemReport = useReactiveVar(selectedItemReportVar);
+
+  if (mapRef.current && selectedItemReport) {
+    mapRef.current.setZoom(24);
+    mapRef.current.panTo({
+      lat: selectedItemReport.location.latitude,
+      lng: selectedItemReport.location.longitude,
+    });
+  }
 
   const handleClose = () => {
     setOpenInfoWindow(false);
@@ -50,6 +61,7 @@ export default function Map() {
   useSubscription(REPORTS_SUBSCRIPTION, { onSubscriptionData: IncomingReport });
 
   const onMapChange = async (changes: ChangeEventValue) => {
+    selectedItemReportVar(null); // release selected
     const minTimeForLoadingSimulation = 700; // in miliseconds
     loadingPollutionReportsVar(true);
     const startTime = performance.now();
@@ -191,7 +203,7 @@ export default function Map() {
                   style={{ color: labelColor }}
                   className="report-marker"
                   onClick={() => {
-                    setSelectedReport(cluster.properties.report);
+                    selectedReportVar(cluster.properties.report);
                     setOpenInfoWindow(true);
                   }}
                 >
