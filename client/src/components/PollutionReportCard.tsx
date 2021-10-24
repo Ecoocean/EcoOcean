@@ -50,7 +50,7 @@ export default function PollutionReportCard(props: {
       </Box>
       <CardMedia
         component="img"
-        sx={{ width: 250, height: 150 }}
+        sx={{ width: 150, height: 150 }}
         image={
           props.report.photoUrls && props.report.photoUrls.length > 0
             ? props.report.photoUrls[0]

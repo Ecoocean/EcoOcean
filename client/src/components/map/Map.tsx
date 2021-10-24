@@ -10,7 +10,7 @@ import {
   filteredPollutionReportsVar,
   loadingPollutionReportsVar,
   selectedReportVar,
-  selectedItemReportVar,
+  selectedMapReportVar,
 } from "../../cache";
 import { GET_ALL_POLLUTION_REPORTS_LOCAL } from "../../GraphQL/Queries";
 import { PollutionReportModal } from "../modals/PollutionReportModal";
@@ -26,13 +26,13 @@ export default function Map() {
   const [zoom, setZoom] = useState(10);
   const [openInfoWindow, setOpenInfoWindow] = useState(false);
   const selectedReport = useReactiveVar(selectedReportVar);
-  const selectedItemReport = useReactiveVar(selectedItemReportVar);
+  const selectedMapReport = useReactiveVar(selectedMapReportVar);
 
-  if (mapRef.current && selectedItemReport) {
+  if (mapRef.current && selectedMapReport) {
     mapRef.current.setZoom(24);
     mapRef.current.panTo({
-      lat: selectedItemReport.location.latitude,
-      lng: selectedItemReport.location.longitude,
+      lat: selectedMapReport.location.latitude,
+      lng: selectedMapReport.location.longitude,
     });
   }
 
@@ -61,7 +61,7 @@ export default function Map() {
   useSubscription(REPORTS_SUBSCRIPTION, { onSubscriptionData: IncomingReport });
 
   const onMapChange = async (changes: ChangeEventValue) => {
-    selectedItemReportVar(null); // release selected
+    selectedMapReportVar(null); // release selected Map Report
     const minTimeForLoadingSimulation = 700; // in miliseconds
     loadingPollutionReportsVar(true);
     const startTime = performance.now();

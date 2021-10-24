@@ -4,15 +4,15 @@ export const allPollutionReportsVar = makeVar([]);
 export const filteredPollutionReportsVar = makeVar([]);
 export const loadingPollutionReportsVar = makeVar(false);
 export const selectedReportVar = makeVar(null);
-export const selectedItemReportVar = makeVar(null);
+export const selectedMapReportVar = makeVar(null);
 
 export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        selectedItemReport: {
+        selectedMapReport: {
           read() {
-            return selectedItemReportVar();
+            return selectedMapReportVar();
           },
         },
         selectedReport: {
