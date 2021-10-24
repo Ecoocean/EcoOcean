@@ -4,7 +4,10 @@ import useSupercluster from "use-supercluster";
 import "./Map.css";
 import { useQuery, useReactiveVar, useSubscription } from "@apollo/client";
 import { PollutionReport } from "../../types/PollutionReport";
-import { REPORTS_SUBSCRIPTION } from "../../GraphQL/Subscriptions";
+import {
+  REPORT_ADDED_SUBSCRIPTION,
+  REPORT_UNRELEVANT_SUBSCRIPTION,
+} from "../../GraphQL/Subscriptions";
 import {
   allPollutionReportsVar,
   filteredPollutionReportsVar,
@@ -58,7 +61,36 @@ export default function Map() {
     }
   };
 
-  useSubscription(REPORTS_SUBSCRIPTION, { onSubscriptionData: IncomingReport });
+  const UnrelevantReport = ({ subscriptionData: { data } }: any) => {
+    const allReports = allPollutionReportsVar();
+    allPollutionReportsVar(
+      allReports.filter((report) => report.id !== data.reportUnrelevant.id)
+    );
+
+    if (
+      data.reportUnrelevant.location.latitude > bounds[1] &&
+      data.reportUnrelevant.location.latitude < bounds[3] &&
+      data.reportUnrelevant.location.longitude > bounds[0] &&
+      data.reportUnrelevant.location.longitude < bounds[2]
+    ) {
+      const currentFilteredReports: PollutionReport[] =
+        filteredPollutionReportsVar();
+      filteredPollutionReportsVar(
+        currentFilteredReports.filter(
+          (report) => report.id !== data.reportUnrelevant.id
+        )
+      );
+      console.log(filteredPollutionReportsVar());
+    }
+  };
+
+  useSubscription(REPORT_ADDED_SUBSCRIPTION, {
+    onSubscriptionData: IncomingReport,
+  });
+
+  useSubscription(REPORT_UNRELEVANT_SUBSCRIPTION, {
+    onSubscriptionData: UnrelevantReport,
+  });
 
   const onMapChange = async (changes: ChangeEventValue) => {
     selectedMapReportVar(null); // release selected Map Report
@@ -89,7 +121,6 @@ export default function Map() {
 
     const timeToWait = minTimeForLoadingSimulation - TotalTime;
     if (timeToWait > 0) {
-      console.log(timeToWait);
       // if operation was too fast and took less than a second (1000)
       // we will wait the diff time
       await new Promise((resolve) => setTimeout(resolve, timeToWait));
@@ -187,11 +218,6 @@ export default function Map() {
 
           return (
             <Marker
-              style={{
-                position: "absolute",
-                textAlign: "center",
-                transform: "translate(-50%, -50%)",
-              }}
               key={`report-${cluster.properties.report.id}`}
               text={cluster.id}
               lat={latitude}
@@ -199,6 +225,7 @@ export default function Map() {
             >
               <PollutionReportToolTip report={cluster.properties.report}>
                 <IconButton
+                  sx={{ marginTop: -5, marginLeft: -2.5 }}
                   size="large"
                   style={{ color: labelColor }}
                   className="report-marker"

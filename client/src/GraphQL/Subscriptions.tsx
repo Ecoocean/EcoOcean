@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const REPORTS_SUBSCRIPTION = gql`
+export const REPORT_ADDED_SUBSCRIPTION = gql`
   subscription OnReportAdded {
     reportAdded {
       location {
@@ -14,6 +14,18 @@ export const REPORTS_SUBSCRIPTION = gql`
       address
       photoUrls
       reporterImageUrl
+    }
+  }
+`;
+
+export const REPORT_UNRELEVANT_SUBSCRIPTION = gql`
+  subscription OnReportUnrelevant {
+    reportUnrelevant {
+      location {
+        latitude
+        longitude
+      }
+      id
     }
   }
 `;

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Paper from "@mui/material/Paper";
 import List from "@mui/material/List";
-import { useQuery, useReactiveVar } from "@apollo/client";
+import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { PollutionReport } from "../types/PollutionReport";
 import MapIcon from "@mui/icons-material/Map";
 import PollutionReportCard from "./PollutionReportCard";
 import { GET_FILTERED_POLLUTION_REPORTS_LOCAL } from "../GraphQL/Queries";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
   loadingPollutionReportsVar,
   selectedReportVar,
@@ -21,6 +22,8 @@ import {
   Tooltip,
 } from "@mui/material";
 import { PollutionReportModal } from "./modals/PollutionReportModal";
+import DeleteForever from "@mui/icons-material/DeleteForever";
+import { SET_REPORT_UNRELEVANT } from "../GraphQL/Mutations";
 
 export default function AlignItemsList() {
   const [openInfoWindow, setOpenInfoWindow] = useState(false);
@@ -30,8 +33,21 @@ export default function AlignItemsList() {
     GET_FILTERED_POLLUTION_REPORTS_LOCAL
   );
 
+  const [
+    setReportUnrelevant,
+    { loading: loadingUnrelevant, error: errorUnreleant, data: dataUnrelevant },
+  ] = useMutation(SET_REPORT_UNRELEVANT);
+
   const handleClose = () => {
     setOpenInfoWindow(false);
+  };
+
+  const handleSetReportUnrelevant = async (reportId: string) => {
+    const { data } = await setReportUnrelevant({
+      variables: {
+        reportId: reportId,
+      },
+    });
   };
 
   return (
@@ -61,22 +77,41 @@ export default function AlignItemsList() {
           {data.filteredPollutionReports.map((report: PollutionReport) => {
             return (
               <ListItem divider key={report.id} component="div" disablePadding>
-                <ListItemButton
-                  onClick={() => {
-                    selectedReportVar(report);
-                    setOpenInfoWindow(true);
-                  }}
-                >
-                  <PollutionReportCard report={report} />
-                </ListItemButton>
-                <Tooltip title="Show Report On Map" placement="top" arrow>
-                  <IconButton
-                    aria-label="delete"
-                    onClick={() => selectedMapReportVar(report)}
+                <Grid container direction="column">
+                  <Grid
+                    item
+                    justifyContent="left"
+                    alignItems="left"
+                    sx={{ marginLeft: 2 }}
                   >
-                    <MapIcon />
-                  </IconButton>
-                </Tooltip>
+                    <Tooltip title="Show Report On Map" placement="top" arrow>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => selectedMapReportVar(report)}
+                      >
+                        <MapIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Delete Report" placement="top" arrow>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => handleSetReportUnrelevant(report.id)}
+                      >
+                        <DeleteForeverIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                  <Grid item>
+                    <ListItemButton
+                      onClick={() => {
+                        selectedReportVar(report);
+                        setOpenInfoWindow(true);
+                      }}
+                    >
+                      <PollutionReportCard report={report} />
+                    </ListItemButton>
+                  </Grid>
+                </Grid>
               </ListItem>
             );
           })}

@@ -9,14 +9,17 @@ export const resolvers = {
   Upload: GraphQLUpload,
   Subscription: {
     reportAdded: {
-      // More on pubsub below
       subscribe: () => pubsub.asyncIterator(["REPORT_ADDED"]),
+    },
+    reportUnrelevant: {
+      subscribe: () => pubsub.asyncIterator(["REPORT_UNRELEVANT"]),
     },
   },
   Query: {
     getAllPollutionReports: async () => {
       const snapshot = await db
         .collection("pollution_report")
+        .where("isRelevant", "==", true)
         .orderBy("created_at", "desc")
         .get();
       const output = snapshot.docs.map((doc) => doc.data());
@@ -24,6 +27,13 @@ export const resolvers = {
     },
   },
   Mutation: {
+    setReportUnrelevant: async (parent, args) => {
+      const ref = db.collection("pollution_report").doc(args.reportId);
+      const report = await ref.get();
+      ref.update({ isRelevant: false });
+      pubsub.publish("REPORT_UNRELEVANT", { reportUnrelevant: report.data() });
+      return true;
+    },
     createPollutionReport: async (parent, args) => {
       const urls = await Promise.all(
         args.files.map(async (file) => {
@@ -41,6 +51,7 @@ export const resolvers = {
         type: args.type,
         created_at: timestamp,
         photoUrls: urls,
+        isRelevant: args.isRelevant,
       };
       await ref.set(pollutionReport);
       openGeocoder()

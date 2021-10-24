@@ -30,6 +30,7 @@ const typeDefs = gql`
     address: String
     photoUrls: [String]
     reporterImageUrl: String
+    isRelevant: Boolean!
   }
 
   type User {
@@ -48,9 +49,10 @@ const typeDefs = gql`
       type: PollutionType!
       files: [Upload]
       reporterImageUrl: String
+      isRelevant: Boolean!
     ): PollutionReport
 
-    singleUpload(file: Upload!): File!
+    setReportUnrelevant(reportId: String!): Boolean!
   }
 
   type Query {
@@ -58,7 +60,8 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    reportAdded: PollutionReport
+    reportAdded: PollutionReport!
+    reportUnrelevant: PollutionReport!
   }
 `;
 

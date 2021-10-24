@@ -5,7 +5,7 @@ import { Button, Modal, Form, Spinner } from "react-bootstrap";
 import PollutionTypePicker from "./PollutionTypePicker";
 import { useMutation } from "@apollo/client";
 import { CREATE_POLLUTION_REPORT } from "../../../GraphQL/Mutations";
-import { GET_ALL_POLLUTION_REPORTS_LOCAL } from "../../../GraphQL/Queries";
+
 import ImageUploaderComp from "../../reusables/ImageUploaderComp";
 import MyLocationMap from "../../map/MyLocationMap";
 import * as firebase from "firebase/app";
@@ -20,14 +20,7 @@ const PollutionForm = ({show, setSnackBar,  handleClose, }) => {
   const [locationFound, setLocationFound] = useState(false);
 
   const schema = yup.object().shape({});
-  const [CreatePollutionReport, { loading, error, data }] = useMutation(
-    CREATE_POLLUTION_REPORT,
-    {
-      refetchQueries: [
-        GET_ALL_POLLUTION_REPORTS_LOCAL, // DocumentNode object parsed with gql
-      ],
-    }
-  );
+  const [CreatePollutionReport, { loading, error, data }] = useMutation(CREATE_POLLUTION_REPORT);
   const AddPollutionReport = async () => {
     try {
       if (
@@ -38,7 +31,7 @@ const PollutionForm = ({show, setSnackBar,  handleClose, }) => {
         const { data } = await CreatePollutionReport({
           variables: {
             reporter: firebase.auth().currentUser ? firebase.auth().currentUser.displayName: "Test",
-            reporterImageUrl: firebase.auth().currentUser? firebase.auth().currentUser.photoURL: "Test",
+            reporterImageUrl: firebase.auth().currentUser? firebase.auth().currentUser.photoURL: null,
             latitude: locationMapRef.current.state.currentLocation.lat,
             longitude: locationMapRef.current.state.currentLocation.lng,
             type: pollutionTypePickerRef.current.state.image.value,
