@@ -22,8 +22,8 @@ import {
   Tooltip,
 } from "@mui/material";
 import { PollutionReportModal } from "./modals/PollutionReportModal";
-import DeleteForever from "@mui/icons-material/DeleteForever";
 import { SET_REPORT_UNRELEVANT } from "../GraphQL/Mutations";
+import { setSnackBar } from "../SnackBarUtils";
 
 export default function AlignItemsList() {
   const [openInfoWindow, setOpenInfoWindow] = useState(false);
@@ -48,6 +48,7 @@ export default function AlignItemsList() {
         reportId: reportId,
       },
     });
+    setSnackBar("Pollution report sucssefully deleted", "success");
   };
 
   return (

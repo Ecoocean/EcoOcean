@@ -80,7 +80,6 @@ export default function Map() {
           (report) => report.id !== data.reportUnrelevant.id
         )
       );
-      console.log(filteredPollutionReportsVar());
     }
   };
 

@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./components/Home";
 import SignInPage from "./pages/SignInPage.js";
+import CustomizedSnackbar from "./components/reusables/CustomizedSnackbar";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
+      <CustomizedSnackbar />
     </Router>
   );
 }

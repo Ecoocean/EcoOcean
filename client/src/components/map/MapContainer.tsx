@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import MapLeftPanel from "./MapLeftPanel";
 import Map from "./Map";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { GET_ALL_POLLUTION_REPORTS } from "../../GraphQL/Queries";
 import {
   allPollutionReportsVar,
@@ -10,14 +10,18 @@ import {
 } from "../../cache";
 
 function MapContainer() {
-  const FetchingAllReports = (data: any) => {
+  const FetchingAllReports = async (data: any) => {
     allPollutionReportsVar(data.getAllPollutionReports);
     filteredPollutionReportsVar(data.getAllPollutionReports);
   };
 
-  useQuery(GET_ALL_POLLUTION_REPORTS, {
+  const [fetachReports, {}] = useLazyQuery(GET_ALL_POLLUTION_REPORTS, {
     onCompleted: FetchingAllReports,
   });
+
+  useEffect(() => {
+    fetachReports();
+  }, [fetachReports]);
 
   return (
     <Container fluid>

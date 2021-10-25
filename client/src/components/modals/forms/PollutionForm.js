@@ -5,12 +5,12 @@ import { Button, Modal, Form, Spinner } from "react-bootstrap";
 import PollutionTypePicker from "./PollutionTypePicker";
 import { useMutation } from "@apollo/client";
 import { CREATE_POLLUTION_REPORT } from "../../../GraphQL/Mutations";
-
+import {setSnackBar} from "../../../SnackBarUtils"
 import ImageUploaderComp from "../../reusables/ImageUploaderComp";
 import MyLocationMap from "../../map/MyLocationMap";
 import * as firebase from "firebase/app";
 import 'firebase/auth';
-const PollutionForm = ({show, setSnackBar,  handleClose, }) => {
+const PollutionForm = ({show, handleClose, }) => {
   const { Formik } = formik;
 
   const formRef = useRef(null);
