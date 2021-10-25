@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import Paper from "@mui/material/Paper";
 import List from "@mui/material/List";
 import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
-import { PollutionReport } from "../types/PollutionReport";
+import { PollutionReport } from "../../types/PollutionReport";
 import MapIcon from "@mui/icons-material/Map";
-import PollutionReportCard from "./PollutionReportCard";
-import { GET_FILTERED_POLLUTION_REPORTS_LOCAL } from "../GraphQL/Queries";
+import PollutionReportCard from "../PollutionReportCard";
+import { GET_FILTERED_POLLUTION_REPORTS_LOCAL } from "../../GraphQL/Queries";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
   loadingPollutionReportsVar,
   selectedReportVar,
   selectedMapReportVar,
-} from "../cache";
+} from "../../cache";
 import {
   Backdrop,
   CircularProgress,
@@ -21,11 +21,11 @@ import {
   ListItemButton,
   Tooltip,
 } from "@mui/material";
-import { PollutionReportModal } from "./modals/PollutionReportModal";
-import { SET_REPORT_UNRELEVANT } from "../GraphQL/Mutations";
-import { setSnackBar } from "../SnackBarUtils";
+import { PollutionReportModal } from "../modals/PollutionReportModal";
+import { SET_REPORT_UNRELEVANT } from "../../GraphQL/Mutations";
+import { setSnackBar } from "../../SnackBarUtils";
 
-export default function AlignItemsList() {
+export default function ReportList() {
   const [openInfoWindow, setOpenInfoWindow] = useState(false);
   const loadingFilteredReports = useReactiveVar(loadingPollutionReportsVar);
   const selectedReport = useReactiveVar(selectedReportVar);
