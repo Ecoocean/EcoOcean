@@ -12,6 +12,7 @@
     "@types/jest": "^27.0.2",
     "@types/node": "^16.10.3",
     "@types/react-dom": "^17.0.9",
+    "antd": "^4.16.13",
     "apollo-upload-client": "^16.0.0",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
@@ -35,9 +36,11 @@
     "react-firebaseui": "^5.0.2",
     "react-flip-move": "^3.0.4",
     "react-gmaps": "^1.9.0",
+    "react-google-autocomplete": "^2.5.0",
     "react-images-upload": "^1.2.8",
     "react-laag": "^2.0.3",
     "react-markdown": "^6.0.0",
+    "react-places-autocomplete": "^7.3.0",
     "react-redux": "^7.2.1",
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
@@ -62,7 +65,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

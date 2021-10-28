@@ -9,6 +9,7 @@ import {setSnackBar} from "../../../SnackBarUtils"
 import ImageUploaderComp from "../../reusables/ImageUploaderComp";
 import MyLocationMap from "../../map/MyLocationMap";
 import * as firebase from "firebase/app";
+
 import 'firebase/auth';
 const PollutionForm = ({show, handleClose, }) => {
   const { Formik } = formik;
@@ -28,6 +29,12 @@ const PollutionForm = ({show, handleClose, }) => {
         pollutionTypePickerRef.current &&
         imageUploaderRef.current
       ) {
+        // exteranl validation - we validate here because we can't use formik validation
+        // pollution type picker is special component
+        if(!pollutionTypePickerRef.current.state.image.value){
+          setSnackBar('Pollution type must be selected', 'error');
+          return
+        }
         const { data } = await CreatePollutionReport({
           variables: {
             reporter: firebase.auth().currentUser ? firebase.auth().currentUser.displayName: "Test",
@@ -52,7 +59,7 @@ const PollutionForm = ({show, handleClose, }) => {
   }
 
   return (
-    <Modal show={show} onHide={handleClose} animation={true}>
+    <Modal show={show} size="lg" onHide={handleClose} animation={true}>
       <Formik
         innerRef={formRef}
         validateOnBlur={true}

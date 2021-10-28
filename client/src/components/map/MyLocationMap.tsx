@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, useRef } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import GoogleMapReact from "google-map-react";
+import SearchBar from "../../SearchBar";
 
 const Marker = (props: any) => props.children;
 
@@ -17,8 +18,19 @@ class MyLocationMap extends Component<{ onLocationFound: any }, State> {
   private locationWatchID: any;
   readonly state: State = initialState;
 
+  constructor(props) {
+    super(props);
+    this.onSetLocation = this.onSetLocation.bind(this);
+  }
+
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.locationWatchID);
+  }
+
+  onSetLocation(lat, lng) {
+    this.setState({ currentLocation: { lng: lng, lat: lat } });
+    this.setState({ locationFound: true });
+    this.props.onLocationFound(lat, lng); // update the found on the parent component
   }
 
   render() {
@@ -27,12 +39,9 @@ class MyLocationMap extends Component<{ onLocationFound: any }, State> {
       this.locationWatchID = navigator.geolocation.watchPosition(
         ({ coords: { latitude: lat, longitude: lng, accuracy: acc } }) => {
           console.log(acc);
-          if (acc < 5000) {
+          if (acc < 50) {
             // if the location is within 50 meters
-            const pos = { lat, lng };
-            this.setState({ currentLocation: pos });
-            this.setState({ locationFound: true });
-            this.props.onLocationFound();
+            this.onSetLocation(lat, lng);
           }
         },
         (err) => console.log(err),
@@ -44,10 +53,11 @@ class MyLocationMap extends Component<{ onLocationFound: any }, State> {
       );
     };
     const googleKey: GoogleMapReact.BootstrapURLKeys = {
-      key: process.env.REACT_APP_GOOGLE_TOKEN!,
+      key: process.env.REACT_APP_GOOGLE,
     };
     return (
       <div>
+        <SearchBar onSetLocation={this.onSetLocation} ref="searchBar" />
         <div style={{ height: "400px", width: "100%" }}>
           {!this.state.locationFound && (
             <Button variant="primary">

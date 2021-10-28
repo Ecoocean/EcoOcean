@@ -51,6 +51,7 @@ export const resolvers = {
         type: args.type,
         created_at: timestamp,
         photoUrls: urls,
+        address: null,
         isRelevant: args.isRelevant,
       };
       await ref.set(pollutionReport);
@@ -58,11 +59,14 @@ export const resolvers = {
         .reverse(args.longitude, args.latitude)
         .end((err, res) => {
           if (res) {
-            console.log(res.address);
+            pollutionReport.address = res.display_name;
             ref.update({ address: res.display_name });
           }
+          if (err) {
+            console.log(err);
+          }
+          pubsub.publish("REPORT_ADDED", { reportAdded: pollutionReport });
         });
-      pubsub.publish("REPORT_ADDED", { reportAdded: pollutionReport });
       return pollutionReport;
     },
   },

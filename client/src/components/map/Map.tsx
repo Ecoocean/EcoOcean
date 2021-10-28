@@ -152,7 +152,8 @@ export default function Map() {
     options: { radius: 75, maxZoom: 20 },
   });
   const googleKey: GoogleMapReact.BootstrapURLKeys = {
-    key: process.env.REACT_APP_GOOGLE_TOKEN!,
+    key: process.env.REACT_APP_GOOGLE,
+    libraries: ["places"],
   };
 
   return (
@@ -224,7 +225,7 @@ export default function Map() {
             >
               <PollutionReportToolTip report={cluster.properties.report}>
                 <IconButton
-                  sx={{ marginTop: -5, marginLeft: -2.5 }}
+                  sx={{ marginTop: -3.5, marginLeft: -3 }}
                   size="large"
                   style={{ color: labelColor }}
                   className="report-marker"
