@@ -25,8 +25,8 @@ export default function AccountMenu() {
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         {firebase.auth().currentUser.displayName}
-        <Tooltip title="Account settings">
-          <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
+        <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
+          <Tooltip title="Account settings" arrow>
             <Avatar
               sx={{
                 border: "0.1px solid lightgray",
@@ -39,8 +39,8 @@ export default function AccountMenu() {
               }
               alt={firebase.auth().currentUser.displayName}
             />
-          </IconButton>
-        </Tooltip>
+          </Tooltip>
+        </IconButton>
       </Box>
       <Menu
         anchorEl={anchorEl}
