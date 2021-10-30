@@ -1,3 +1,3 @@
 # EcoOcean
 
-EcoOcean Platform check 5
+EcoOcean Platform check 6
