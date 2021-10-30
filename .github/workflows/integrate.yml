@@ -21,6 +21,7 @@ jobs:
       - run: npm run build
       
       - name: Archive production artifacts
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: add-logs
