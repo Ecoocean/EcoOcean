@@ -1,4 +1,4 @@
-name: Node Continuous Integration - Client
+name: Node Continuous Integration - Server
 
 on:
  
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./client
+        working-directory: ./server
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -26,6 +26,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: add-logs
+          name: npm_logs
           path: |
             /home/runner/.npm/_logs/*

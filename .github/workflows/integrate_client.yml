@@ -26,6 +26,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: add-logs
+          name: npm_logs
           path: |
             /home/runner/.npm/_logs/*
