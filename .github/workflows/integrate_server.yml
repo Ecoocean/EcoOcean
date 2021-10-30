@@ -1,0 +1,31 @@
+name: Node Continuous Integration - Client
+
+on:
+ 
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test_pull_request:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.16
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+        env:
+          CI: false
+      
+      - name: Archive production artifacts
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: add-logs
+          path: |
+            /home/runner/.npm/_logs/*
