@@ -19,7 +19,8 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
-        name: Archive production artifacts
+      
+      - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
           name: add-logs
