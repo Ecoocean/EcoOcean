@@ -7,7 +7,7 @@
   "scripts": {
     "start": "ts-node-dev --respawn src/index.ts",
     "test": "jest --passWithNoTests",
-    "build": "tsc"
+    "build": "tsc -p ."
   },
   "keywords": [],
   "author": "",
