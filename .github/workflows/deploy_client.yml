@@ -20,6 +20,7 @@ jobs:
         env:
           CI: false
       - uses: w9jds/firebase-action@master
+        working-directory: ./client
         with:
           args: deploy --only hosting
         env:
