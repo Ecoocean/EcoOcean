@@ -19,6 +19,8 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+        env:
+          CI: false
       
       - name: Archive production artifacts
         if: always()
