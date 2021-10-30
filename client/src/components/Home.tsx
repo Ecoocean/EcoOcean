@@ -1,10 +1,18 @@
 import React from "react";
-import MapContainer from './map/MapContainer'
-
-
+import Footer from "./Footer";
+import Header from "./Header";
+import MapContainer from "./map/MapContainer";
+import { Helmet } from "react-helmet";
 const Home = () => {
   return (
-    <MapContainer/>
+    <main>
+      <Helmet>
+        <title>EcoOcean</title>
+      </Helmet>
+      <Header />
+      <MapContainer />
+      <Footer />
+    </main>
   );
 };
 

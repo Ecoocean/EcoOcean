@@ -2,7 +2,11 @@
 import React, { useEffect, useState } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import * as firebase from "firebase/app";
+import { Helmet } from 'react-helmet';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Navigate  } from 'react-router-dom'
 import 'firebase/auth';
+import './SignInPage.css'
 
 // Configure Firebase.
 const firebaseConfig = {
@@ -23,9 +27,11 @@ const uiConfig = {
   signInFlow: "popup",
   // We will display Google and Facebook as auth providers.
   signInOptions: [
+    firebase.auth.EmailAuthProvider.PROVIDER_ID,
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.FacebookAuthProvider.PROVIDER_ID,
   ],
+  signInSuccessUrl: '/',
   callbacks: {
     // Avoid redirects after sign-in.
     signInSuccessWithAuthResult: () => false,
@@ -33,6 +39,7 @@ const uiConfig = {
 };
 
 function SignInScreen() {
+  const [checkingAuth, setCheckingAuth] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
 
   // Listen to the Firebase Auth state and set the local state.
@@ -40,32 +47,40 @@ function SignInScreen() {
     const unregisterAuthObserver = firebase
       .auth()
       .onAuthStateChanged((user) => {
-        setIsSignedIn(!!user);
+        if(user){
+          setCheckingAuth(true);
+        }
+        setTimeout(() => {
+          setIsSignedIn(!!user);
+          if(user){
+            setCheckingAuth(false);
+          }
+        }, 1000);
+        
       });
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
   }, []);
 
   if (!isSignedIn) {
     return (
-      <div>
-        <h1>My App</h1>
-        <p>Please sign-in:</p>
-        <StyledFirebaseAuth
-          uiConfig={uiConfig}
-          firebaseAuth={firebase.auth()}
-        />
+      <div className="LoginRoot">
+      <Helmet>
+        <title>Login</title>
+      </Helmet>
+      <img className="LoginLogo" src={'/images/Ecoocean_new_logo_filtered.jpg'} alt="" />
+      {checkingAuth ? <CircularProgress color="inherit" /> :
+      <div> 
+          <StyledFirebaseAuth
+            uiConfig={uiConfig}
+            firebaseAuth={firebase.auth()}
+          />
       </div>
+    }
+    </div>
     );
   }
   return (
-    <div>
-      <h1>My App</h1>
-      <p>
-        Welcome {firebase.auth().currentUser.displayName}! You are now
-        signed-in!
-      </p>
-      <a onClick={() => firebase.auth().signOut()}>Sign-out</a>
-    </div>
+    <Navigate to="/" />
   );
 }
 

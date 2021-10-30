@@ -1,79 +1,67 @@
-import React from "react";
-import { Navbar, Nav, NavDropdown } from "react-bootstrap";
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import LogoutIcon from "@mui/icons-material/Logout";
 
-import Logo from "./reusables/Logo";
-import { Link, useNavigate } from "react-router-dom";
+import { Tooltip } from "@mui/material";
+import AccountMenu from "./AccountMenu";
 
-const Header = () => {
-  const navigate = useNavigate();
+export default function Header() {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
-    <header>
-      <Navbar id="main_navbar" className="fixed-top">
-        <Link to="/">
-          <Navbar.Brand>
-            <Logo />
-          </Navbar.Brand>
-        </Link>
-        <Navbar.Toggle aria-controls="basic_navbar_nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <>
-            <>
-              <span>ברוך שובך </span>
-              <NavDropdown title={"gg"} id="username">
-                <NavDropdown.Item
-                  id={"user_profile_nav"}
-                  onClick={() => navigate("profile")}
-                >
-                  פרופיל משתמש
-                </NavDropdown.Item>
-                <NavDropdown.Item
-                  id={"user_latest_results_nav"}
-                  onClick={() => navigate("user_latest_results")}
-                >
-                  הרצות אחרונות שלי
-                </NavDropdown.Item>
-                <NavDropdown.Item
-                  id={"user_logout"}
-                  onClick={() => console.log("ss")}
-                >
-                  התנתק/י
-                </NavDropdown.Item>
-              </NavDropdown>
-            </>
-            ) : (
-            <>
-              <Nav.Link
-                onClick={() => navigate("login")}
-                className="nav_link_custom"
-                id="nav_link_login"
-              >
-                <span className="lnr lnr-enter"></span>
-
-                <span>התחברות</span>
-              </Nav.Link>
-              <Nav.Link
-                onClick={() => navigate("register")}
-                className="nav_link_custom"
-                id="nav_link_register"
-              >
-                <span className="lnr lnr-user"></span>
-                <span>הרשמה</span>
-              </Nav.Link>
-            </>
-            <Nav.Link
-              onClick={() => navigate("/")}
-              className="nav_link_custom"
-              id="nav_link_forum"
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            EcoOcean
+          </Typography>
+          <div>
+            <AccountMenu />
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
             >
-              <span className="lnr lnr-home"></span>
-              <span>בית</span>
-            </Nav.Link>
-          </>
-        </Navbar.Collapse>
-      </Navbar>
-    </header>
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+            </Menu>
+          </div>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
-};
-
-export default Header;
+}
