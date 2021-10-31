@@ -32,13 +32,19 @@ const typeDefs = gql`
     reporterImageUrl: String
     isRelevant: Boolean!
   }
+  type UserMetadata {
+    creationTime: Date!
+    lastRefreshTime: Date!
+    lastSignInTime: Date!
+  }
 
   type User {
-    id: ID!
-    username: String!
+    uid: ID!
+    displayName: String!
     email: String!
-    profileImageUrl: String
-    token: String
+    emailVerified: Boolean!
+    photoURL: String
+    metadata: UserMetadata!
   }
 
   type Mutation {
@@ -57,6 +63,7 @@ const typeDefs = gql`
 
   type Query {
     getAllPollutionReports: [PollutionReport]!
+    allUsers: [User]!
   }
 
   type Subscription {

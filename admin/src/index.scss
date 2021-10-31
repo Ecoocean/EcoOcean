@@ -1,0 +1,178 @@
+// By: https://bootswatch.com/, template: Lumen
+@import "./custom";
+
+@font-face {
+  font-family: "Alef";
+  src: local("Alef"),
+    url("./fonts/Alef-Webfont/Alef-Bold.ttf") format("truetype");
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+//--------------UP HERE ARE THE GLOBALS
+
+//---------------FROM HERE REUSABLES
+.offset_nav {
+  margin-bottom: 10vh;
+}
+
+.red {
+  color: rgb(209, 4, 4);
+}
+
+.ltr {
+  direction: ltr;
+}
+
+.rtl {
+  direction: rtl;
+}
+
+#login_screen {
+  max-width: 50vh;
+}
+
+// Navbar
+#main_navbar {
+  background-color: $white;
+  height: 7vh;
+
+  .input-group {
+    width: 30rem;
+  }
+
+  // To reset react-bootstrap drop arrow
+  .dropdown a::after {
+    border: 0;
+  }
+
+  .nav_link_custom {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .navbar-nav a {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+    width: 16vh;
+    justify-content: space-around;
+  }
+
+  .lnr {
+    font-size: 1.5rem;
+  }
+
+  #basic-navbar-nav {
+    direction: rtl;
+    justify-content: flex-start;
+  }
+}
+
+#portfolio_wrapper {
+  padding-top: 3rem;
+  direction: ltr;
+  text-align: right;
+}
+
+#q_wrapper {
+  direction: ltr;
+  text-align: right;
+
+  ol {
+    justify-content: flex-end;
+  }
+
+  .breadcrumb {
+    li {
+      flex-grow: 1;
+      flex-basis: auto;
+      text-align: center;
+      border-left: 1px solid #ccc;
+      color: $primary;
+      text-decoration: underline;
+      cursor: pointer;
+
+      &.active {
+        color: $secondary;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.question_text {
+  direction: rtl;
+}
+.modal-title {
+  direction: ltr;
+  text-align: right;
+}
+
+#map {
+  margin-top: 2em;
+  padding-bottom: 10em;
+  background-position: 100% 0;
+  background-repeat: no-repeat;
+}
+#map-left-panel {
+  padding-right: 0;
+  padding-bottom: 10em;
+  background-position: 100% 0;
+  background-repeat: no-repeat;
+}
+#map-operations {
+  align-items: center;
+  padding-right: 0;
+}
+#map-element-list {
+  padding-right: 0;
+}
+
+#top_banner {
+  height: 75vh;
+  background-image: url("/images/backgrounds/5.jpg");
+  background-position: 50% 50%;
+  background-size: cover;
+  color: black;
+  display: flex;
+  line-height: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  text-align: right;
+  direction: rtl;
+  // background-color: rgba(0, 0, 0, 0.5);
+}
+
+*:not(span, i) {
+  // font-family: "Alef", sans-serif !important;
+}
+
+.center_block {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  min-height: 70vh;
+}
+
+// Portfolio
+.pie_chart_container_col {
+  min-height: 50vh;
+}
+
+// Forum
+.forum_cluster {
+  max-height: 35vh;
+  image {
+    background-size: cover;
+  }
+}
+
+.forum_subject_card {
+  margin-top: 3vh;
+  font-style: normal;
+  font-size: 0.8rem;
+  font-weight: 400;
+}

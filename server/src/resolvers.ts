@@ -1,4 +1,4 @@
-import { db, admin } from "./firestore";
+import { db, admin, auth } from "./firestore";
 import { GeoPoint } from "@google-cloud/firestore";
 import { GraphQLUpload } from "graphql-upload";
 import { saveFileToFireStorage } from "./fileUploader";
@@ -16,6 +16,10 @@ export const resolvers = {
     },
   },
   Query: {
+    allUsers: async (parentValue, args) => {
+      const { users } = await auth.listUsers();
+      return users;
+    },
     getAllPollutionReports: async () => {
       const snapshot = await db
         .collection("pollution_report")

@@ -9,5 +9,6 @@ admin.initializeApp({
   storageBucket: "gs://ecoocean.appspot.com",
 });
 
+export const auth = admin.auth();
 export const db = admin.firestore();
 export const bucket = admin.storage().bucket();
