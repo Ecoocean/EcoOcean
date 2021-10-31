@@ -7,7 +7,6 @@ import { styled } from "@mui/material/styles";
 import { Box } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ScaleLoader from "react-spinners/ScaleLoader";
-import { display } from "@mui/system";
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />

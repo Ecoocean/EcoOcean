@@ -5,8 +5,8 @@
   "targets": {
     "ecoocean": {
       "hosting": {
-        "ecoocean": [
-          "ecoocean"
+        "admin-ecoocean": [
+          "admin-ecoocean"
         ]
       }
     }

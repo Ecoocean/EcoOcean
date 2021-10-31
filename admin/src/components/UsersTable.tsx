@@ -16,6 +16,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 import UserPermissionsBox from "./UserPermissionsBox";
+import { DateTime } from "luxon";
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -35,12 +36,31 @@ const columns = [
     options: {
       filter: true,
       sort: true,
+      sortCompare:
+        (order) =>
+        ({ data: val1 }, { data: val2 }) => {
+          const name1 = val1.displayName;
+          const name2 = val2.displayName;
+          console.log(order);
+          if (name1 === name2) {
+            return 0;
+          }
+
+          if (order === "desc" && name1 > name2) {
+            return 1;
+          }
+
+          return -1;
+        },
+      customHeadLabelRender: (columnMeta) => {
+        return <Box sx={{ fontWeight: "bold" }}>{columnMeta.label}</Box>;
+      },
       customBodyRender: (value, tableMeta, updateValue) => {
         return (
           <Grid container spacing={2}>
             <Grid item>
               <Avatar
-                sx={{ width: 56, height: 56 }}
+                sx={{ width: 70, height: 70 }}
                 variant="circular"
                 src={value.photoURL}
               ></Avatar>
@@ -60,24 +80,33 @@ const columns = [
   },
   {
     name: "lastSignInTime",
-    label: "Last Sign In Time",
+    label: "Last Sign In",
     options: {
+      customHeadLabelRender: (columnMeta) => {
+        return <Box sx={{ fontWeight: "bold" }}>{columnMeta.label}</Box>;
+      },
       filter: false,
-      sort: false,
+      sort: true,
+      customBodyRender: (value, tableMeta, updateValue) => {
+        return value.toRelative();
+      },
     },
   },
   {
     name: "status",
     label: "Status",
     options: {
+      customHeadLabelRender: (columnMeta) => {
+        return <Box sx={{ fontWeight: "bold" }}>{columnMeta.label}</Box>;
+      },
       filter: false,
       sort: false,
       customBodyRender: (value, tableMeta, updateValue) => {
-        const color = value.emailVerified ? "success" : "error";
+        const color = value.emailVerified ? "#52D198" : "#E0452F";
         const label = value.emailVerified
           ? "Email Verified"
           : "Email Not Verified";
-        return <Chip label={label} color={color} />;
+        return <Chip label={label} sx={{ backgroundColor: color }} />;
       },
     },
   },
@@ -85,6 +114,9 @@ const columns = [
     name: "actions",
     label: "Actions",
     options: {
+      customHeadLabelRender: (columnMeta) => {
+        return <Box sx={{ fontWeight: "bold" }}>{columnMeta.label}</Box>;
+      },
       filter: false,
       sort: false,
       customBodyRender: (value, tableMeta, updateValue) => {
@@ -116,6 +148,9 @@ const columns = [
     name: "permissions",
     label: "Permissions",
     options: {
+      customHeadLabelRender: (columnMeta) => {
+        return <Box sx={{ fontWeight: "bold" }}>{columnMeta.label}</Box>;
+      },
       filter: false,
       sort: false,
       customBodyRender: (permissions, tableMeta, updateValue) => {
@@ -135,6 +170,11 @@ const columns = [
 const options = {
   filterType: "checkbox",
   selectableRowsHideCheckboxes: true,
+  customSearch: (searchQuery, currentRow, columns) => {
+    const searchQueryLower = searchQuery.toLowerCase();
+    const nameLower = currentRow[0].displayName.toLowerCase();
+    return nameLower.includes(searchQueryLower);
+  },
 };
 export default function UsersTable() {
   const { loading, error, data } = useQuery(GET_ALL_USERS);
@@ -144,13 +184,14 @@ export default function UsersTable() {
       title={"User List"}
       data={data.allUsers.map((user) => {
         const { displayName, email, emailVerified, photoURL, metadata } = user;
+        const lastSignInTime = DateTime.fromHTTP(metadata.lastSignInTime);
         return {
           name: {
             displayName: displayName,
             email: email,
             photoURL: photoURL,
           },
-          lastSignInTime: metadata.lastSignInTime,
+          lastSignInTime: lastSignInTime,
           status: { emailVerified: emailVerified },
           permissions: {
             admin: true,
