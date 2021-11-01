@@ -1,13 +1,11 @@
 name: Node Continuous Integration - Server
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
 jobs:
-  test_pull_request:
+  continuous_integration_admin:
     runs-on: ubuntu-latest
     defaults:
       run:
