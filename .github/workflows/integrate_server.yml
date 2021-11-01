@@ -1,7 +1,8 @@
 name: Node Continuous Integration - Server
 
 on:
- 
+  push:
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
