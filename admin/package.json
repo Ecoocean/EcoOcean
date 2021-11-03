@@ -72,7 +72,7 @@
   },
   "scripts": {
     "start": "react-dotenv && react-scripts start",
-    "build": "react-dotenv && react-scripts build",
+    "build": "react-dotenv && react-scripts build:prod",
     "test": "jest --passWithNoTests",
     "eject": "react-scripts eject"
   },
