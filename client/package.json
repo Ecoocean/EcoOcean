@@ -69,9 +69,8 @@
     "yup": "^0.32.9"
   },
   "scripts": {
-    "start": "react-dotenv && react-scripts start",
-    "build": "react-dotenv && react-scripts build",
-    "build:prod": "env-cmd -f .env.production npm run build",
+    "start": "env-cmd -f .env.development react-scripts start",
+    "build": "env-cmd -f .env.production react-scripts build",
     "test": "jest --passWithNoTests",
     "eject": "react-scripts eject"
   },
