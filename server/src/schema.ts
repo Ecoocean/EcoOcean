@@ -33,18 +33,42 @@ const typeDefs = gql`
     isRelevant: Boolean!
   }
   type UserMetadata {
-    creationTime: Date!
-    lastRefreshTime: Date!
-    lastSignInTime: Date!
+    creationTime: Date
+    lastRefreshTime: Date
+    lastSignInTime: Date
+  }
+
+  type UserInfo {
+    displayName: String!
+    email: String!
+    photoURL: String
+    emailVerified: Boolean!
+  }
+
+  type UserPermissions {
+    isOnboard: Boolean
+    isAdmin: Boolean
+    isReporter: Boolean
+    hasChartAccess: Boolean
   }
 
   type User {
     uid: ID!
+    userInfo: UserInfo
+    metadata: UserMetadata
+    permissions: UserPermissions
+  }
+
+  input UserInfoInput {
     displayName: String!
     email: String!
-    emailVerified: Boolean!
     photoURL: String
-    metadata: UserMetadata!
+    emailVerified: Boolean!
+  }
+
+  input UserInput {
+    uid: String
+    userInfo: UserInfoInput
   }
 
   type Mutation {
@@ -59,11 +83,20 @@ const typeDefs = gql`
     ): PollutionReport
 
     setReportUnrelevant(reportId: String!): Boolean!
+
+    addUser(userInput: UserInput): User
+
+    setUserPermissionField(
+      uid: String!
+      fieldName: String!
+      value: Boolean!
+    ): Boolean
   }
 
   type Query {
     getAllPollutionReports: [PollutionReport]!
     allUsers: [User]!
+    getUserByUID(uid: String!): User
   }
 
   type Subscription {

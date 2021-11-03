@@ -16,9 +16,38 @@ export const resolvers = {
     },
   },
   Query: {
+    getUserByUID: async (parentValue, args) => {
+      const snapshot = await db.collection("user").doc(args.uid).get();
+      return snapshot.data();
+    },
     allUsers: async (parentValue, args) => {
-      const { users } = await auth.listUsers();
-      return users;
+      let { users } = await auth.listUsers();
+      users = users.filter(({ email, displayName }) => {
+        if (!(email || displayName)) return false;
+        return true;
+      });
+      const snapshot = await db.collection("user").get();
+      const onboardedUsers = snapshot.docs.map((doc) => doc.data());
+      return users.map((firebaseUser) => {
+        const [match] = onboardedUsers.filter(
+          (onb) => onb.uid === firebaseUser.uid
+        );
+        return {
+          metadata: firebaseUser.metadata,
+          ...(match || {
+            uid: firebaseUser.uid,
+            userInfo: {
+              emailVerified: firebaseUser.emailVerified,
+              displayName: firebaseUser.displayName,
+              email: firebaseUser.email,
+              photoURL: firebaseUser.photoURL,
+            },
+            permissions: {
+              isOnboard: false,
+            },
+          }),
+        };
+      });
     },
     getAllPollutionReports: async () => {
       const snapshot = await db
@@ -31,6 +60,28 @@ export const resolvers = {
     },
   },
   Mutation: {
+    setUserPermissionField: async (parent, args) => {
+      db.collection("user")
+        .doc(args.uid)
+        .update({
+          [`permissions.${args.fieldName}`]: args.value,
+        });
+    },
+    addUser: async (parent, args) => {
+      const {
+        userInput: { uid, userInfo },
+      } = args;
+      const user = {
+        uid: uid,
+        userInfo: userInfo,
+        permissions: {
+          isOnboard: true,
+        },
+      };
+      await db.collection("user").doc(uid).set(user);
+      return user;
+    },
+
     setReportUnrelevant: async (parent, args) => {
       const ref = db.collection("pollution_report").doc(args.reportId);
       const report = await ref.get();

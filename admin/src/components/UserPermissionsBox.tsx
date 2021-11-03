@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
@@ -7,6 +7,8 @@ import { styled } from "@mui/material/styles";
 import { Box } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import { SET_USER_FIELD } from "../GraphQL/Mutations";
+import { useMutation } from "@apollo/client";
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -19,15 +21,36 @@ const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-export default function UserPermissionsBox({ admin, reporter, charts }) {
-  let [loading, setLoading] = useState(false);
-  const onPermissionClick = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+export default function UserPermissionsBox({ uid, admin, reporter, charts }) {
+  const [adminVal, setAdmin] = useState(admin);
+  const [reporterVal, setReporter] = useState(reporter);
+  const [chartsVal, setCharts] = useState(charts);
+  const [loadingSimulation, setLoadingSimulations] = useState(false);
+
+  const onPermissionClick = async (fieldName, currentValue) => {
+    const minTimeForLoadingSimulation = 700; // in miliseconds
+    setLoadingSimulations(true);
+    const startTime = performance.now();
+    await editUserField({
+      variables: {
+        uid: uid,
+        fieldName: fieldName,
+        value: !currentValue,
+      },
+    });
+    const endTime = performance.now();
+    const TotalTime = endTime - startTime; // in miliseconds
+
+    const timeToWait = minTimeForLoadingSimulation - TotalTime;
+    if (timeToWait > 0) {
+      // if operation was too fast and took less than a second (1000)
+      // we will wait the diff time
+      await new Promise((resolve) => setTimeout(resolve, timeToWait));
+    }
   };
-  return !loading ? (
+
+  const [editUserField, { loading, error, data }] = useMutation(SET_USER_FIELD);
+  return !loadingSimulation ? (
     <Box
       component="div"
       sx={{
@@ -43,24 +66,36 @@ export default function UserPermissionsBox({ admin, reporter, charts }) {
     >
       <BootstrapTooltip title="Admin">
         <IconButton
-          style={{ color: admin ? "#52D198" : "grey" }}
-          onClick={onPermissionClick}
+          style={{ color: adminVal ? "#52D198" : "grey" }}
+          onClick={async () => {
+            await onPermissionClick("isAdmin", adminVal);
+            setAdmin(!adminVal);
+            setLoadingSimulations(false);
+          }}
         >
           <SupervisedUserCircleIcon />
         </IconButton>
       </BootstrapTooltip>
       <BootstrapTooltip title="Reporter">
         <IconButton
-          style={{ color: reporter ? "#52D198" : "grey" }}
-          onClick={onPermissionClick}
+          style={{ color: reporterVal ? "#52D198" : "grey" }}
+          onClick={async () => {
+            await onPermissionClick("isReporter", reporterVal);
+            setReporter(!reporterVal);
+            setLoadingSimulations(false);
+          }}
         >
           <FmdGoodIcon />
         </IconButton>
       </BootstrapTooltip>
       <BootstrapTooltip title="Access Charts">
         <IconButton
-          style={{ color: charts ? "#52D198" : "grey" }}
-          onClick={onPermissionClick}
+          style={{ color: chartsVal ? "#52D198" : "grey" }}
+          onClick={async () => {
+            await onPermissionClick("hasChartAccess", chartsVal);
+            setCharts(!chartsVal);
+            setLoadingSimulations(false);
+          }}
         >
           <AssessmentIcon />
         </IconButton>
@@ -74,6 +109,7 @@ export default function UserPermissionsBox({ admin, reporter, charts }) {
         border: "1px solid grey",
         borderRadius: "25px",
         height: "50px",
+        width: "180px",
         maxWidth: "180px",
         justifyContent: "center",
         alignItems: "center",
@@ -81,12 +117,12 @@ export default function UserPermissionsBox({ admin, reporter, charts }) {
       }}
     >
       <ScaleLoader
-        height="25"
-        width="8"
-        radius="2"
-        margin="2"
+        height="30px"
+        width="8px"
+        radius="2px"
+        margin="2px"
         color="#52D198"
-        loading={loading}
+        loading={loadingSimulation}
       />
     </Box>
   );

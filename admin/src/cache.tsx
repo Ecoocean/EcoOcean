@@ -1,5 +1,8 @@
 import { InMemoryCache, makeVar } from "@apollo/client";
 
+// onboard user uid
+export const lastOnboardUserUIDVar = makeVar(null);
+
 // all the reports
 export const allPollutionReportsVar = makeVar([]);
 

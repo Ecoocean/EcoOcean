@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.scss";
-import App from "./App";
+import App from "./App.js";
 import { split } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { ApolloClient, ApolloProvider } from "@apollo/client";

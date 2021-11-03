@@ -6,17 +6,20 @@ import Typography from "@mui/material/Typography";
 import AccountMenu from "./AccountMenu";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import { useNavigate } from "react-router-dom";
 interface LinkTabProps {
   label?: string;
   href?: string;
 }
 
 function LinkTab(props: LinkTabProps) {
+  const navigate = useNavigate();
   return (
     <Tab
       component="a"
       onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         event.preventDefault();
+        navigate(props.href);
       }}
       {...props}
     />
@@ -43,6 +46,7 @@ export default function Header() {
               onChange={handleChange}
               aria-label="nav tabs example"
             >
+              <LinkTab label="Home" href="/" />
               <LinkTab label="Users" href="/users" />
               <LinkTab label="Page Two" href="/trash" />
               <LinkTab label="Page Three" href="/spam" />

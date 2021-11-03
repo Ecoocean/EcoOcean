@@ -5,8 +5,11 @@ import * as firebase from "firebase/app";
 import { Helmet } from 'react-helmet';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Navigate  } from 'react-router-dom'
+import { useLazyQuery } from '@apollo/client';
+import {GET_USER_BY_UID} from '../GraphQL/Queries'
 import 'firebase/auth';
 import './SignInPage.css'
+import { Button } from "react-bootstrap";
 
 // Configure Firebase.
 const firebaseConfig = {
@@ -40,7 +43,16 @@ const uiConfig = {
 
 function SignInScreen() {
   const [checkingAuth, setCheckingAuth] = useState(false);
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
+  const [getUser, { loading, error, data }] = useLazyQuery(GET_USER_BY_UID);
+
+  // listen for db user result
+  useEffect(() => {
+    if(data?.getUserByUID) {
+      setUserAuthenticated(true);
+    }
+  }, [data])
 
   // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {
@@ -49,8 +61,13 @@ function SignInScreen() {
       .onAuthStateChanged((user) => {
         if(user){
           setCheckingAuth(true);
+          getUser({
+            variables:{
+              uid: user.uid
+            }
+          })
         }
-        setTimeout(() => {
+        setTimeout(() => {   
           setIsSignedIn(!!user);
           if(user){
             setCheckingAuth(false);
@@ -61,14 +78,25 @@ function SignInScreen() {
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
   }, []);
 
-  if (!isSignedIn) {
+  if (!isSignedIn || !userAuthenticated) {
     return (
       <div className="LoginRoot">
       <Helmet>
         <title>Login</title>
       </Helmet>
       <img className="LoginLogo" src={'/images/Ecoocean_new_logo_filtered.jpg'} alt="" />
-      {checkingAuth ? <CircularProgress color="inherit" /> :
+      {!isSignedIn && checkingAuth && !userAuthenticated ? <CircularProgress color="inherit" /> :
+      isSignedIn && !userAuthenticated? 
+      <div> 
+        <h4 style={{color: "white"}}>User is not authorized</h4>
+        <Button style={{color: "white"}} onClick={() => {
+          setIsSignedIn(false);
+          setCheckingAuth(false);
+          firebase.auth().signOut();
+        }} >
+          Try with a different account
+        </Button>
+      </div>:
       <div> 
           <StyledFirebaseAuth
             uiConfig={uiConfig}

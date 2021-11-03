@@ -1,5 +1,12 @@
 import { gql } from "@apollo/client";
 //from server
+export const GET_USER_BY_UID = gql`
+  query getUserByUID($uid: String!) {
+    getUserByUID(uid: $uid) {
+      uid
+    }
+  }
+`;
 export const GET_ALL_POLLUTION_REPORTS = gql`
   query {
     getAllPollutionReports {

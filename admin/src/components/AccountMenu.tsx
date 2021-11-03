@@ -11,9 +11,11 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import firebase from "firebase";
+import { useNavigate } from "react-router";
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -21,7 +23,7 @@ export default function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  return (
+  return firebase.auth().currentUser ? (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         {firebase.auth().currentUser.displayName}
@@ -95,7 +97,12 @@ export default function AccountMenu() {
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem onClick={() => firebase.auth().signOut()}>
+        <MenuItem
+          onClick={() => {
+            firebase.auth().signOut();
+            navigate("/login");
+          }}
+        >
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
@@ -103,5 +110,5 @@ export default function AccountMenu() {
         </MenuItem>
       </Menu>
     </React.Fragment>
-  );
+  ) : null;
 }
