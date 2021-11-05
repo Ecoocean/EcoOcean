@@ -90,6 +90,7 @@ function SignInScreen() {
       <div> 
         <h4 style={{color: "white"}}>User is not authorized</h4>
         <Button style={{color: "white"}} onClick={() => {
+          setUserAuthenticated(false);
           setIsSignedIn(null);
           setCheckingAuth(false);
           firebase.auth().signOut();

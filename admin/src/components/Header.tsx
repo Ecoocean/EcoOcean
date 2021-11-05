@@ -48,8 +48,6 @@ export default function Header() {
             >
               <LinkTab label="Home" href="/" />
               <LinkTab label="Users" href="/users" />
-              <LinkTab label="Page Two" href="/trash" />
-              <LinkTab label="Page Three" href="/spam" />
             </Tabs>
           </Typography>
           <div>

@@ -8,14 +8,33 @@ import { ApolloClient, ApolloProvider } from "@apollo/client";
 import { createUploadLink } from "apollo-upload-client";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { cache } from "./cache";
-
-const link = createUploadLink({ uri: "http://localhost:4000/graphql" });
+import * as firebase from "firebase/app";
+import "firebase/auth";
+import { setContext } from "@apollo/client/link/context";
+const link = createUploadLink({
+  uri: "https://us-central1-ecoocean.cloudfunctions.net/graphql",
+});
 
 const wsLink = new WebSocketLink({
-  uri: "ws://localhost:4000/graphql",
+  uri: "ws://https://us-central1-ecoocean.cloudfunctions.net/graphql",
   options: {
     reconnect: true,
   },
+});
+
+const authLink = setContext((_, { headers }) => {
+  //it will always get unexpired version of the token
+  return firebase
+    .auth()
+    .currentUser.getIdToken()
+    .then((token) => {
+      return {
+        headers: {
+          ...headers,
+          authorization: token ? `Bearer ${token}` : "",
+        },
+      };
+    });
 });
 
 // The split function takes three parameters:
@@ -38,7 +57,7 @@ const splitLink = split(
 const client = new ApolloClient({
   ssrMode: typeof window === "undefined",
   cache: cache,
-  link: splitLink,
+  link: authLink.concat(splitLink),
 });
 
 ReactDOM.render(

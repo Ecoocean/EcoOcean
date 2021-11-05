@@ -1,5 +1,4 @@
 export const admin = require("firebase-admin");
-
 const serviceAccount = require("./keys/ecoOcean_firebase_key.json");
 
 admin.initializeApp({
