@@ -15,7 +15,7 @@ import { setContext } from "@apollo/client/link/context";
 const link = createUploadLink({ uri: process.env.REACT_APP_SERVER_ENDPOINT_URL });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://${process.env.REACT_APP_SERVER_ENDPOINT}`,
+  uri: `${process.env.REACT_APP_WEB_SOCKET_TYPE}://${process.env.REACT_APP_SERVER_ENDPOINT}`,
   options: {
     reconnect: true,
   },
