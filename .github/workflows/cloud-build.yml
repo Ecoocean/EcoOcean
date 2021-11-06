@@ -1,38 +1,42 @@
-name: Build using Cloud Build
-
 on:
   push:
     branches:
     - master
 
+name: Build and Deploy to Cloud Run
 env:
   PROJECT_ID: ecoocean
-  SERVICE_NAME: ecoocean-server
+  SERVICE: ecoocean-server
+  REGION: europe-west1
 
 jobs:
-  setup-build-deploy:
-    name: Setup, Build, and Deploy
+  deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./server
-
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
-    # Setup gcloud CLI
-    - uses: google-github-actions/setup-gcloud@master
+    - name: Setup Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0.2.0
       with:
-        version: '286.0.0'
-        service_account_email: ${{ secrets.RUN_SA_EMAIL }}
-        service_account_key: ${{ secrets.RUN_SA_KEY }}
         project_id: ecoocean
-        source: ./server
+        service_account_key: ${{ secrets.RUN_SA_KEY }}
 
-    # Build and push image to Google Container Registry
-    - name: Build
+    - name: Authorize Docker push
+      run: gcloud auth configure-docker
+
+    - name: Build and Push Container
       run: |-
-        gcloud builds submit \
-          --quiet \
-          --tag "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA"
+        docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
+        docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+        
+    - name: Deploy to Cloud Run
+      run: |-
+        gcloud run deploy ${{ env.SERVICE }} \
+          --region ${{ env.REGION }} \
+          --image gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} \
+          --platform "managed" \
+          --quiet 
