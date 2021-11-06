@@ -12,6 +12,9 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -26,13 +29,11 @@ jobs:
       run: gcloud auth configure-docker
 
     - name: Build and Push Container
-      working-directory: ../server
       run: |-
         docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
         
     - name: Deploy to Cloud Run
-      working-directory: ../server
       run: |-
         gcloud run deploy ${{ env.SERVICE }} \
           --region ${{ env.REGION }} \
