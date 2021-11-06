@@ -14,7 +14,6 @@ import { auth } from "./firestore";
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 export const pubsub = new PubSub();
-const app = express();
 
 async function startServer() {
   const server = new ApolloServer({
@@ -65,7 +64,7 @@ async function startServer() {
       return { user };
     },
   });
-
+  const app = express();
   // This `app` is the returned value from `express()`.
   const httpServer = createServer(app);
 
@@ -90,15 +89,14 @@ async function startServer() {
   // This middleware should be added before calling `applyMiddleware`.
   app.use(graphqlUploadExpress());
 
-  server.applyMiddleware({ app, path: "/", cors: true });
+  server.applyMiddleware({ app });
 
-  httpServer.listen({ port: 4001 }, () => {
+  httpServer.listen({ port: 8080 }, () => {
     console.log(
-      `🚀 Server ready at http://localhost:4001${server.graphqlPath}`
+      `🚀 Server ready at http://localhost:8080${server.graphqlPath}`
     );
-    console.log("testttt");
   });
 
-  return app;
+
 }
 startServer();

@@ -12,11 +12,11 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import { setContext } from "@apollo/client/link/context";
 const link = createUploadLink({
-  uri: "https://us-central1-ecoocean.cloudfunctions.net/graphql",
+  uri: process.env.REACT_APP_SERVER_ENDPOINT_URL,
 });
 
 const wsLink = new WebSocketLink({
-  uri: "ws://https://us-central1-ecoocean.cloudfunctions.net/graphql",
+  uri: `ws://${process.env.REACT_APP_SERVER_ENDPOINT}`,
   options: {
     reconnect: true,
   },
