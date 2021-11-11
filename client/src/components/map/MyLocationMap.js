@@ -1,4 +1,5 @@
-import React, {useState, Fragment, use} from 'react';
+import React, {useState} from 'react';
+import { Button, Spinner } from "react-bootstrap";
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Tooltip, useMapEvents, useMap } from "react-leaflet";
 
@@ -27,7 +28,7 @@ const search = new GeoSearch.GeoSearchControl({
 
 
 
-function MyLocation({onLocationFound}) {
+function MyLocation({onLocationFound, onGpsLocationFound}) {
     const map = useMap();
     const [location, setLocation] = useState({lat: 31.4117257, lng:35.0818155});
     const [usingSearch, setUsingSearch] = useState(false);
@@ -39,6 +40,7 @@ function MyLocation({onLocationFound}) {
           if (acc < 50 && !usingSearch && !gpsLocaionFound) {
             // if the location is within 50 meters
             setGpsLocaionFound(true);
+            onGpsLocationFound();
             setLocation({lat: lat, lng:lng});
             onLocationFound(lat, lng);
             map.flyTo({lat: lat, lng:lng},15);
@@ -61,30 +63,49 @@ function MyLocation({onLocationFound}) {
     map.on('geosearch/marker/dragend', function (e) {
         onLocationFound(e.location.lat, e.location.lng)
     });
-    return gpsLocaionFound? <Marker
+    return gpsLocaionFound && !usingSearch? <Marker
                     position={[location.lat, location.lng]} icon={blueMarker}>
 
                     </Marker> : null
+            
     
 }
 
 export default function MyLocationMap({onLocationFound}) {
-    
+    const [gpsLocaionFound, setGpsLocaionFound] = useState(false);
+
+    const onGpsLocationFound = () => {
+        setGpsLocaionFound(true);
+    }
    
     return (
-        <MapContainer
-            style={{ height: '50vh', width: '100wh' }}
-            className="markercluster-map"
-            center={[31.4117257, 35.0818155]}
-            zoom={8}
-            maxZoom={18}
-        >
-        <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <MyLocation onLocationFound={onLocationFound} />
-        
-        </MapContainer>
+        <div>
+             {!gpsLocaionFound && (
+            <Button variant="primary">
+              <Spinner
+                as="span"
+                animation="grow"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+              getting accurate location...
+            </Button>
+          )}
+            <MapContainer
+                style={{ height: '50vh', width: '100wh' }}
+                className="markercluster-map"
+                center={[31.4117257, 35.0818155]}
+                zoom={8}
+                maxZoom={18}
+            >
+            <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            />
+            <MyLocation onLocationFound={onLocationFound} onGpsLocationFound={onGpsLocationFound}/>
+            
+            </MapContainer>
+    </div>
     )
 }
