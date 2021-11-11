@@ -43,7 +43,7 @@ function MyLocation({onLocationFound, onGpsLocationFound}) {
             onGpsLocationFound();
             setLocation({lat: lat, lng:lng});
             onLocationFound(lat, lng);
-            map.flyTo({lat: lat, lng:lng},15);
+            map.flyTo({lat: lat, lng:lng},18);
           }
         },
         (err) => console.log(err),
