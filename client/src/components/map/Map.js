@@ -1,4 +1,4 @@
-import React, {useState, Fragment, use} from 'react';
+import React, {useState, Fragment, use, useEffect} from 'react';
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Tooltip, useMapEvents, useMap } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-markercluster";
@@ -49,7 +49,16 @@ function ShowReports() {
     const [zoom, setZoom] = useState(map.getZoom());
     const [openInfoWindow, setOpenInfoWindow] = useState(false);
     const selectedReport = useReactiveVar(selectedReportVar);
+    const selectedMapReport = useReactiveVar(selectedMapReportVar);
     const { loading, error, data } = useQuery(GET_ALL_POLLUTION_REPORTS_LOCAL);
+
+    useEffect(() => {
+      if(selectedMapReport){
+        map.flyTo({lat: selectedMapReport.location.latitude,
+          lng:selectedMapReport.location.longitude},18);
+      }
+
+    }, [selectedMapReport])
 
     const IncomingReport = ({ subscriptionData: { data } }) => {
         const allReports = allPollutionReportsVar();
@@ -218,7 +227,7 @@ export default function Map() {
     
     return (
     <MapContainer
-        style={{ height: '100vh', width: '100wh' }}
+        style={{ height: '125vh', width: '100wh' }}
         className="markercluster-map"
         center={[31.4117257, 35.0818155]}
         zoom={8}
