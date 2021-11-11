@@ -1,10 +1,15 @@
 // By: https://bootswatch.com/, template: Lumen
 @import "./custom";
+@import "~leaflet/dist/leaflet.css";
+@import "~react-leaflet-markercluster/dist/styles.min.css";
 
 @font-face {
   font-family: "Alef";
   src: local("Alef"),
     url("./fonts/Alef-Webfont/Alef-Bold.ttf") format("truetype");
+}
+.markercluster-map {
+  height: 90vh;
 }
 
 html {

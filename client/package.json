@@ -29,6 +29,7 @@
     "google-map-react": "^2.1.10",
     "graphql": "^15.6.0",
     "history": "^5.0.0",
+    "leaflet-geosearch": "^3.6.0",
     "lodash": "^4.17.20",
     "moment": "^2.27.0",
     "node-sass": "4.14.1",
@@ -45,6 +46,7 @@
     "react-helmet": "^6.1.0",
     "react-images-upload": "^1.2.8",
     "react-laag": "^2.0.3",
+    "react-leaflet-markercluster": "^3.0.0-rc1",
     "react-markdown": "^6.0.0",
     "react-places-autocomplete": "^7.3.0",
     "react-redux": "^7.2.1",
@@ -77,18 +79,11 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "proxy": "http://127.0.0.1:5000",
   "bit": {
     "env": {},

@@ -7,7 +7,7 @@ import { useMutation } from "@apollo/client";
 import { CREATE_POLLUTION_REPORT } from "../../../GraphQL/Mutations";
 import {setSnackBar} from "../../../SnackBarUtils"
 import ImageUploaderComp from "../../reusables/ImageUploaderComp";
-import MyLocationMap from "../../map/MyLocationMap";
+import MyLocationMap from "../../map/MyLocationMap.js";
 import * as firebase from "firebase/app";
 
 import 'firebase/auth';
@@ -16,16 +16,15 @@ const PollutionForm = ({show, handleClose, }) => {
 
   const formRef = useRef(null);
   const pollutionTypePickerRef = useRef(null);
-  const locationMapRef = useRef(null);
   const imageUploaderRef = useRef(null);
   const [locationFound, setLocationFound] = useState(false);
+  const [location, setLocation] = useState();
 
   const schema = yup.object().shape({});
   const [CreatePollutionReport, { loading, error, data }] = useMutation(CREATE_POLLUTION_REPORT);
   const AddPollutionReport = async () => {
     try {
       if (
-        locationMapRef.current &&
         pollutionTypePickerRef.current &&
         imageUploaderRef.current
       ) {
@@ -39,8 +38,8 @@ const PollutionForm = ({show, handleClose, }) => {
           variables: {
             reporter: firebase.auth().currentUser ? firebase.auth().currentUser.displayName: "Test",
             reporterImageUrl: firebase.auth().currentUser? firebase.auth().currentUser.photoURL: null,
-            latitude: locationMapRef.current.state.currentLocation.lat,
-            longitude: locationMapRef.current.state.currentLocation.lng,
+            latitude: location.lat,
+            longitude: location.lng,
             type: pollutionTypePickerRef.current.state.image.value,
             files: imageUploaderRef.current.state.pictures
           },
@@ -54,8 +53,9 @@ const PollutionForm = ({show, handleClose, }) => {
     }
   };
 
-  const onLocationFound = () => {
+  const onLocationFound = (lat, lng) => {
     setLocationFound(true);
+    setLocation({lat: lat, lng: lng})
   }
 
   return (
@@ -82,7 +82,7 @@ const PollutionForm = ({show, handleClose, }) => {
               <Modal.Title>Add Pollution Report</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <MyLocationMap ref={locationMapRef} onLocationFound={onLocationFound} />
+              <MyLocationMap onLocationFound={onLocationFound} />
               <PollutionTypePicker ref={pollutionTypePickerRef} />
               <ImageUploaderComp ref={imageUploaderRef} />
             </Modal.Body>
