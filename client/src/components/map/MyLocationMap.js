@@ -61,7 +61,7 @@ function MyLocation({onLocationFound, onGpsLocationFound}) {
  
     });
     map.on('geosearch/marker/dragend', function (e) {
-        onLocationFound(e.location.lat, e.location.lng)
+        onLocationFound(e.location.lng, e.location.lat)
     });
     return gpsLocaionFound && !usingSearch? <Marker
                     position={[location.lat, location.lng]} icon={blueMarker}>
