@@ -154,8 +154,11 @@ function ShowReports() {
     };
     
     useMapEvents({
-        zoomend: () => {
-            onMapChange();
+      zoomanim: () => {
+          new Promise(() => {
+            onMapChange()
+          })
+          console.log("check");
         },
         dragend: () => {
             onMapChange();
