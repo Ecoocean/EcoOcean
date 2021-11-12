@@ -1,5 +1,25 @@
 import { gql } from "@apollo/client";
 //from server
+
+export const GET_LOCATION_REPORTS = gql`
+  query getLocationPollutionReports($latitude: Float!, $longitude: Float!, $radiusInM: Float!) {
+    getLocationPollutionReports(latitude: $latitude, longitude: $longitude, radiusInM: $radiusInM) {
+      id
+      geohash
+      location {
+        latitude
+        longitude
+      }
+      reporterImageUrl
+      address
+      created_at
+      reporter
+      type
+      photoUrls
+    }
+  }
+`;
+
 export const GET_USER_BY_UID = gql`
   query getUserByUID($uid: String!) {
     getUserByUID(uid: $uid) {

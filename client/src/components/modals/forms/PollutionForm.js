@@ -53,7 +53,7 @@ const PollutionForm = ({show, handleClose, }) => {
     }
   };
 
-  const onLocationFound = (lat, lng) => {
+  const onLocationFound = (lng, lat) => {
     setLocationFound(true);
     setLocation({lat: lat, lng: lng})
   }

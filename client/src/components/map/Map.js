@@ -2,10 +2,10 @@ import React, {useState, Fragment, use, useEffect} from 'react';
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Tooltip, useMapEvents, useMap } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-markercluster";
-import { GET_ALL_POLLUTION_REPORTS_LOCAL } from "../../GraphQL/Queries";
+import { GET_ALL_POLLUTION_REPORTS_LOCAL, GET_LOCATION_REPORTS } from "../../GraphQL/Queries";
 import Typography from "@mui/material/Typography";
 import { PollutionReportModal } from "../modals/PollutionReportModal";
-import { useQuery, useReactiveVar, useSubscription } from "@apollo/client";
+import { useQuery, useLazyQuery, useReactiveVar, useSubscription } from "@apollo/client";
 import {
   REPORT_ADDED_SUBSCRIPTION,
   REPORT_UNRELEVANT_SUBSCRIPTION,
@@ -14,7 +14,6 @@ import yellowFilledMarker from './icons/marker-yellow-optimized.svg';
 import greenFilledMarker from './icons/marker-green-optimized.svg';
 import redFilledMarker from './icons/marker-red-optimized.svg';
 import {
-    allPollutionReportsVar,
     filteredPollutionReportsVar,
     loadingPollutionReportsVar,
     selectedReportVar,
@@ -45,12 +44,11 @@ const greenMarker = L.icon({
 function ShowReports() {
     const map = useMap();
     const [bounds, setBounds] = useState(map.getBounds());
-    const [position, setPosition] = useState(map.getCenter());
-    const [zoom, setZoom] = useState(map.getZoom());
     const [openInfoWindow, setOpenInfoWindow] = useState(false);
     const selectedReport = useReactiveVar(selectedReportVar);
     const selectedMapReport = useReactiveVar(selectedMapReportVar);
-    const { loading, error, data } = useQuery(GET_ALL_POLLUTION_REPORTS_LOCAL);
+    const filteredPollutionReports = useReactiveVar(filteredPollutionReportsVar);
+    const [getLocationReports, { loading, error, data }] = useLazyQuery(GET_LOCATION_REPORTS);
 
     useEffect(() => {
       if(selectedMapReport){
@@ -60,17 +58,33 @@ function ShowReports() {
 
     }, [selectedMapReport])
 
+    useEffect(() => {
+      if(data) {
+        filteredPollutionReportsVar(data.getLocationPollutionReports);
+      }
+  }, [data])
+
+    useEffect(() => {
+        const center = map.getCenter();
+        const mapBoundNorthEast = bounds.getNorthEast();
+        const mapDistance = mapBoundNorthEast.distanceTo(center);
+        getLocationReports({variables: {
+          latitude: center.lat,
+          longitude: center.lng,
+          radiusInM: mapDistance, 
+        }})
+
+    }, [])
+
+
     const IncomingReport = ({ subscriptionData: { data } }) => {
-        const allReports = allPollutionReportsVar();
-        allPollutionReportsVar([data.reportAdded].concat(allReports));
         if (
           data.reportAdded.location.latitude > bounds.getSouthEast().lat &&
           data.reportAdded.location.latitude < bounds.getNorthWest().lat &&
           data.reportAdded.location.longitude >bounds.getNorthWest().lng &&
           data.reportAdded.location.longitude < bounds.getSouthEast().lng
         ) {
-          const currentFilteredReports =
-            filteredPollutionReportsVar();
+          const currentFilteredReports = filteredPollutionReportsVar();
           filteredPollutionReportsVar(
             [data.reportAdded].concat(currentFilteredReports)
           );
@@ -78,11 +92,7 @@ function ShowReports() {
       };
     
       const UnrelevantReport = ({ subscriptionData: { data } }) => {
-        const allReports = allPollutionReportsVar();
-        allPollutionReportsVar(
-          allReports.filter((report) => report.id !== data.reportUnrelevant.id)
-        );
-    
+        
         if (
           data.reportUnrelevant.location.latitude > bounds.getSouthEast().lat &&
           data.reportUnrelevant.location.latitude < bounds.getNorthWest().lat &&
@@ -112,20 +122,16 @@ function ShowReports() {
         const minTimeForLoadingSimulation = 700; // in miliseconds
         loadingPollutionReportsVar(true);
         const startTime = performance.now();
-        setZoom(map.getZoom());
+        const center = map.getCenter();
         const bounds = map.getBounds();
         setBounds(bounds);
-        const BBoxPollutionReports = allPollutionReportsVar().filter(
-          (report) => {
-            return (
-              report.location.latitude > bounds.getSouthEast().lat &&
-              report.location.latitude < bounds.getNorthWest().lat &&
-              report.location.longitude > bounds.getNorthWest().lng &&
-              report.location.longitude < bounds.getSouthEast().lng
-            );
-          }
-        );
-        filteredPollutionReportsVar(BBoxPollutionReports);
+        const mapBoundNorthEast = bounds.getNorthEast();
+        const mapDistance = mapBoundNorthEast.distanceTo(center);
+        getLocationReports({variables: {
+          latitude: center.lat,
+          longitude: center.lng,
+          radiusInM: mapDistance, 
+        }})
         const endTime = performance.now();
         const TotalTime = endTime - startTime; // in miliseconds
     
@@ -145,24 +151,18 @@ function ShowReports() {
     
     useMapEvents({
         zoomend: () => {
-            setPosition(map.getCenter())
-            setZoom(map.getZoom());
             onMapChange();
         },
         dragend: () => {
-            setZoom(map.getCenter());
             onMapChange();
         }
     });
-
-    const pollutionReports =
-    data && !error && !loading ? data.allPollutionReports : [];
 
 
     return (
         <div>
         <MarkerClusterGroup>
-        {pollutionReports.map((report) => {
+        {filteredPollutionReports.map((report) => {
             let markerColor = null;
             const reportType = report.type;
             if (reportType === "TRASH") {

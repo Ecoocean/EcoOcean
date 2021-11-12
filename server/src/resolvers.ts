@@ -4,6 +4,7 @@ import { GraphQLUpload } from "graphql-upload";
 import { saveFileToFireStorage } from "./fileUploader";
 import { pubsub } from "./index";
 import openGeocoder from "node-open-geocoder";
+import * as geofire from 'geofire-common'
 
 export const resolvers = {
   Upload: GraphQLUpload,
@@ -58,6 +59,46 @@ export const resolvers = {
       const output = snapshot.docs.map((doc) => doc.data());
       return output;
     },
+    getLocationPollutionReports: async (parent, args) => {
+      // Each item in 'bounds' represents a startAt/endAt pair. We have to issue
+      // a separate query for each pair. There can be up to 9 pairs of bounds
+      // depending on overlap, but in most cases there are 4.
+      const center = [args.latitude, args.longitude];
+      const bounds = geofire.geohashQueryBounds(center, args.radiusInM);
+      const promises = [];
+      for (const b of bounds) {
+        const q = db.collection('pollution_report')
+          .orderBy('geohash')
+          .startAt(b[0])
+          .endAt(b[1]);
+
+        promises.push(q.get());
+      }
+
+      // Collect all the query results together into a single list
+      return Promise.all(promises).then((snapshots) => {
+        const matchingDocs = [];
+
+        for (const snap of snapshots) {
+          for (const doc of snap.docs) {
+            const location = doc.get('location');
+            const isRelevant = doc.get('isRelevant');
+            const lat = location.latitude;
+            const lng = location.longitude;            ;
+            
+            // We have to filter out a few false positives due to GeoHash
+            // accuracy, but most will match
+            const distanceInKm = geofire.distanceBetween([lat, lng], center);
+            const distanceInM = distanceInKm * 1000;
+            if (isRelevant && distanceInM <= args.radiusInM) {
+              matchingDocs.push(doc);
+            }
+          }
+        }
+        return matchingDocs; }).then((matchingDocs) => {
+          return matchingDocs.map((doc)=> doc.data());
+        });
+      }
   },
   Mutation: {
     setUserPermissionField: async (parent, args) => {
@@ -97,11 +138,13 @@ export const resolvers = {
         })
       );
       const timestamp = admin.firestore.Timestamp.fromDate(new Date());
+      const geohash = geofire.geohashForLocation([args.latitude, args.longitude]);
       const ref = db.collection("pollution_report").doc();
       const pollutionReport = {
         id: ref.id,
         reporterImageUrl: args.reporterImageUrl,
         reporter: args.reporter,
+        geohash: geohash,
         location: new GeoPoint(args.latitude, args.longitude),
         type: args.type,
         created_at: timestamp,

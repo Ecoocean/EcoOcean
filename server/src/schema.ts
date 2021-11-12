@@ -28,6 +28,7 @@ const typeDefs = gql`
     created_at: Date!
     type: PollutionType!
     address: String
+    geohash: String
     photoUrls: [String]
     reporterImageUrl: String
     isRelevant: Boolean!
@@ -95,6 +96,8 @@ const typeDefs = gql`
 
   type Query {
     getAllPollutionReports: [PollutionReport]!
+    getLocationPollutionReports(latitude: Float!, longitude: Float!,
+     radiusInM: Float!): [PollutionReport]!
     allUsers: [User]!
     getUserByUID(uid: String!): User
   }

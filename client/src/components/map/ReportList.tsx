@@ -24,15 +24,15 @@ import {
 import { PollutionReportModal } from "../modals/PollutionReportModal";
 import { SET_REPORT_UNRELEVANT } from "../../GraphQL/Mutations";
 import { setSnackBar } from "../../SnackBarUtils";
+import {
+  filteredPollutionReportsVar
+} from "../../cache";
 
 export default function ReportList() {
   const [openInfoWindow, setOpenInfoWindow] = useState(false);
   const loadingFilteredReports = useReactiveVar(loadingPollutionReportsVar);
   const selectedReport = useReactiveVar(selectedReportVar);
-  const { data, loading, error } = useQuery(
-    GET_FILTERED_POLLUTION_REPORTS_LOCAL
-  );
-
+  const filteredPollutionReports = useReactiveVar(filteredPollutionReportsVar);
   const [
     setReportUnrelevant,
     { loading: loadingUnrelevant, error: errorUnreleant, data: dataUnrelevant },
@@ -75,7 +75,7 @@ export default function ReportList() {
       </Backdrop>
       <Paper style={{ maxHeight: 950, overflow: "auto" }}>
         <List sx={{ display: "list-item", width: "100%" }}>
-          {data.filteredPollutionReports.map((report: PollutionReport) => {
+          {filteredPollutionReports.map((report: PollutionReport) => {
             return (
               <ListItem divider key={report.id} component="div" disablePadding>
                 <Grid container direction="column">
