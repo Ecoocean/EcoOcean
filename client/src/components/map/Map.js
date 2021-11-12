@@ -77,21 +77,23 @@ function ShowReports() {
     }, [])
 
 
-    const IncomingReport = ({ subscriptionData: { data } }) => {
+    const IncomingReport = async ({ subscriptionData: { data } }) => {
         if (
           data.reportAdded.location.latitude > bounds.getSouthEast().lat &&
           data.reportAdded.location.latitude < bounds.getNorthWest().lat &&
           data.reportAdded.location.longitude >bounds.getNorthWest().lng &&
           data.reportAdded.location.longitude < bounds.getSouthEast().lng
         ) {
+          const minTimeForLoadingSimulation = 700; // in miliseconds
           const currentFilteredReports = filteredPollutionReportsVar();
           filteredPollutionReportsVar(
             [data.reportAdded].concat(currentFilteredReports)
           );
+          await new Promise((resolve) => setTimeout(resolve, minTimeForLoadingSimulation));
         }
       };
     
-      const UnrelevantReport = ({ subscriptionData: { data } }) => {
+      const UnrelevantReport = async({ subscriptionData: { data } }) => {
         
         if (
           data.reportUnrelevant.location.latitude > bounds.getSouthEast().lat &&
@@ -99,6 +101,7 @@ function ShowReports() {
           data.reportUnrelevant.location.longitude > bounds.getNorthWest().lng &&
           data.reportUnrelevant.location.longitude < bounds.getSouthEast().lng
         ) {
+          const minTimeForLoadingSimulation = 700; // in miliseconds
           const currentFilteredReports =
             filteredPollutionReportsVar();
           filteredPollutionReportsVar(
@@ -106,6 +109,7 @@ function ShowReports() {
               (report) => report.id !== data.reportUnrelevant.id
             )
           );
+          await new Promise((resolve) => setTimeout(resolve, minTimeForLoadingSimulation));
         }
       };
     
