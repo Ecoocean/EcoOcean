@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Paper from "@mui/material/Paper";
 import List from "@mui/material/List";
-import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
+import { useMutation, useReactiveVar } from "@apollo/client";
 import { PollutionReport } from "../../types/PollutionReport";
 import MapIcon from "@mui/icons-material/Map";
 import PollutionReportCard from "../PollutionReportCard";

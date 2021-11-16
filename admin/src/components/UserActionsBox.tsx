@@ -5,7 +5,7 @@ import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 import { Grid } from "@mui/material";
 import { useMutation } from "@apollo/client";
-import { ADD_USER } from "../GraphQL/Mutations";
+import { CREATE_USER } from "../GraphQL/Mutations";
 import { setSnackBar } from "../SnackBarUtils";
 import { userInfo } from "os";
 import { lastOnboardUserUIDVar } from "../cache";
@@ -25,19 +25,20 @@ export default function UserActionsBox({ user }) {
   const [
     createUser,
     { loading: loadingUser, error: errorUser, data: dataUser },
-  ] = useMutation(ADD_USER);
+  ] = useMutation(CREATE_USER);
   const [userOnboard, setUserOnboard] = useState(user.isOnboard);
   const onOnboardUserClick = async () => {
     const { data } = await createUser({
       variables: {
-        userInput: {
-          uid: user.uid,
-          userInfo: {
+        input: {
+          user:{
+            uid: user.uid,
             displayName: user.displayName,
             email: user.email,
             emailVerified: user.emailVerified,
-            photoURL: user.photoURL,
-          },
+            photoUrl: user.photoURL,
+            isOnboard: true,
+          }
         },
       },
     });

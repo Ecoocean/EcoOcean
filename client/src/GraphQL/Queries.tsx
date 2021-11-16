@@ -1,6 +1,18 @@
 import { gql } from "@apollo/client";
 //from server
 
+export const GET_BEACHES_GEOJSON = gql`
+  query getBeachesGeoJson {
+    beaches {
+      nodes {
+        geom {
+          geojson
+        }
+      }
+    }
+}
+`;
+
 export const GET_LOCATION_REPORTS = gql`
   query getLocationPollutionReports($latitude: Float!, $longitude: Float!, $radiusInM: Float!) {
     getLocationPollutionReports(latitude: $latitude, longitude: $longitude, radiusInM: $radiusInM) {
@@ -21,9 +33,10 @@ export const GET_LOCATION_REPORTS = gql`
 `;
 
 export const GET_USER_BY_UID = gql`
-  query getUserByUID($uid: String!) {
+  query user($uid: String!) {
     getUserByUID(uid: $uid) {
       uid
+      isAdmin
     }
   }
 `;

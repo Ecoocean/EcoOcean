@@ -1,0 +1,1371 @@
+type GeometryPoint implements GeometryInterface & GeometryGeometry {
+  geojson: GeoJSON
+  srid: Int!
+  x: Float!
+  y: Float!
+}
+
+"""All geometry types implement this interface"""
+interface GeometryInterface {
+  """Converts the object to GeoJSON"""
+  geojson: GeoJSON
+
+  """Spatial reference identifier (SRID)"""
+  srid: Int!
+}
+
+"""
+The `GeoJSON` scalar type represents GeoJSON values as specified by[RFC 7946](https://tools.ietf.org/html/rfc7946).
+"""
+scalar GeoJSON
+
+"""All geometry XY types implement this interface"""
+interface GeometryGeometry {
+  """Converts the object to GeoJSON"""
+  geojson: GeoJSON
+
+  """Spatial reference identifier (SRID)"""
+  srid: Int!
+}
+
+type GeometryPointM implements GeometryInterface & GeometryGeometryM {
+  geojson: GeoJSON
+  srid: Int!
+  x: Float!
+  y: Float!
+}
+
+"""All geometry XYM types implement this interface"""
+interface GeometryGeometryM {
+  """Converts the object to GeoJSON"""
+  geojson: GeoJSON
+
+  """Spatial reference identifier (SRID)"""
+  srid: Int!
+}
+
+type GeometryPointZ implements GeometryInterface & GeometryGeometryZ {
+  geojson: GeoJSON
+  srid: Int!
+  x: Float!
+  y: Float!
+}
+
+"""All geometry XYZ types implement this interface"""
+interface GeometryGeometryZ {
+  """Converts the object to GeoJSON"""
+  geojson: GeoJSON
+
+  """Spatial reference identifier (SRID)"""
+  srid: Int!
+}
+
+type GeometryPointZM implements GeometryInterface & GeometryGeometryZM {
+  geojson: GeoJSON
+  srid: Int!
+  x: Float!
+  y: Float!
+}
+
+"""All geometry XYZM types implement this interface"""
+interface GeometryGeometryZM {
+  """Converts the object to GeoJSON"""
+  geojson: GeoJSON
+
+  """Spatial reference identifier (SRID)"""
+  srid: Int!
+}
+
+type GeometryLineString implements GeometryInterface & GeometryGeometry {
+  geojson: GeoJSON
+  srid: Int!
+  points: [GeometryPoint]
+}
+
+type GeometryLineStringM implements GeometryInterface & GeometryGeometryM {
+  geojson: GeoJSON
+  srid: Int!
+  points: [GeometryPointM]
+}
+
+type GeometryLineStringZ implements GeometryInterface & GeometryGeometryZ {
+  geojson: GeoJSON
+  srid: Int!
+  points: [GeometryPointZ]
+}
+
+type GeometryLineStringZM implements GeometryInterface & GeometryGeometryZM {
+  geojson: GeoJSON
+  srid: Int!
+  points: [GeometryPointZM]
+}
+
+type GeometryPolygon implements GeometryInterface & GeometryGeometry {
+  geojson: GeoJSON
+  srid: Int!
+  exterior: GeometryLineString
+  interiors: [GeometryLineString]
+}
+
+type GeometryPolygonM implements GeometryInterface & GeometryGeometryM {
+  geojson: GeoJSON
+  srid: Int!
+  exterior: GeometryLineStringM
+  interiors: [GeometryLineStringM]
+}
+
+type GeometryPolygonZ implements GeometryInterface & GeometryGeometryZ {
+  geojson: GeoJSON
+  srid: Int!
+  exterior: GeometryLineStringZ
+  interiors: [GeometryLineStringZ]
+}
+
+type GeometryPolygonZM implements GeometryInterface & GeometryGeometryZM {
+  geojson: GeoJSON
+  srid: Int!
+  exterior: GeometryLineStringZM
+  interiors: [GeometryLineStringZM]
+}
+
+type GeometryMultiPoint implements GeometryInterface & GeometryGeometry {
+  geojson: GeoJSON
+  srid: Int!
+  points: [GeometryPoint]
+}
+
+type GeometryMultiPointM implements GeometryInterface & GeometryGeometryM {
+  geojson: GeoJSON
+  srid: Int!
+  points: [GeometryPointM]
+}
+
+type GeometryMultiPointZ implements GeometryInterface & GeometryGeometryZ {
+  geojson: GeoJSON
+  srid: Int!
+  points: [GeometryPointZ]
+}
+
+type GeometryMultiPointZM implements GeometryInterface & GeometryGeometryZM {
+  geojson: GeoJSON
+  srid: Int!
+  points: [GeometryPointZM]
+}
+
+type GeometryMultiLineString implements GeometryInterface & GeometryGeometry {
+  geojson: GeoJSON
+  srid: Int!
+  lines: [GeometryLineString]
+}
+
+type GeometryMultiLineStringM implements GeometryInterface & GeometryGeometryM {
+  geojson: GeoJSON
+  srid: Int!
+  lines: [GeometryLineStringM]
+}
+
+type GeometryMultiLineStringZ implements GeometryInterface & GeometryGeometryZ {
+  geojson: GeoJSON
+  srid: Int!
+  lines: [GeometryLineStringZ]
+}
+
+type GeometryMultiLineStringZM implements GeometryInterface & GeometryGeometryZM {
+  geojson: GeoJSON
+  srid: Int!
+  lines: [GeometryLineStringZM]
+}
+
+type GeometryMultiPolygon implements GeometryInterface & GeometryGeometry {
+  geojson: GeoJSON
+  srid: Int!
+  polygons: [GeometryPolygon]
+}
+
+type GeometryMultiPolygonM implements GeometryInterface & GeometryGeometryM {
+  geojson: GeoJSON
+  srid: Int!
+  polygons: [GeometryPolygonM]
+}
+
+type GeometryMultiPolygonZ implements GeometryInterface & GeometryGeometryZ {
+  geojson: GeoJSON
+  srid: Int!
+  polygons: [GeometryPolygonZ]
+}
+
+type GeometryMultiPolygonZM implements GeometryInterface & GeometryGeometryZM {
+  geojson: GeoJSON
+  srid: Int!
+  polygons: [GeometryPolygonZM]
+}
+
+type GeometryGeometryCollection implements GeometryInterface & GeometryGeometry {
+  geojson: GeoJSON
+  srid: Int!
+  geometries: [GeometryGeometry]
+}
+
+type GeometryGeometryCollectionM implements GeometryInterface & GeometryGeometryM {
+  geojson: GeoJSON
+  srid: Int!
+  geometries: [GeometryGeometryM]
+}
+
+type GeometryGeometryCollectionZ implements GeometryInterface & GeometryGeometryZ {
+  geojson: GeoJSON
+  srid: Int!
+  geometries: [GeometryGeometryZ]
+}
+
+type GeometryGeometryCollectionZM implements GeometryInterface & GeometryGeometryZM {
+  geojson: GeoJSON
+  srid: Int!
+  geometries: [GeometryGeometryZM]
+}
+
+"""The root query type which gives access points into the data universe."""
+type Query implements Node {
+  """
+  Exposes the root query type nested one level down. This is helpful for Relay 1
+  which can only query top level fields if they are in a particular form.
+  """
+  query: Query!
+
+  """
+  The root query type must be a `Node` to work well with Relay 1 mutations. This just resolves to `query`.
+  """
+  nodeId: ID!
+
+  """Fetches an object given its globally unique `ID`."""
+  node(
+    """The globally unique `ID`."""
+    nodeId: ID!
+  ): Node
+
+  """Reads and enables pagination through a set of `Beach`."""
+  beaches(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Beach`."""
+    orderBy: [BeachesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: BeachCondition
+  ): BeachesConnection
+
+  """Reads and enables pagination through a set of `PollutionReport`."""
+  pollutionReports(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PollutionReport`."""
+    orderBy: [PollutionReportsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PollutionReportCondition
+  ): PollutionReportsConnection
+
+  """Reads and enables pagination through a set of `User`."""
+  users(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+  ): UsersConnection
+  beach(beachId: Int!): Beach
+  pollutionReport(id: BigInt!): PollutionReport
+  user(uid: String!): User
+
+  """Reads a single `Beach` using its globally unique `ID`."""
+  beachByNodeId(
+    """The globally unique `ID` to be used in selecting a single `Beach`."""
+    nodeId: ID!
+  ): Beach
+
+  """Reads a single `PollutionReport` using its globally unique `ID`."""
+  pollutionReportByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `PollutionReport`.
+    """
+    nodeId: ID!
+  ): PollutionReport
+
+  """Reads a single `User` using its globally unique `ID`."""
+  userByNodeId(
+    """The globally unique `ID` to be used in selecting a single `User`."""
+    nodeId: ID!
+  ): User
+  getAllPollutionReports: [PollutionReport]!
+  getLocationPollutionReports(latitude: Float!, longitude: Float!, radiusInM: Float!): [PollutionReport]!
+  allUsers: [User]!
+  getUserByUID(uid: String!): User
+}
+
+"""An object with a globally unique `ID`."""
+interface Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+}
+
+"""A connection to a list of `Beach` values."""
+type BeachesConnection {
+  """A list of `Beach` objects."""
+  nodes: [Beach!]!
+
+  """
+  A list of edges which contains the `Beach` and cursor to aid in pagination.
+  """
+  edges: [BeachesEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Beach` you could get from the connection."""
+  totalCount: Int!
+}
+
+type Beach implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  beachId: Int!
+  geom: GeometryMultiPolygon
+  osmId: BigInt
+  class: String
+  type: String
+  name: String
+  address: String
+  extratags: String
+  layer: String
+  path: String
+  pollutionLevel: Int
+}
+
+"""
+A signed eight-byte integer. The upper big integer values are greater than the
+max value for a JavaScript number. Therefore all big integers will be output as
+strings and not numbers.
+"""
+scalar BigInt
+
+"""A `Beach` edge in the connection."""
+type BeachesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Beach` at the end of the edge."""
+  node: Beach!
+}
+
+"""A location in a connection that can be used for resuming pagination."""
+scalar Cursor
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: Cursor
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: Cursor
+}
+
+"""Methods to use when ordering `Beach`."""
+enum BeachesOrderBy {
+  NATURAL
+  BEACH_ID_ASC
+  BEACH_ID_DESC
+  GEOM_ASC
+  GEOM_DESC
+  OSM_ID_ASC
+  OSM_ID_DESC
+  CLASS_ASC
+  CLASS_DESC
+  TYPE_ASC
+  TYPE_DESC
+  NAME_ASC
+  NAME_DESC
+  ADDRESS_ASC
+  ADDRESS_DESC
+  EXTRATAGS_ASC
+  EXTRATAGS_DESC
+  LAYER_ASC
+  LAYER_DESC
+  PATH_ASC
+  PATH_DESC
+  POLLUTION_LEVEL_ASC
+  POLLUTION_LEVEL_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Beach` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input BeachCondition {
+  """Checks for equality with the object’s `beachId` field."""
+  beachId: Int
+
+  """Checks for equality with the object’s `geom` field."""
+  geom: GeoJSON
+
+  """Checks for equality with the object’s `osmId` field."""
+  osmId: BigInt
+
+  """Checks for equality with the object’s `class` field."""
+  class: String
+
+  """Checks for equality with the object’s `type` field."""
+  type: String
+
+  """Checks for equality with the object’s `name` field."""
+  name: String
+
+  """Checks for equality with the object’s `address` field."""
+  address: String
+
+  """Checks for equality with the object’s `extratags` field."""
+  extratags: String
+
+  """Checks for equality with the object’s `layer` field."""
+  layer: String
+
+  """Checks for equality with the object’s `path` field."""
+  path: String
+
+  """Checks for equality with the object’s `pollutionLevel` field."""
+  pollutionLevel: Int
+}
+
+"""A connection to a list of `PollutionReport` values."""
+type PollutionReportsConnection {
+  """A list of `PollutionReport` objects."""
+  nodes: [PollutionReport!]!
+
+  """
+  A list of edges which contains the `PollutionReport` and cursor to aid in pagination.
+  """
+  edges: [PollutionReportsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `PollutionReport` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type PollutionReport implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  geom: GeometryPoint
+  id: BigInt!
+  reporter: String
+  isRelevant: Boolean
+  address: String
+  createdAt: Datetime
+  photoUrls: [String]
+  reporterImageUrl: String
+  type: String
+}
+
+"""
+A point in time as described by the [ISO
+8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
+"""
+scalar Datetime
+
+"""A `PollutionReport` edge in the connection."""
+type PollutionReportsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `PollutionReport` at the end of the edge."""
+  node: PollutionReport!
+}
+
+"""Methods to use when ordering `PollutionReport`."""
+enum PollutionReportsOrderBy {
+  NATURAL
+  GEOM_ASC
+  GEOM_DESC
+  ID_ASC
+  ID_DESC
+  REPORTER_ASC
+  REPORTER_DESC
+  IS_RELEVANT_ASC
+  IS_RELEVANT_DESC
+  ADDRESS_ASC
+  ADDRESS_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PHOTO_URLS_ASC
+  PHOTO_URLS_DESC
+  REPORTER_IMAGE_URL_ASC
+  REPORTER_IMAGE_URL_DESC
+  TYPE_ASC
+  TYPE_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `PollutionReport` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input PollutionReportCondition {
+  """Checks for equality with the object’s `geom` field."""
+  geom: GeoJSON
+
+  """Checks for equality with the object’s `id` field."""
+  id: BigInt
+
+  """Checks for equality with the object’s `reporter` field."""
+  reporter: String
+
+  """Checks for equality with the object’s `isRelevant` field."""
+  isRelevant: Boolean
+
+  """Checks for equality with the object’s `address` field."""
+  address: String
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+
+  """Checks for equality with the object’s `photoUrls` field."""
+  photoUrls: [String]
+
+  """Checks for equality with the object’s `reporterImageUrl` field."""
+  reporterImageUrl: String
+
+  """Checks for equality with the object’s `type` field."""
+  type: String
+}
+
+"""A connection to a list of `User` values."""
+type UsersConnection {
+  """A list of `User` objects."""
+  nodes: [User!]!
+
+  """
+  A list of edges which contains the `User` and cursor to aid in pagination.
+  """
+  edges: [UsersEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+type User implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  uid: String!
+  displayName: String
+  email: String
+  emailVerified: Boolean
+  photoUrl: String
+  isOnboard: Boolean
+  isAdmin: Boolean
+  isReporter: Boolean
+  hasChartAccess: Boolean
+  metadata: UserMetadata
+}
+
+type UserMetadata {
+  creationTime: Date
+  lastRefreshTime: Date
+  lastSignInTime: Date
+}
+
+"""The day, does not include a time."""
+scalar Date
+
+"""A `User` edge in the connection."""
+type UsersEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User!
+}
+
+"""Methods to use when ordering `User`."""
+enum UsersOrderBy {
+  NATURAL
+  UID_ASC
+  UID_DESC
+  DISPLAY_NAME_ASC
+  DISPLAY_NAME_DESC
+  EMAIL_ASC
+  EMAIL_DESC
+  EMAIL_VERIFIED_ASC
+  EMAIL_VERIFIED_DESC
+  PHOTO_URL_ASC
+  PHOTO_URL_DESC
+  IS_ONBOARD_ASC
+  IS_ONBOARD_DESC
+  IS_ADMIN_ASC
+  IS_ADMIN_DESC
+  IS_REPORTER_ASC
+  IS_REPORTER_DESC
+  HAS_CHART_ACCESS_ASC
+  HAS_CHART_ACCESS_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `User` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input UserCondition {
+  """Checks for equality with the object’s `uid` field."""
+  uid: String
+
+  """Checks for equality with the object’s `displayName` field."""
+  displayName: String
+
+  """Checks for equality with the object’s `email` field."""
+  email: String
+
+  """Checks for equality with the object’s `emailVerified` field."""
+  emailVerified: Boolean
+
+  """Checks for equality with the object’s `photoUrl` field."""
+  photoUrl: String
+
+  """Checks for equality with the object’s `isOnboard` field."""
+  isOnboard: Boolean
+
+  """Checks for equality with the object’s `isAdmin` field."""
+  isAdmin: Boolean
+
+  """Checks for equality with the object’s `isReporter` field."""
+  isReporter: Boolean
+
+  """Checks for equality with the object’s `hasChartAccess` field."""
+  hasChartAccess: Boolean
+}
+
+"""
+The root mutation type which contains root level fields which mutate data.
+"""
+type Mutation {
+  """Creates a single `Beach`."""
+  createBeach(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateBeachInput!
+  ): CreateBeachPayload
+
+  """Creates a single `PollutionReport`."""
+  createPollutionReport(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePollutionReportInput!
+  ): CreatePollutionReportPayload
+
+  """Creates a single `User`."""
+  createUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateUserInput!
+  ): CreateUserPayload
+
+  """Updates a single `Beach` using its globally unique id and a patch."""
+  updateBeachByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateBeachByNodeIdInput!
+  ): UpdateBeachPayload
+
+  """Updates a single `Beach` using a unique key and a patch."""
+  updateBeach(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateBeachInput!
+  ): UpdateBeachPayload
+
+  """
+  Updates a single `PollutionReport` using its globally unique id and a patch.
+  """
+  updatePollutionReportByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePollutionReportByNodeIdInput!
+  ): UpdatePollutionReportPayload
+
+  """Updates a single `PollutionReport` using a unique key and a patch."""
+  updatePollutionReport(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePollutionReportInput!
+  ): UpdatePollutionReportPayload
+
+  """Updates a single `User` using its globally unique id and a patch."""
+  updateUserByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserByNodeIdInput!
+  ): UpdateUserPayload
+
+  """Updates a single `User` using a unique key and a patch."""
+  updateUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserInput!
+  ): UpdateUserPayload
+
+  """Deletes a single `Beach` using its globally unique id."""
+  deleteBeachByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteBeachByNodeIdInput!
+  ): DeleteBeachPayload
+
+  """Deletes a single `Beach` using a unique key."""
+  deleteBeach(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteBeachInput!
+  ): DeleteBeachPayload
+
+  """Deletes a single `PollutionReport` using its globally unique id."""
+  deletePollutionReportByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePollutionReportByNodeIdInput!
+  ): DeletePollutionReportPayload
+
+  """Deletes a single `PollutionReport` using a unique key."""
+  deletePollutionReport(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePollutionReportInput!
+  ): DeletePollutionReportPayload
+
+  """Deletes a single `User` using its globally unique id."""
+  deleteUserByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserByNodeIdInput!
+  ): DeleteUserPayload
+
+  """Deletes a single `User` using a unique key."""
+  deleteUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserInput!
+  ): DeleteUserPayload
+}
+
+"""The output of our create `Beach` mutation."""
+type CreateBeachPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Beach` that was created by this mutation."""
+  beach: Beach
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Beach`. May be used by Relay 1."""
+  beachEdge(
+    """The method to use when ordering `Beach`."""
+    orderBy: [BeachesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): BeachesEdge
+}
+
+"""All input for the create `Beach` mutation."""
+input CreateBeachInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Beach` to be created by this mutation."""
+  beach: BeachInput!
+}
+
+"""An input for mutations affecting `Beach`"""
+input BeachInput {
+  beachId: Int
+  geom: GeoJSON
+  osmId: BigInt
+  class: String
+  type: String
+  name: String
+  address: String
+  extratags: String
+  layer: String
+  path: String
+  pollutionLevel: Int
+}
+
+"""The output of our create `PollutionReport` mutation."""
+type CreatePollutionReportPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PollutionReport` that was created by this mutation."""
+  pollutionReport: PollutionReport
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `PollutionReport`. May be used by Relay 1."""
+  pollutionReportEdge(
+    """The method to use when ordering `PollutionReport`."""
+    orderBy: [PollutionReportsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PollutionReportsEdge
+}
+
+"""All input for the create `PollutionReport` mutation."""
+input CreatePollutionReportInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PollutionReport` to be created by this mutation."""
+  pollutionReport: PollutionReportInput!
+}
+
+"""An input for mutations affecting `PollutionReport`"""
+input PollutionReportInput {
+  geom: GeoJSON
+  id: BigInt!
+  reporter: String
+  isRelevant: Boolean
+  address: String
+  createdAt: Datetime
+  photoUrls: [String]
+  reporterImageUrl: String
+  type: String
+}
+
+"""The output of our create `User` mutation."""
+type CreateUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `User` that was created by this mutation."""
+  user: User
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `User`. May be used by Relay 1."""
+  userEdge(
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UsersEdge
+}
+
+"""All input for the create `User` mutation."""
+input CreateUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `User` to be created by this mutation."""
+  user: UserInput!
+}
+
+"""An input for mutations affecting `User`"""
+input UserInput {
+  uid: String!
+  displayName: String
+  email: String
+  emailVerified: Boolean
+  photoUrl: String
+  isOnboard: Boolean
+  isAdmin: Boolean
+  isReporter: Boolean
+  hasChartAccess: Boolean
+}
+
+"""The output of our update `Beach` mutation."""
+type UpdateBeachPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Beach` that was updated by this mutation."""
+  beach: Beach
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Beach`. May be used by Relay 1."""
+  beachEdge(
+    """The method to use when ordering `Beach`."""
+    orderBy: [BeachesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): BeachesEdge
+}
+
+"""All input for the `updateBeachByNodeId` mutation."""
+input UpdateBeachByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Beach` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `Beach` being updated.
+  """
+  patch: BeachPatch!
+}
+
+"""
+Represents an update to a `Beach`. Fields that are set will be updated.
+"""
+input BeachPatch {
+  beachId: Int
+  geom: GeoJSON
+  osmId: BigInt
+  class: String
+  type: String
+  name: String
+  address: String
+  extratags: String
+  layer: String
+  path: String
+  pollutionLevel: Int
+}
+
+"""All input for the `updateBeach` mutation."""
+input UpdateBeachInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Beach` being updated.
+  """
+  patch: BeachPatch!
+  beachId: Int!
+}
+
+"""The output of our update `PollutionReport` mutation."""
+type UpdatePollutionReportPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PollutionReport` that was updated by this mutation."""
+  pollutionReport: PollutionReport
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `PollutionReport`. May be used by Relay 1."""
+  pollutionReportEdge(
+    """The method to use when ordering `PollutionReport`."""
+    orderBy: [PollutionReportsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PollutionReportsEdge
+}
+
+"""All input for the `updatePollutionReportByNodeId` mutation."""
+input UpdatePollutionReportByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `PollutionReport` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `PollutionReport` being updated.
+  """
+  patch: PollutionReportPatch!
+}
+
+"""
+Represents an update to a `PollutionReport`. Fields that are set will be updated.
+"""
+input PollutionReportPatch {
+  geom: GeoJSON
+  id: BigInt
+  reporter: String
+  isRelevant: Boolean
+  address: String
+  createdAt: Datetime
+  photoUrls: [String]
+  reporterImageUrl: String
+  type: String
+}
+
+"""All input for the `updatePollutionReport` mutation."""
+input UpdatePollutionReportInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `PollutionReport` being updated.
+  """
+  patch: PollutionReportPatch!
+  id: BigInt!
+}
+
+"""The output of our update `User` mutation."""
+type UpdateUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `User` that was updated by this mutation."""
+  user: User
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `User`. May be used by Relay 1."""
+  userEdge(
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UsersEdge
+}
+
+"""All input for the `updateUserByNodeId` mutation."""
+input UpdateUserByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `User` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `User` being updated.
+  """
+  patch: UserPatch!
+}
+
+"""Represents an update to a `User`. Fields that are set will be updated."""
+input UserPatch {
+  uid: String
+  displayName: String
+  email: String
+  emailVerified: Boolean
+  photoUrl: String
+  isOnboard: Boolean
+  isAdmin: Boolean
+  isReporter: Boolean
+  hasChartAccess: Boolean
+}
+
+"""All input for the `updateUser` mutation."""
+input UpdateUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `User` being updated.
+  """
+  patch: UserPatch!
+  uid: String!
+}
+
+"""The output of our delete `Beach` mutation."""
+type DeleteBeachPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Beach` that was deleted by this mutation."""
+  beach: Beach
+  deletedBeachNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Beach`. May be used by Relay 1."""
+  beachEdge(
+    """The method to use when ordering `Beach`."""
+    orderBy: [BeachesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): BeachesEdge
+}
+
+"""All input for the `deleteBeachByNodeId` mutation."""
+input DeleteBeachByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Beach` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteBeach` mutation."""
+input DeleteBeachInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  beachId: Int!
+}
+
+"""The output of our delete `PollutionReport` mutation."""
+type DeletePollutionReportPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PollutionReport` that was deleted by this mutation."""
+  pollutionReport: PollutionReport
+  deletedPollutionReportNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `PollutionReport`. May be used by Relay 1."""
+  pollutionReportEdge(
+    """The method to use when ordering `PollutionReport`."""
+    orderBy: [PollutionReportsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PollutionReportsEdge
+}
+
+"""All input for the `deletePollutionReportByNodeId` mutation."""
+input DeletePollutionReportByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `PollutionReport` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deletePollutionReport` mutation."""
+input DeletePollutionReportInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: BigInt!
+}
+
+"""The output of our delete `User` mutation."""
+type DeleteUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `User` that was deleted by this mutation."""
+  user: User
+  deletedUserNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `User`. May be used by Relay 1."""
+  userEdge(
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UsersEdge
+}
+
+"""All input for the `deleteUserByNodeId` mutation."""
+input DeleteUserByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `User` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteUser` mutation."""
+input DeleteUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uid: String!
+}
+
+"""
+The root subscription type: contains realtime events you can subscribe to with the `subscription` operation.
+"""
+type Subscription {
+  reportAdded: PollutionReport!
+  reportUnrelevant: PollutionReport!
+  listen(topic: String!): ListenPayload!
+}
+
+type ListenPayload {
+  """
+  Our root query field type. Allows us to run any query from our subscription payload.
+  """
+  query: Query
+  relatedNode: Node
+  relatedNodeId: ID
+}

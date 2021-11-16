@@ -167,8 +167,8 @@ export default function UsersTable() {
       data={data.allUsers.map((user) => {
         const {
           uid,
-          permissions: { isOnboard, isAdmin, isReporter, hasChartAccess },
-          userInfo: { displayName, email, emailVerified, photoURL },
+          isOnboard, isAdmin, isReporter, hasChartAccess,
+          displayName, email, emailVerified, photoUrl ,
           metadata: { lastSignInTime },
         } = user;
         const lastSignInDate = DateTime.fromHTTP(lastSignInTime);
@@ -179,7 +179,7 @@ export default function UsersTable() {
             isOnboard: isOnboard,
             displayName: displayName,
             email: email,
-            photoURL: photoURL,
+            photoURL: photoUrl,
           },
           lastSignInTime: lastSignInDate,
           status: { emailVerified: emailVerified },

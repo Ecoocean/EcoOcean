@@ -2,7 +2,7 @@ import React, {useState, Fragment, use, useEffect} from 'react';
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Tooltip, useMapEvents, useMap } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-markercluster";
-import { GET_ALL_POLLUTION_REPORTS_LOCAL, GET_LOCATION_REPORTS } from "../../GraphQL/Queries";
+import { GET_BEACHES_GEOJSON, GET_LOCATION_REPORTS } from "../../GraphQL/Queries";
 import Typography from "@mui/material/Typography";
 import { PollutionReportModal } from "../modals/PollutionReportModal";
 import { useQuery, useLazyQuery, useReactiveVar, useSubscription } from "@apollo/client";
@@ -48,7 +48,28 @@ function ShowReports() {
     const selectedReport = useReactiveVar(selectedReportVar);
     const selectedMapReport = useReactiveVar(selectedMapReportVar);
     const filteredPollutionReports = useReactiveVar(filteredPollutionReportsVar);
-    const [getLocationReports, { loading, error, data }] = useLazyQuery(GET_LOCATION_REPORTS);
+    const [getLocationReports, { data: dataLocal }] = useLazyQuery(GET_LOCATION_REPORTS);
+
+    const { data } = useQuery(GET_BEACHES_GEOJSON, {
+      fetchPolicy: "network-only",
+    });
+
+    const whenClicked = (e) => {
+      // e = event
+      console.log(e);
+      // You can make your ajax call declaration here
+      //$.ajax(... 
+    }
+    
+    const onEachFeature = (feature, layer) => {
+        //bind click
+        layer.on({
+            click: whenClicked
+        });
+    }
+    
+
+    
 
     useEffect(() => {
       if(selectedMapReport){
@@ -59,10 +80,20 @@ function ShowReports() {
     }, [selectedMapReport])
 
     useEffect(() => {
-      if(data) {
-        filteredPollutionReportsVar(data.getLocationPollutionReports);
+      if(dataLocal) {
+        filteredPollutionReportsVar(dataLocal.getLocationPollutionReports);
       }
-  }, [data])
+    }, [dataLocal])
+
+    useEffect(() => {
+      if(data) {
+        data.beaches.nodes.map((beach) => {
+          L.geoJSON(beach.geom.geojson, {
+            onEachFeature: onEachFeature
+          }).addTo(map);
+        })
+      }
+    }, [data])
 
     useEffect(() => {
         const center = map.getCenter();

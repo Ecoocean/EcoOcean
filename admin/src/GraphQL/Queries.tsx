@@ -2,39 +2,34 @@ import { gql } from "@apollo/client";
 
 //from server
 export const GET_USER_BY_UID = gql`
-  query getUserByUID($uid: String!) {
+  query user($uid: String!) {
     getUserByUID(uid: $uid) {
       uid
-      permissions {
-        isAdmin
-      }
+      isAdmin
     }
   }
 `;
 
 export const GET_ALL_USERS = gql`
-  query {
-    allUsers {
-      uid
-      userInfo {
-        displayName
-        email
-        emailVerified
-        photoURL
-      }
-      metadata {
-        creationTime
-        lastRefreshTime
-        lastSignInTime
-      }
-      permissions {
-        isOnboard
-        isAdmin
-        isReporter
-        hasChartAccess
-      }
+ query {
+  allUsers {
+    displayName
+    metadata {
+      creationTime
+      lastRefreshTime
+      lastSignInTime
     }
+    email
+    emailVerified
+    isAdmin
+    hasChartAccess
+    isOnboard
+    isReporter
+    photoUrl
+    uid
   }
+}
+
 `;
 
 export const GET_ALL_POLLUTION_REPORTS = gql`
