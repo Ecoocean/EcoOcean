@@ -7,7 +7,7 @@ import { styled } from "@mui/material/styles";
 import { Box } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ScaleLoader from "react-spinners/ScaleLoader";
-import { SET_USER_FIELD } from "../GraphQL/Mutations";
+import { UPDATE_USER } from "../GraphQL/Mutations";
 import { useMutation } from "@apollo/client";
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -31,11 +31,14 @@ export default function UserPermissionsBox({ uid, admin, reporter, charts }) {
     const minTimeForLoadingSimulation = 700; // in miliseconds
     setLoadingSimulations(true);
     const startTime = performance.now();
-    await editUserField({
+    let patch = {}
+    patch[fieldName] = !currentValue
+    await updateUser({
       variables: {
-        uid: uid,
-        fieldName: fieldName,
-        value: !currentValue,
+        input: {
+          uid: uid,
+          patch: patch
+        }
       },
     });
     const endTime = performance.now();
@@ -49,7 +52,7 @@ export default function UserPermissionsBox({ uid, admin, reporter, charts }) {
     }
   };
 
-  const [editUserField, { loading, error, data }] = useMutation(SET_USER_FIELD);
+  const [updateUser, { loading, error, data }] = useMutation(UPDATE_USER);
   return !loadingSimulation ? (
     <Box
       component="div"

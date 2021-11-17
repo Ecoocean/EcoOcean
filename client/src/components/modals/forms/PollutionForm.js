@@ -36,12 +36,16 @@ const PollutionForm = ({show, handleClose, }) => {
         }
         const { data } = await CreatePollutionReport({
           variables: {
-            reporter: firebase.auth().currentUser ? firebase.auth().currentUser.displayName: "Test",
-            reporterImageUrl: firebase.auth().currentUser? firebase.auth().currentUser.photoURL: null,
-            latitude: location.lat,
-            longitude: location.lng,
-            type: pollutionTypePickerRef.current.state.image.value,
-            files: imageUploaderRef.current.state.pictures
+            input: {
+              pollutionReport:{
+                reporter: firebase.auth().currentUser ? firebase.auth().currentUser.displayName: "Test",
+                reporterImageUrl: firebase.auth().currentUser? firebase.auth().currentUser.photoURL: null,
+                isRelevant: true,
+                type: pollutionTypePickerRef.current.state.image.value,
+                //files: imageUploaderRef.current.state.pictures
+                geom: { "type": "Point", "coordinates": [ location.lng, location.lat ] }
+              }
+            }
           },
         });
         setSnackBar('Pollution report sucssefully submitted', 'success');

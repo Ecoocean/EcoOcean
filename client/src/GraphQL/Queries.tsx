@@ -14,22 +14,25 @@ export const GET_BEACHES_GEOJSON = gql`
 `;
 
 export const GET_LOCATION_REPORTS = gql`
-  query getLocationPollutionReports($latitude: Float!, $longitude: Float!, $radiusInM: Float!) {
-    getLocationPollutionReports(latitude: $latitude, longitude: $longitude, radiusInM: $radiusInM) {
-      id
-      geohash
-      location {
-        latitude
-        longitude
+  query getLocationPollutionReports($xmax: Float!, $xmin: Float!, $ymax: Float!, $ymin: Float!) {
+    getLocationPollutionReports(xmax: $xmax, xmin: $xmin, ymax: $ymax, ymin: $ymin) {
+      nodes {
+        address
+        createdAt
+        id
+        geom {
+          geojson
+          x
+          y
+        }
+        isRelevant
+        photoUrls
+        reporter
+        reporterImageUrl
+        type
       }
-      reporterImageUrl
-      address
-      created_at
-      reporter
-      type
-      photoUrls
-    }
   }
+}
 `;
 
 export const GET_USER_BY_UID = gql`

@@ -1,4 +1,5 @@
 export interface GeoLoaction {
-  latitude: number;
-  longitude: number;
+  geojson: any;
+  x: number;
+  y: number;
 }

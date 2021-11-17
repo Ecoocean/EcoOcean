@@ -15,9 +15,9 @@ export const PollutionReportModal = ({ report, show, handleClose }: any) => {
           ID: {report.id}
           {report.address
             ? `Address: ${report.address}`
-            : `Coordinates: lat: ${report.location.latitude}, lng: ${report.location.longitude}`}
+            : `Coordinates: lat: ${report.geom.y}, lng: ${report.geom.x}`}
           <ImageList sx={{ width: 350, height: 350 }} cols={2}>
-            {report.photoUrls.map((photoUrl: string) => (
+            {report.photoUrls?.map((photoUrl: string) => (
               <ImageListItem key={photoUrl}>
                 <a href={photoUrl} target="_blank">
                   <img width="164" height="164" src={photoUrl} />

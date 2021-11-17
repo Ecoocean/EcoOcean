@@ -25,12 +25,12 @@ const typeDefs = gql`
 
   extend type Query {
     getAllPollutionReports: [PollutionReport]!
-    getLocationPollutionReports(latitude: Float!, longitude: Float!,
-    radiusInM: Float!): [PollutionReport]!
     allUsers: [User]!
     getUserByUID(uid: String!): User
   }
-
+  extend type Mutation {
+    test(uid: String!): User
+  }
 `;
 
 export default typeDefs;

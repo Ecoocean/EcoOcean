@@ -48,7 +48,9 @@ function ShowReports() {
     const selectedReport = useReactiveVar(selectedReportVar);
     const selectedMapReport = useReactiveVar(selectedMapReportVar);
     const filteredPollutionReports = useReactiveVar(filteredPollutionReportsVar);
-    const [getLocationReports, { data: dataLocal }] = useLazyQuery(GET_LOCATION_REPORTS);
+    const [getLocationReports, { data: dataLocal }] = useLazyQuery(GET_LOCATION_REPORTS, {
+      fetchPolicy: "network-only",
+    });
 
     const { data } = useQuery(GET_BEACHES_GEOJSON, {
       fetchPolicy: "network-only",
@@ -73,15 +75,15 @@ function ShowReports() {
 
     useEffect(() => {
       if(selectedMapReport){
-        map.flyTo({lat: selectedMapReport.location.latitude,
-          lng:selectedMapReport.location.longitude},18);
+        map.flyTo({lat: selectedMapReport.geom.y,
+          lng:selectedMapReport.geom.x},18);
       }
 
     }, [selectedMapReport])
 
     useEffect(() => {
       if(dataLocal) {
-        filteredPollutionReportsVar(dataLocal.getLocationPollutionReports);
+        filteredPollutionReportsVar(dataLocal.getLocationPollutionReports.nodes);
       }
     }, [dataLocal])
 
@@ -99,11 +101,14 @@ function ShowReports() {
         const center = map.getCenter();
         const mapBoundNorthEast = bounds.getNorthEast();
         const mapDistance = mapBoundNorthEast.distanceTo(center);
-        getLocationReports({variables: {
-          latitude: center.lat,
-          longitude: center.lng,
-          radiusInM: mapDistance, 
-        }})
+        const variables = {
+          xmin: bounds.getSouthEast().lng,
+          ymin: bounds.getSouthEast().lat,
+          xmax: bounds.getSouthWest().lng,
+          ymax: bounds.getNorthEast().lat
+        }
+        console.log(variables)
+        getLocationReports({variables: variables})
 
     }, [])
 
@@ -157,15 +162,13 @@ function ShowReports() {
         const minTimeForLoadingSimulation = 700; // in miliseconds
         loadingPollutionReportsVar(true);
         const startTime = performance.now();
-        const center = map.getCenter();
         const bounds = map.getBounds();
         setBounds(bounds);
-        const mapBoundNorthEast = bounds.getNorthEast();
-        const mapDistance = mapBoundNorthEast.distanceTo(center);
         getLocationReports({variables: {
-          latitude: center.lat,
-          longitude: center.lng,
-          radiusInM: mapDistance, 
+          xmin: bounds.getSouthEast().lng,
+          ymin: bounds.getSouthEast().lat,
+          xmax: bounds.getSouthWest().lng,
+          ymax: bounds.getNorthEast().lat
         }})
         const endTime = performance.now();
         const TotalTime = endTime - startTime; // in miliseconds
@@ -212,7 +215,7 @@ function ShowReports() {
             }
             return <Marker
                     key={report.id}
-                    position={[report.location.latitude, report.location.longitude]}
+                    position={[report.geom.y, report.geom.x]}
                     icon={markerColor}
                     eventHandlers={{
                         click: (e) => {
@@ -243,7 +246,7 @@ function ShowReports() {
                                     <u>
                                     <b>{"Date:"}</b>
                                     </u>{" "}
-                                    {`${new Date(report.created_at._seconds * 1000).toString()}`}
+                                    {`${new Date(report.created_at?._seconds * 1000).toString()}`}
                                     <br />
                                     <b>for more inforamtion click on the marker</b>
                                 </Fragment>

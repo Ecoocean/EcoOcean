@@ -10,13 +10,15 @@ export const CREATE_USER = gql`
   }
 `;
 
-export const SET_USER_FIELD = gql`
-  mutation setUserPermissionField(
-    $uid: String!
-    $fieldName: String!
-    $value: Boolean!
+export const UPDATE_USER = gql`
+  mutation updateUser(
+    $input:  UpdateUserInput!
   ) {
-    setUserPermissionField(uid: $uid, fieldName: $fieldName, value: $value)
+    updateUser(input: $input) {
+      user {
+        uid
+      }
+    }
   }
 `;
 export const CREATE_POLLUTION_REPORT = gql`

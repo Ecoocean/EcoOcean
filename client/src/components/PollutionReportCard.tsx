@@ -26,7 +26,7 @@ export default function PollutionReportCard(props: {
           >
             {props.report.address
               ? `Address: ${props.report.address}`
-              : `Coordinates: lat: ${props.report.location.latitude}, lng: ${props.report.location.longitude}`}
+              : `Coordinates: lat: ${props.report.geom.y}, lng: ${props.report.geom.x}`}
           </Typography>
         </CardContent>
         <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}>
@@ -43,7 +43,7 @@ export default function PollutionReportCard(props: {
           </Grid>
           <Grid item xs={7}>
             {`Date: ${new Date(
-              props.report.created_at._seconds * 1000
+              props.report.created_at?._seconds * 1000
             ).toString()}`}
           </Grid>
         </Box>

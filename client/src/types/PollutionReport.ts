@@ -5,7 +5,7 @@ export interface PollutionReport {
   reporterImageUrl: string;
   reporter: string;
   created_at: any;
-  location: GeoLoaction;
+  geom: GeoLoaction;
   type: string;
   address: string;
   photoUrls: string[];
