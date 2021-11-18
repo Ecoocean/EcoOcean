@@ -36,7 +36,7 @@ jobs:
     - name: Deploy to Cloud Run
       run: |-
         gcloud run deploy ${{ env.SERVICE }} \
-          --vpc-connector ecoocean-vpc
+          --vpc-connector ecoocean-vpc \
           --region ${{ env.REGION }} \
           --image gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} \
           --platform "managed" \
