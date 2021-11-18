@@ -40,7 +40,7 @@ async function startServer() {
   
   
   const app = express();
-  const allowedDomains = ['http://localhost:3000', 'https://ecoocean-server-73kh3tgoha-ew.a.run.app']
+  const allowedDomains = ['http://localhost:3000', 'https://ecoocean.web.app', 'https://admin-ecoocean.web.app']
   const options = {
         origin: function (origin, callback) {
           // bypass the requests with no origin (like curl requests, mobile apps, etc )
