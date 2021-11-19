@@ -40,7 +40,7 @@ async function startServer() {
   
   
   const app = express();
-  const allowedDomains = ['http://localhost:3000', 'https://ecoocean.web.app', 'https://admin-ecoocean.web.app']
+  const allowedDomains = [process.env.ECOOCEAN_CLIENT_URL, process.env.ADMIN_ECOOCEAN_CLIENT_URL]
   const options = {
         origin: function (origin, callback) {
           // bypass the requests with no origin (like curl requests, mobile apps, etc )
@@ -60,9 +60,13 @@ async function startServer() {
   // Enable pre-flight requests for all routes
   app.options('*', cors(options));
   app.use(graphqlUploadExpress());
-
+  const dbUserName = process.env.DB_USERNAME;
+  const dbPassword = process.env.DB_PASSWORD;
+  const dbName = process.env.DB_NAME;
+  const dbHost = process.env.DB_HOST;
+  const dbPort = process.env.DB_PORT;
   const postgraphileMiddleware =  postgraphile(
-    process.env.DATABASE_URL || "postgres://postgres:bengurion@34.79.12.114:5432/ecoocean_postgis",
+    process.env.DATABASE_URL || `postgres://${dbUserName}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`,
     "public",
     postgraphileOptions
   )

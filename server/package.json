@@ -1,9 +1,9 @@
 {
   "name": "functions",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "env-cmd -f .env.production node src/index.js",
     "gcp-build": "tsc -p .",
-    "start:dev": "ts-node-dev --respawn src/index.ts",
+    "start:dev": "env-cmd -f .env.development ts-node-dev --respawn src/index.ts",
     "test": "jest --passWithNoTests",
     "build": "tsc -p ."
   },
@@ -23,6 +23,7 @@
     "apollo-log": "^1.1.0",
     "apollo-server": "^3.4.0",
     "apollo-server-express": "^3.4.0",
+    "env-cmd": "^10.1.0",
     "express-winston": "^4.2.0",
     "firebase": "^9.1.3",
     "firebase-admin": "^10.0.0",
