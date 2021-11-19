@@ -53,9 +53,9 @@ function SignInScreen() {
 
   // listen for db user result
   useEffect(() => {
-    if(data?.getUserByUID) {
+    if(data?.user) {
       setUserAuthenticated(true);
-      if(data.getUserByUID.permissions?.isAdmin){
+      if(data.user.isAdmin){
         setHasAdminPermission(true);
       }
     }

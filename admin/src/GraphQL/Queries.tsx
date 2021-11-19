@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 //from server
 export const GET_USER_BY_UID = gql`
   query user($uid: String!) {
-    getUserByUID(uid: $uid) {
+    user(uid: $uid) {
       uid
       isAdmin
     }

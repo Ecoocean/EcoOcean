@@ -4,7 +4,6 @@ import { graphqlUploadExpress } from "graphql-upload";
 import { PubSub } from "graphql-subscriptions";
 import { postgraphile, PostGraphileOptions, makePluginHook } from "postgraphile";
 import * as PostgisPlugin from "@graphile/postgis";
-import { makeExtendSchemaPlugin, gql } from "graphile-utils";
 import PgPubsub  from "@graphile/pg-pubsub";
 import cors from 'cors';
 import { PostgresPlugin } from './resolvers'
@@ -40,7 +39,8 @@ async function startServer() {
   
   
   const app = express();
-  const allowedDomains = [process.env.ECOOCEAN_CLIENT_URL, process.env.ADMIN_ECOOCEAN_CLIENT_URL]
+  const allowedDomains = [process.env.ECOOCEAN_SERVER,
+                          process.env.ECOOCEAN_CLIENT_URL, process.env.ADMIN_ECOOCEAN_CLIENT_URL]
   const options = {
         origin: function (origin, callback) {
           // bypass the requests with no origin (like curl requests, mobile apps, etc )
