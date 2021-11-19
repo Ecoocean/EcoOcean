@@ -77,6 +77,7 @@ function ShowReports() {
       if(selectedMapReport){
         map.flyTo({lat: selectedMapReport.geom.y,
           lng:selectedMapReport.geom.x},18);
+        filteredPollutionReportsVar([selectedMapReport]);
       }
 
     }, [selectedMapReport])
@@ -192,7 +193,7 @@ function ShowReports() {
             onMapChange()
           })
         },
-        moveend: () => {
+        dragend: () => {
           new Promise(() => {
             onMapChange();
           })
