@@ -73,7 +73,7 @@ function ShowReports() {
 
     
 
-    useEffect(() => {
+    useEffect( () => {
       if(selectedMapReport){
         map.flyTo({lat: selectedMapReport.geom.y,
           lng:selectedMapReport.geom.x},18);
@@ -106,9 +106,8 @@ function ShowReports() {
           ymin: bounds.getSouthEast().lat,
           xmax: bounds.getSouthWest().lng,
           ymax: bounds.getNorthEast().lat
-        }
-        console.log(variables)
-        getLocationReports({variables: variables})
+        };
+        getLocationReports({variables: variables});
 
     }, [])
 
@@ -188,14 +187,15 @@ function ShowReports() {
     };
     
     useMapEvents({
-      zoomanim: () => {
+        zoomanim: () => {
           new Promise(() => {
             onMapChange()
           })
-          console.log("check");
         },
-        dragend: () => {
+        moveend: () => {
+          new Promise(() => {
             onMapChange();
+          })
         }
     });
 
