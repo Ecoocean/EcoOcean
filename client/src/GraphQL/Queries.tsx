@@ -37,7 +37,7 @@ export const GET_LOCATION_REPORTS = gql`
 
 export const GET_USER_BY_UID = gql`
   query user($uid: String!) {
-    getUserByUID(uid: $uid) {
+    user(uid: $uid) {
       uid
       isAdmin
     }

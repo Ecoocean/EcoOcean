@@ -49,7 +49,7 @@ function SignInScreen() {
 
   // listen for db user result
   useEffect(() => {
-    if(data?.getUserByUID) {
+    if(data?.user) {
       setUserAuthenticated(true);
     }
   }, [data])
