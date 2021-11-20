@@ -22,8 +22,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { PollutionReportModal } from "../modals/PollutionReportModal";
-import { SET_REPORT_UNRELEVANT } from "../../GraphQL/Mutations";
-import { setSnackBar } from "../../SnackBarUtils";
+
 
 export default function ReportList() {
   const [openInfoWindow, setOpenInfoWindow] = useState(false);
@@ -33,23 +32,6 @@ export default function ReportList() {
     GET_FILTERED_POLLUTION_REPORTS_LOCAL
   );
 
-  const [
-    setReportUnrelevant,
-    { loading: loadingUnrelevant, error: errorUnreleant, data: dataUnrelevant },
-  ] = useMutation(SET_REPORT_UNRELEVANT);
-
-  const handleClose = () => {
-    setOpenInfoWindow(false);
-  };
-
-  const handleSetReportUnrelevant = async (reportId: string) => {
-    const { data } = await setReportUnrelevant({
-      variables: {
-        reportId: reportId,
-      },
-    });
-    setSnackBar("Pollution report sucssefully deleted", "success");
-  };
 
   return (
     <div style={{ position: "relative" }}>
@@ -96,7 +78,6 @@ export default function ReportList() {
                     <Tooltip title="Delete Report" placement="top" arrow>
                       <IconButton
                         aria-label="delete"
-                        onClick={() => handleSetReportUnrelevant(report.id)}
                       >
                         <DeleteForeverIcon />
                       </IconButton>
@@ -121,7 +102,6 @@ export default function ReportList() {
       <PollutionReportModal
         report={selectedReport}
         show={openInfoWindow}
-        handleClose={handleClose}
       />
     </div>
   );

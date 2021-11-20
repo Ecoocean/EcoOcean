@@ -61,6 +61,9 @@ export const PostgresPlugin = makeExtendSchemaPlugin(build => {
               variables,
               operationName
           );
+          if (errors){
+            return errors;
+          }
           return data;
           }
         },
@@ -96,6 +99,9 @@ export const PostgresPlugin = makeExtendSchemaPlugin(build => {
                 null,
                 context,
             );
+            if (errors){
+              return errors;
+            }
 
             const onboardedUsers = data.users.nodes;
             return users.map((firebaseUser) => {
