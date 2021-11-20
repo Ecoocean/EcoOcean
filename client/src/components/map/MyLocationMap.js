@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Button, Spinner } from "react-bootstrap";
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
@@ -35,24 +35,30 @@ function MyLocation({onLocationFound, onGpsLocationFound}) {
     const [gpsLocaionFound, setGpsLocaionFound] = useState(false);
     map.addControl(search);
 
-    const locationWatchID = navigator.geolocation.watchPosition(
-        ({ coords: { latitude: lat, longitude: lng, accuracy: acc } }) => {
-          if (acc < 50 && !usingSearch && !gpsLocaionFound) {
-            // if the location is within 50 meters
-            setGpsLocaionFound(true);
-            onGpsLocationFound();
-            setLocation({lat: lat, lng:lng});
-            onLocationFound(lng, lat);
-            map.flyTo({lat: lat, lng:lng},18);
-          }
-        },
-        (err) => console.log(err),
-        {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 1000,
+    useEffect(() =>{
+        const locationWatchID = navigator.geolocation.watchPosition(
+            ({ coords: { latitude: lat, longitude: lng, accuracy: acc } }) => {
+                if (acc < 50 && !usingSearch && !gpsLocaionFound) {
+                    // if the location is within 50 meters
+                    setGpsLocaionFound(true);
+                    onGpsLocationFound();
+                    setLocation({lat: lat, lng:lng});
+                    onLocationFound(lng, lat);
+                    map.flyTo({lat: lat, lng:lng},18);
+                }
+            },
+            (err) => console.log(err),
+            {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 1000,
+            }
+        );
+
+        return () => {
+            navigator.geolocation.clearWatch(locationWatchID);
         }
-    );
+    }, [])
     
     
     map.on('geosearch/showlocation', function (e) {
