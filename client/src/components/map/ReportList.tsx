@@ -5,7 +5,6 @@ import { useMutation, useReactiveVar } from "@apollo/client";
 import { PollutionReport } from "../../types/PollutionReport";
 import MapIcon from "@mui/icons-material/Map";
 import PollutionReportCard from "../PollutionReportCard";
-import { GET_FILTERED_POLLUTION_REPORTS_LOCAL } from "../../GraphQL/Queries";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
   loadingPollutionReportsVar,
@@ -43,12 +42,17 @@ export default function ReportList() {
   };
 
   const handleSetReportUnrelevant = async (reportId: string) => {
-    const { data } = await setReportUnrelevant({
+    await setReportUnrelevant({
       variables: {
-        reportId: reportId,
+        input: {
+          id: reportId,
+          patch: {
+            isRelevant: false
+          }
+        }
       },
     });
-    setSnackBar("Pollution report sucssefully deleted", "success");
+    setSnackBar("Pollution report successfully deleted", "success");
   };
 
   return (

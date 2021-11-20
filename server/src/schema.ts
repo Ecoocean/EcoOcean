@@ -9,10 +9,6 @@ const typeDefs = gql`
     filename: String!
   }
   
-  extend type Subscription {
-    reportAdded: PollutionReport!
-    reportUnrelevant: PollutionReport!
-  }
   type UserMetadata {
     creationTime: Date
     lastRefreshTime: Date

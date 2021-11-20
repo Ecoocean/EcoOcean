@@ -1,31 +1,45 @@
 import { gql } from "@apollo/client";
 
 export const REPORT_ADDED_SUBSCRIPTION = gql`
-  subscription OnReportAdded {
-    reportAdded {
-      location {
-        latitude
-        longitude
+  subscription {
+    listen(topic: "reportAdded") {
+      relatedNodeId
+      relatedNode {
+        nodeId
+        ... on PollutionReport {
+          id
+          address
+          createdAt
+          isRelevant
+          nodeId
+          photoUrls
+          reporter
+          reporterImageUrl
+          type
+          geom {
+            x
+            y
+          }
+        }
       }
-      id
-      reporter
-      created_at
-      type
-      address
-      photoUrls
-      reporterImageUrl
     }
   }
 `;
 
-export const REPORT_UNRELEVANT_SUBSCRIPTION = gql`
-  subscription OnReportUnrelevant {
-    reportUnrelevant {
-      location {
-        latitude
-        longitude
+export const REPORT_IRRELEVANT_SUBSCRIPTION = gql`
+  subscription {
+    listen(topic: "reportIrrelevant") {
+      relatedNodeId
+      relatedNode {
+        nodeId
+        ... on PollutionReport {
+          id
+          geom {
+            x
+            y
+          }
+        }
       }
-      id
     }
   }
 `;

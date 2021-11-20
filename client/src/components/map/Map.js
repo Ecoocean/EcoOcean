@@ -7,8 +7,7 @@ import Typography from "@mui/material/Typography";
 import { PollutionReportModal } from "../modals/PollutionReportModal";
 import { useQuery, useLazyQuery, useReactiveVar, useSubscription } from "@apollo/client";
 import {
-  REPORT_ADDED_SUBSCRIPTION,
-  REPORT_UNRELEVANT_SUBSCRIPTION,
+    REPORT_ADDED_SUBSCRIPTION, REPORT_IRRELEVANT_SUBSCRIPTION
 } from "../../GraphQL/Subscriptions";
 import yellowFilledMarker from './icons/marker-yellow-optimized.svg';
 import greenFilledMarker from './icons/marker-green-optimized.svg';
@@ -115,34 +114,34 @@ function ShowReports() {
 
     const IncomingReport = async ({ subscriptionData: { data } }) => {
         if (
-          data.reportAdded.location.latitude > bounds.getSouthEast().lat &&
-          data.reportAdded.location.latitude < bounds.getNorthWest().lat &&
-          data.reportAdded.location.longitude >bounds.getNorthWest().lng &&
-          data.reportAdded.location.longitude < bounds.getSouthEast().lng
+          data.listen.relatedNode.geom.y > bounds.getSouthEast().lat &&
+            data.listen.relatedNode.geom.y < bounds.getNorthWest().lat &&
+            data.listen.relatedNode.geom.x >bounds.getNorthWest().lng &&
+            data.listen.relatedNode.geom.x < bounds.getSouthEast().lng
         ) {
           const minTimeForLoadingSimulation = 700; // in miliseconds
           const currentFilteredReports = filteredPollutionReportsVar();
           filteredPollutionReportsVar(
-            [data.reportAdded].concat(currentFilteredReports)
+            [data.listen.relatedNode].concat(currentFilteredReports)
           );
           await new Promise((resolve) => setTimeout(resolve, minTimeForLoadingSimulation));
         }
       };
     
-      const UnrelevantReport = async({ subscriptionData: { data } }) => {
+      const IrrelevantReport = async({ subscriptionData: { data } }) => {
         
         if (
-          data.reportUnrelevant.location.latitude > bounds.getSouthEast().lat &&
-          data.reportUnrelevant.location.latitude < bounds.getNorthWest().lat &&
-          data.reportUnrelevant.location.longitude > bounds.getNorthWest().lng &&
-          data.reportUnrelevant.location.longitude < bounds.getSouthEast().lng
+            data.listen.relatedNode.geom.y > bounds.getSouthEast().lat &&
+            data.listen.relatedNode.geom.y  < bounds.getNorthWest().lat &&
+            data.listen.relatedNode.geom.x  > bounds.getNorthWest().lng &&
+            data.listen.relatedNode.geom.x  < bounds.getSouthEast().lng
         ) {
           const minTimeForLoadingSimulation = 700; // in miliseconds
           const currentFilteredReports =
             filteredPollutionReportsVar();
           filteredPollutionReportsVar(
             currentFilteredReports.filter(
-              (report) => report.id !== data.reportUnrelevant.id
+              (report) => report.id !== data.listen.relatedNode.id
             )
           );
           await new Promise((resolve) => setTimeout(resolve, minTimeForLoadingSimulation));
@@ -153,8 +152,8 @@ function ShowReports() {
         onSubscriptionData: IncomingReport,
       });
     
-      useSubscription(REPORT_UNRELEVANT_SUBSCRIPTION, {
-        onSubscriptionData: UnrelevantReport,
+      useSubscription(REPORT_IRRELEVANT_SUBSCRIPTION, {
+        onSubscriptionData: IrrelevantReport,
       });
 
     const onMapChange = async () => {

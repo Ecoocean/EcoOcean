@@ -15,7 +15,13 @@ export const CREATE_POLLUTION_REPORT = gql`
 `;
 
 export const SET_REPORT_UNRELEVANT = gql`
-  mutation setReportUnrelevant($reportId: String!) {
-    setReportUnrelevant(reportId: $reportId)
+  mutation updatePollutionReport(
+    $input:  UpdatePollutionReportInput!
+  ) {
+    updatePollutionReport(input: $input) {
+      pollutionReport {
+        id
+      }
+    }
   }
 `;

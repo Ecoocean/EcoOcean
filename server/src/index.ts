@@ -1,14 +1,10 @@
-import typeDefs from "./schema";
 import express from "express";
 import { graphqlUploadExpress } from "graphql-upload";
-import { PubSub } from "graphql-subscriptions";
 import { postgraphile, PostGraphileOptions, makePluginHook } from "postgraphile";
 import * as PostgisPlugin from "@graphile/postgis";
 import PgPubsub  from "@graphile/pg-pubsub";
 import cors from 'cors';
 import { PostgresPlugin } from './resolvers'
-
-export const pubsub = new PubSub();
 
 const pluginHook = makePluginHook([PgPubsub]);
 
@@ -17,6 +13,7 @@ async function startServer() {
   
   const postgraphileOptions: PostGraphileOptions = {
     pluginHook,
+    // Enable live support in PostGraphile
     subscriptions: true,
     simpleSubscriptions: true,
     watchPg: true,
