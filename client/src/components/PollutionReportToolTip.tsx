@@ -43,7 +43,7 @@ export default function PollutionReportToolTip(props: any) {
             <u>
               <b>{"Date:"}</b>
             </u>{" "}
-            {`${new Date(props.report.created_at._seconds * 1000).toString()}`}
+            {`${new Date(props.report.createdAt)?.toString()}`}
             <br />
             <b>for more inforamtion click on the marker</b>
           </React.Fragment>

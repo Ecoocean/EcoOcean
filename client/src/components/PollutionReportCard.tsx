@@ -42,9 +42,8 @@ export default function PollutionReportCard(props: {
             {`Reporter: ${props.report.reporter}`}
           </Grid>
           <Grid item xs={7}>
-            {`Date: ${new Date(
-              props.report.created_at?._seconds * 1000
-            ).toString()}`}
+            {`Date: ${
+              new Date(props.report.createdAt)?.toString()}`}
           </Grid>
         </Box>
       </Box>

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { Button, Spinner } from "react-bootstrap";
 import L from 'leaflet';
-import { MapContainer, TileLayer, Marker, Tooltip, useMapEvents, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 
 import blueFilledMarker from './icons/marker-blue-optimized.svg';
 // when the docs use an import:

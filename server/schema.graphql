@@ -869,7 +869,14 @@ type Mutation {
     """
     input: DeleteUserInput!
   ): DeleteUserPayload
-  test(uid: String!): User
+  createPollutionReportExtend(
+    files: [Upload]
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePollutionReportInput!
+  ): CreatePollutionReportPayload
 }
 
 """The output of our create `Beach` mutation."""
@@ -1377,6 +1384,9 @@ input DeleteUserInput {
   clientMutationId: String
   uid: String!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 """
 The root subscription type: contains realtime events you can subscribe to with the `subscription` operation.

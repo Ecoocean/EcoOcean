@@ -25,7 +25,7 @@ const typeDefs = gql`
     getUserByUID(uid: String!): User
   }
   extend type Mutation {
-    test(uid: String!): User
+    createPollutionReportExtend(files: [Upload], input: CreatePollutionReportInput!): CreatePollutionReportPayload
   }
 `;
 

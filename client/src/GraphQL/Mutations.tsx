@@ -2,9 +2,11 @@ import { gql } from "@apollo/client";
 
 export const CREATE_POLLUTION_REPORT = gql`
   mutation createPollutionReport(
+    $files: [Upload]
     $input: CreatePollutionReportInput!
   ) {
-    createPollutionReport(
+    createPollutionReportExtend(
+      files: $files
       input: $input
     ) {
       pollutionReport {
