@@ -916,7 +916,7 @@ input CreateBeachInput {
 
 """An input for mutations affecting `Beach`"""
 input BeachInput {
-  beachId: Int
+  beachId: Int!
   geom: GeoJSON
   osmId: BigInt
   class: String

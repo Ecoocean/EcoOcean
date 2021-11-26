@@ -1,4 +1,4 @@
-import React, {useState, Fragment, use, useEffect} from 'react';
+import React, {useState, Fragment, useEffect} from 'react';
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Tooltip, useMapEvents, useMap } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-markercluster";
@@ -84,16 +84,31 @@ function ShowReports() {
     useEffect(() => {
       if(dataLocal) {
         filteredPollutionReportsVar(dataLocal.getLocationPollutionReports.nodes);
+        // const markers = dataLocal.getLocationPollutionReports.nodes.map((report) =>{
+        //     return L.marker([report.geom.y, report.geom.x])
+        // })
+        // const reports = L.layerGroup(markers);
+        //   const  overlayMaps = {
+        //       "Reports": reports
+        //   };
+        //   L.control.layers(overlayMaps).addTo(map);
       }
     }, [dataLocal])
 
     useEffect(() => {
       if(data) {
-        data.beaches.nodes.map((beach) => {
-          L.geoJSON(beach.geom.geojson, {
-            onEachFeature: onEachFeature
-          }).addTo(map);
-        })
+          const beaches = data.beaches.nodes.map((beach) => {
+              return L.geoJSON(beach.geom.geojson, {
+                  onEachFeature: onEachFeature
+              })
+          });
+          const beachGroup = L.layerGroup(beaches);
+          const  overlayMaps = {
+              "Beaches": beachGroup
+          };
+          L.control.layers(null, overlayMaps).addTo(map);
+        // .addTo(map);
+        // })
       }
     }, [data])
 
