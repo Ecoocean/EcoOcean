@@ -1,6 +1,5 @@
 import React, {useMemo} from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
-import Layers from './Layers';
 
 
 const MapSmall = props => {
@@ -22,7 +21,6 @@ const MapSmall = props => {
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'/>
 
              {props.children}
-             <Layers/>
          </MapContainer>
       )
    }, [])
