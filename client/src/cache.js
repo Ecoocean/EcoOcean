@@ -20,6 +20,10 @@ export const showSnackBarVar = makeVar(false);
 export const msgSnackBarVar = makeVar("");
 export const severitySnackBarVar = makeVar("");
 
+
+// Side bar variables
+export const sideBarCollapsedVar = makeVar(true);
+
 export const cache = new InMemoryCache({
   typePolicies: {
     Query: {

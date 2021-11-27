@@ -18,6 +18,7 @@ import {
     loadingPollutionReportsVar,
     selectedReportVar,
     selectedMapReportVar,
+    sideBarCollapsedVar
 } from "./cache";
 
 
@@ -54,6 +55,7 @@ function ShowReports() {
 
     useEffect( () => {
         if(selectedMapReport){
+            sideBarCollapsedVar(false);
             map.flyTo({lat: selectedMapReport.geom.y,
                 lng:selectedMapReport.geom.x},18);
             filteredPollutionReportsVar([selectedMapReport]);

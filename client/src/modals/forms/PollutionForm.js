@@ -11,6 +11,7 @@ import MyLocationMap from "../../MyLocationMap.js";
 import * as firebase from "firebase/app";
 
 import 'firebase/auth';
+import {sideBarCollapsedVar} from "../../cache";
 const PollutionForm = ({ openTab }) => {
   const { Formik } = formik;
 
@@ -49,6 +50,7 @@ const PollutionForm = ({ openTab }) => {
             }
           },
         });
+        sideBarCollapsedVar(false);
         setSnackBar('Pollution report sucssefully submitted', 'success');
       }
     } catch (err) {

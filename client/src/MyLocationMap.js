@@ -34,7 +34,7 @@ function MyLocation({onLocationFound, onGpsLocationFound}) {
     const map = useMap();
     const [location, setLocation] = useState({lat: 31.4117257, lng:35.0818155});
     const [usingSearch, setUsingSearch] = useState(false);
-    const [gpsLocaionFound, setGpsLocaionFound] = useState(false);
+    const [gpsLocaionFound, setGpsLocationFound] = useState(false);
     map.addControl(search);
 
     useEffect(() =>{
@@ -42,11 +42,11 @@ function MyLocation({onLocationFound, onGpsLocationFound}) {
             ({ coords: { latitude: lat, longitude: lng, accuracy: acc } }) => {
                 if (acc < 50 && !usingSearch && !gpsLocaionFound) {
                     // if the location is within 50 meters
-                    setGpsLocaionFound(true);
+                    setGpsLocationFound(true);
                     onGpsLocationFound();
                     setLocation({lat: lat, lng:lng});
                     onLocationFound(lng, lat);
-                    map.flyTo({lat: lat, lng:lng},18);
+                    map.flyTo({lat: lat, lng:lng}, 18);
                 }
             },
             (err) => console.log(err),
@@ -71,7 +71,7 @@ function MyLocation({onLocationFound, onGpsLocationFound}) {
     map.on('geosearch/marker/dragend', function (e) {
         onLocationFound(e.location.lng, e.location.lat)
     });
-    return gpsLocaionFound && !usingSearch? <Marker
+    return (gpsLocaionFound || usingSearch) ? <Marker
                     position={[location.lat, location.lng]} icon={blueMarker}>
 
                     </Marker> : null
@@ -80,21 +80,19 @@ function MyLocation({onLocationFound, onGpsLocationFound}) {
 }
 
 export default function MyLocationMap({onLocationFound}) {
-    const [gpsLocaionFound, setGpsLocaionFound] = useState(false);
-    const [map, setMap] = useState(null);
+    const [gpsLocationFound, setGpsLocationFound] = useState(false);
 
     const onGpsLocationFound = () => {
-        setGpsLocaionFound(true);
+        setGpsLocationFound(true);
     }
     const mapReady = (map) =>{
-        setMap(map)
         map.addControl(L.control.zoom({ position: 'bottomright' }));
         setTimeout(function(){ map.invalidateSize()}, 100);
     }
    
     return (
         <div>
-             {!gpsLocaionFound && (
+             {!gpsLocationFound && (
             <Button variant="primary">
               <Spinner
                 as="span"

@@ -7,19 +7,25 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import PollutionForm from "./modals/forms/PollutionForm";
-
+import {
+   sideBarCollapsedVar
+} from "./cache";
+import {useReactiveVar} from "@apollo/client";
 
 
 const SidebarComponent = ({ map }) => {
 
-   const [openTab, setOpenTab] = useState('home')
+   const [openTab, setOpenTab] = useState('home');
+   const sideBarCollapsed = useReactiveVar(sideBarCollapsedVar);
 
    const onClose = () => {
-      setOpenTab(false)
+      setOpenTab(false);
+      sideBarCollapsedVar(false);
    }
 
    const onOpen = id => {
-      setOpenTab(id)
+      setOpenTab(id);
+      sideBarCollapsedVar(true);
    }
 
    return (
@@ -27,7 +33,7 @@ const SidebarComponent = ({ map }) => {
          <Sidebar
             map={map}
             position="left"
-            collapsed={!openTab}
+            collapsed={!sideBarCollapsed}
             selected={openTab}
             closeIcon={<FiChevronLeft />}
             onClose={onClose}
@@ -58,7 +64,7 @@ const SidebarComponent = ({ map }) => {
                </Box>
 
             </Tab>
-            <Tab id="props" header="Pollution Reports" icon={<FiList />}>
+            <Tab id="pollution-reports" header="Pollution Reports" icon={<FiList />}>
                <ReportList/>
             </Tab>
             <Tab id="add-report" header="Add Pollution Report" icon={<FiPlusCircle/>}>
