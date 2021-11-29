@@ -15,7 +15,7 @@ export default function SettingsTab() {
         width: 180px;
         height: 180px;
       }
-      @media (min-width: 400px ) and (max-width: 992px ) {
+      @media (min-width: 300px ) and (max-width: 992px ) {
         width: 130px;
         height: 130px;
       }
