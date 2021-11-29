@@ -218,7 +218,7 @@ function ShowReports() {
                                     <u>
                                         <b>{"Date:"}</b>
                                     </u>{" "}
-                                    {`${new Date(report.created_at?._seconds * 1000).toString()}`}
+                                    {`${new Date(report.createdAt)?.toString()}`}
                                     <br />
                                     <b>for more inforamtion click on the marker</b>
                                 </Fragment>
