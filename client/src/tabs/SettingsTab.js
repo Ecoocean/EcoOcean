@@ -5,18 +5,26 @@ import firebase from "firebase";
 import Grid from "@mui/material/Grid";
 import {Logout} from "@mui/icons-material";
 import {Button} from "@mui/material";
+import { styled } from '@mui/material/styles';
+import './SettingsTab.scss';
 
 export default function SettingsTab() {
+
+    const CustomizedAvatar = styled(Avatar)`
+      @media (min-width: 992px ){
+        width: 180px;
+        height: 180px;
+      }
+      @media (min-width: 400px ) and (max-width: 992px ) {
+        width: 130px;
+        height: 130px;
+      }
+    `;
 
     return (
         <Box sx={{ display: "flex", paddingTop: "10px", flexDirection: "column", alignItems: "center", pl: 1, pb: 1 }}>
             <Grid item xs={6}>
-                <Avatar
-                    sx={{
-                        border: "0.1px solid lightgray",
-                        width: 200,
-                        height: 200,
-                    }}
+                <CustomizedAvatar
                     variant="circular"
                     src={
                         firebase.auth().currentUser.photoURL

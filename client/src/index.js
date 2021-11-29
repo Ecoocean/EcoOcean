@@ -9,6 +9,7 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 import { cache } from "./cache";
 import * as firebase from "firebase/app";
 import "firebase/auth";
+import { StyledEngineProvider } from '@mui/material/styles';
 import { setContext } from "@apollo/client/link/context";
 
 const link = createUploadLink({
@@ -59,7 +60,9 @@ const client = new ApolloClient({
 const rootElement = document.getElementById("root");
 ReactDOM.render(
     <ApolloProvider client={client}>
-        <App />
+        <StyledEngineProvider injectFirst>
+            <App />
+        </StyledEngineProvider>
     </ApolloProvider>,
   rootElement
 );

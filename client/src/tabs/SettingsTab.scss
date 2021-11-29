@@ -1,0 +1,24 @@
+@import "../variables";
+
+
+@media (min-width: $screen-small ) and (max-width: $screen-medium ) {
+  .avatar{
+      height: 850px;
+      width: 850px;
+    }
+}
+
+@media (min-width: $screen-large) {
+  .avatar {
+      height: 600;
+      width: 600px;
+    }
+}
+
+@media (min-width: $screen-medium ) and (max-width: $screen-large ) {
+  .avatar {
+      height: 400px;
+      width: 400px;
+    }
+}
+

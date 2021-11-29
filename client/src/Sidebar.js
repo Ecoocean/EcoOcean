@@ -2,15 +2,13 @@ import React, { useState } from 'react'
 import { FiHome, FiChevronLeft, FiPlusCircle, FiList, FiSettings } from "react-icons/fi";
 import { Sidebar, Tab } from './react-leaflet-sidetabs'
 import ReportList from "./ReportList";
-import SettingsTab from "./SettingsTab";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
+import SettingsTab from "./tabs/SettingsTab";
 import PollutionForm from "./modals/forms/PollutionForm";
 import {
    sideBarCollapsedVar
 } from "./cache";
 import {useReactiveVar} from "@apollo/client";
+import EcooceanHome from "./tabs/EcooceanHome";
 
 
 const SidebarComponent = ({ map }) => {
@@ -42,27 +40,7 @@ const SidebarComponent = ({ map }) => {
             rehomeControls>
 
             <Tab id="home" header="Ecoocean" icon={<FiHome />} active>
-               <Box sx={{ display: "flex", paddingTop: "40px", flexDirection: "column", alignItems: "center", pl: 1, pb: 1 }}>
-                  <Grid item xs={6}>
-                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <img
-                            src="/images/ecoOcenLogoNavPainted.png"
-                            alt="logo"
-                            style={{ width: "12rem" }}
-                        />
-                     </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <img
-                            src="/images/bgu.png"
-                            alt="logo"
-                            style={{ width: "12rem" }}
-                        />
-                     </Typography>
-                  </Grid>
-               </Box>
-
+               <EcooceanHome />
             </Tab>
             <Tab id="pollution-reports" header="Pollution Reports" icon={<FiList />}>
                <ReportList/>

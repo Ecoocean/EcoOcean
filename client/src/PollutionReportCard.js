@@ -10,7 +10,7 @@ import MySvg from "./No-Image-Placeholder.svg";
 
 function PollutionReportCard({report}) {
   return (
-    <Card sx={{ maxWidth: "100%", display: "flex" }}>
+    <Card sx={{ maxWidth: "100%", height: "190px", display: "flex" }}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <CardContent sx={{ flex: "1 0 auto" }}>
           <Typography component="div" variant="h6" sx={{fontSize:"18px"}}>
@@ -20,7 +20,7 @@ function PollutionReportCard({report}) {
             variant="subtitle1"
             color="text.secondary"
             component="div"
-            sx={{fontSize:"14px"}}
+            sx={{fontSize:"13px"}}
           >
             {report.address
               ? `Address: ${report.address}`
@@ -37,17 +37,21 @@ function PollutionReportCard({report}) {
               }
               alt={report.reporter}
             />
-            {`Reporter: ${report.reporter}`}
+              <Typography component="div" sx={{fontSize:"12px"}}>
+                {`Reporter: ${report.reporter}`}
+              </Typography>
           </Grid>
           <Grid item xs={7}>
-            {`Date: ${
-              new Date(report.createdAt)?.toString()}`}
+              <Typography component="div" sx={{fontSize:"12px"}}>
+                {`Date: ${
+                  new Date(report.createdAt)?.toString()}`}
+              </Typography>
           </Grid>
         </Box>
       </Box>
       <CardMedia
         component="img"
-        sx={{ width: 150, height: 150 }}
+        sx={{ width: 151, height: "auto" }}
         image={
           report.photoUrls && report.photoUrls.length > 0
             ? report.photoUrls[0]
