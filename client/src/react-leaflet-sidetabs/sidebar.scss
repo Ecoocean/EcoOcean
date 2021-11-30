@@ -1,12 +1,14 @@
 @import '../variables';
 
 :root {
-    --leaflet-sidetabs-width-s: 305px;
-    --leaflet-sidetabs-width-m: 390px;
-    --leaflet-sidetabs-width-l: 500px;
-    --breakpoint-s: 768px;
-    --breakpoint-m: 992px;
-    --breakpoint-l: 1200px;
+    --leaflet-sidetabs-width-vvs: 250px;
+    --leaflet-sidetabs-width-vs: 350px;
+    --leaflet-sidetabs-width-s: 450px;
+    --leaflet-sidetabs-width-m: 530px;
+    --leaflet-sidetabs-width-l: 600px;
+    --breakpoint-s: 600px;
+    --breakpoint-m: 800px;
+    --breakpoint-l: 1000px;
 }
 
 .sidebar {
@@ -21,6 +23,24 @@
 
 .sidebar.collapsed {
     width: 40px
+}
+
+@media (max-width: $screen-very-small ) {
+    .sidebar {
+        width: var(--leaflet-sidetabs-width-vvs);
+    }
+    .sidebar-pane {
+        min-width: 265px
+    }
+}
+
+@media (min-width: $screen-very-small ) and (max-width: $screen-small ) {
+    .sidebar {
+        width: var(--leaflet-sidetabs-width-vs);
+    }
+    .sidebar-pane {
+        min-width: 265px
+    }
 }
 
 @media (min-width: $screen-small ) and (max-width: $screen-medium ) {
@@ -52,7 +72,7 @@
     right: 0
 }
 
-@media (min-width:768px) {
+@media (min-width:300px) {
     .sidebar {
         top: 10px;
         bottom: 10px;
@@ -305,10 +325,19 @@
     }
 }
 
-@media (max-width: $screen-small ) {
+@media (max-width: $screen-very-small ) {
     .rehomed-top-left, .rehomed-bottom-left,
     .rehomed-top-right, .rehomed-bottom-right{
         display: none;
+    }
+}
+
+@media (min-width: $screen-very-small ) and (max-width: $screen-small ) {
+    .rehomed-top-left, .rehomed-bottom-left {
+        left: var(--leaflet-sidetabs-width-vs);
+    }
+    .rehomed-top-right, .rehomed-bottom-right{
+        right: var(--leaflet-sidetabs-width-vs);
     }
 }
 

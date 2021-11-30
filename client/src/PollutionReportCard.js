@@ -51,7 +51,7 @@ function PollutionReportCard({report}) {
       </Box>
       <CardMedia
         component="img"
-        sx={{ width: 151, height: "auto" }}
+        sx={{ width: 180, height: "auto" }}
         image={
           report.photoUrls && report.photoUrls.length > 0
             ? report.photoUrls[0]
