@@ -21,7 +21,7 @@
     "leaflet-geosearch": "^3.6.0",
     "node-sass": "^4.0.0",
     "react": "16.14.0",
-    "react-bootstrap": "^1.6.4",
+    "react-bootstrap": "^2.0.3",
     "react-dom": "16.14.0",
     "react-firebaseui": "^5.0.2",
     "react-helmet": "^6.1.0",
