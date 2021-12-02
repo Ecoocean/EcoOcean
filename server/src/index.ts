@@ -18,6 +18,9 @@ async function startServer() {
     simpleSubscriptions: true,
     watchPg: true,
     dynamicJson: true,
+    pgDefaultRole: 'anonymous',
+    jwtPgTypeIdentifier: 'public.jwt_token',
+    jwtSecret: 'superSecretRandom',
     setofFunctionsContainNulls: false,
     showErrorStack: "json",
     extendedErrors: ["hint", "detail", "errcode"],
@@ -26,6 +29,7 @@ async function startServer() {
                     PostgresPlugin],
     exportGqlSchemaPath: "schema.graphql",
     graphiql: true,
+    graphiqlCredentials: 'include',
     enhanceGraphiql: true,
     allowExplain(req) {
       // TODO: customise condition!

@@ -65,7 +65,7 @@ function ShowReports() {
 
     useEffect(() => {
         if(dataLocal) {
-            filteredPollutionReportsVar(dataLocal.getLocationPollutionReports.nodes);
+            filteredPollutionReportsVar(dataLocal.getLocationPollutionReports?.nodes);
         }
     }, [dataLocal])
 

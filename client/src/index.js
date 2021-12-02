@@ -7,10 +7,10 @@ import { ApolloClient, ApolloProvider } from "@apollo/client";
 import { createUploadLink } from "apollo-upload-client";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { cache } from "./cache";
-import * as firebase from "firebase/app";
 import "firebase/auth";
 import { StyledEngineProvider } from '@mui/material/styles';
 import { setContext } from "@apollo/client/link/context";
+
 
 const link = createUploadLink({
     uri: process.env.REACT_APP_SERVER_ENDPOINT_URL,
@@ -23,20 +23,17 @@ const wsLink = new WebSocketLink({
     },
 });
 
-// const authLink = setContext((_, { headers }) => {
-//     //it will always get unexpired version of the token
-//     return firebase
-//         .auth()
-//         .currentUser.getIdToken()
-//         .then((token) => {
-//             return {
-//                 headers: {
-//                     ...headers,
-//                     authorization: token ? `Bearer ${token}` : "",
-//                 },
-//             };
-//         });
-// });
+const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem('token');
+    // return the headers to the context so httpLink can read them
+    return {
+        headers: {
+            ...headers,
+            Authorization: token ? `bearer ${token}` : "",
+        }
+    }
+});
 
 
 const splitLink = split(
@@ -54,7 +51,7 @@ const splitLink = split(
 const client = new ApolloClient({
     ssrMode: typeof window === "undefined",
     cache: cache,
-    link: splitLink//authLink.concat(splitLink),
+    link: authLink.concat(splitLink),
 });
 
 const rootElement = document.getElementById("root");

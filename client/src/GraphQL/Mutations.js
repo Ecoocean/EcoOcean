@@ -27,3 +27,11 @@ export const SET_REPORT_UNRELEVANT = gql`
     }
   }
 `;
+
+export const SIGN_IN_CLIENT = gql`
+  mutation signinClient($input: SigninClientInput!) {
+    signinClient(input: $input) {
+      jwtToken
+    }
+  }
+`;

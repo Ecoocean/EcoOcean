@@ -5,11 +5,12 @@ import * as firebase from "firebase/app";
 import { Helmet } from 'react-helmet';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Navigate  } from 'react-router-dom'
-import { useLazyQuery } from '@apollo/client';
-import {GET_USER_BY_UID} from '../GraphQL/Queries'
+import { useMutation } from '@apollo/client';
 import 'firebase/auth';
 import './SignInPage.css'
 import { Button } from "react-bootstrap";
+import {SIGN_IN_CLIENT} from "../GraphQL/Mutations";
+import {jwtTokenVar} from "../cache";
 
 // Configure Firebase.
 const firebaseConfig = {
@@ -45,11 +46,14 @@ function SignInScreen() {
   const [checkingAuth, setCheckingAuth] = useState(false);
   const [userAuthenticated, setUserAuthenticated] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
-  const [getUser, { loading, error, data }] = useLazyQuery(GET_USER_BY_UID);
+  const [signInClient, {client, loading, error, data }] = useMutation(SIGN_IN_CLIENT);
 
   // listen for db user result
   useEffect(() => {
-    if(data?.user) {
+    console.log(data);
+    if(data?.signinClient.jwtToken) {
+      localStorage.setItem('token', data?.signinClient.jwtToken);
+      client.resetStore();
       setUserAuthenticated(true);
     }
   }, [data])
@@ -61,9 +65,11 @@ function SignInScreen() {
       .onAuthStateChanged((user) => {
         if(user){
           setCheckingAuth(true);
-          getUser({
+          signInClient({
             variables:{
-              uid: user.uid
+              input: {
+                userId: user.uid
+              }
             }
           })
         }
