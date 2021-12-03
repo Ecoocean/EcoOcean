@@ -5,24 +5,26 @@ import ReportList from "./ReportList";
 import SettingsTab from "./tabs/SettingsTab";
 import PollutionForm from "./modals/forms/PollutionForm";
 import {
-   sideBarCollapsedVar
+   sideBarCollapsedVar,
+    sideBarOpenTabVar
 } from "./cache";
 import {useReactiveVar} from "@apollo/client";
 import EcooceanHome from "./tabs/EcooceanHome";
+import BackToTop from "./ScrollToTop";
 
 
 const SidebarComponent = ({ map }) => {
 
-   const [openTab, setOpenTab] = useState('home');
+   const openTab = useReactiveVar(sideBarOpenTabVar);
    const sideBarCollapsed = useReactiveVar(sideBarCollapsedVar);
 
    const onClose = () => {
-      setOpenTab(false);
+      sideBarOpenTabVar('');
       sideBarCollapsedVar(false);
    }
 
    const onOpen = id => {
-      setOpenTab(id);
+      sideBarOpenTabVar(id);
       sideBarCollapsedVar(true);
    }
 
@@ -43,7 +45,9 @@ const SidebarComponent = ({ map }) => {
                <EcooceanHome />
             </Tab>
             <Tab id="pollution-reports" header="Pollution Reports" icon={<FiList />}>
-               <ReportList/>
+               <BackToTop>
+                  <ReportList/>
+               </BackToTop>
             </Tab>
             <Tab id="add-report" header="Add Pollution Report" icon={<FiPlusCircle/>}>
                <PollutionForm openTab={openTab}/>

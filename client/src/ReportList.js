@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import Paper from "@mui/material/Paper";
 import List from "@mui/material/List";
 import { useMutation, useReactiveVar } from "@apollo/client";
@@ -77,8 +77,7 @@ export default function ReportList() {
           <Grid item>Loading reports please wait ...</Grid>
         </Grid>
       </Backdrop>
-      <Paper style={{ maxHeight: 950, overflow: "auto" }}>
-        <List sx={{ display: "list-item", width: "100%" }}>
+        <List sx={{ display: "list-item", width: "100%" }} >
           {filteredPollutionReports.map((report) => {
             return (
               <ListItem divider key={report.id} component="div" disablePadding>
@@ -121,7 +120,6 @@ export default function ReportList() {
             );
           })}
         </List>
-      </Paper>
       <PollutionReportModal
         report={selectedReport}
         show={openInfoWindow}

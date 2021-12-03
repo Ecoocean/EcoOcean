@@ -23,6 +23,7 @@ export const severitySnackBarVar = makeVar("");
 
 
 // Side bar variables
+export const sideBarOpenTabVar = makeVar('home');
 export const sideBarCollapsedVar = makeVar(true);
 
 export const cache = new InMemoryCache({

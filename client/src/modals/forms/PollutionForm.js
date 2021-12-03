@@ -11,7 +11,7 @@ import MyLocationMap from "../../MyLocationMap.js";
 import * as firebase from "firebase/app";
 
 import 'firebase/auth';
-import {sideBarCollapsedVar} from "../../cache";
+import {sideBarOpenTabVar} from "../../cache";
 const PollutionForm = ({ openTab }) => {
   const { Formik } = formik;
 
@@ -51,8 +51,18 @@ const PollutionForm = ({ openTab }) => {
           },
         });
         if(!errors) {
-          sideBarCollapsedVar(false);
+          sideBarOpenTabVar('pollution-reports');
           setSnackBar('Pollution report sucssefully submitted', 'success');
+          const anchor = document.querySelector(
+              '#back-to-top-anchor',
+          );
+
+          if (anchor) {
+            anchor.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+            });
+          }
         }
       }
     } catch (err) {
