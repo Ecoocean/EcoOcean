@@ -29,7 +29,6 @@ async function startServer() {
                     PostgresPlugin],
     exportGqlSchemaPath: "schema.graphql",
     graphiql: true,
-    graphiqlCredentials: 'include',
     enhanceGraphiql: true,
     allowExplain(req) {
       // TODO: customise condition!
