@@ -22,3 +22,11 @@ export const UPDATE_USER = gql`
   }
 `;
 
+export const SIGN_IN_ADMIN = gql`
+  mutation signinAdmin($input: SigninAdminInput!) {
+    signinAdmin(input: $input) {
+      jwtToken
+    }
+  }
+`;
+

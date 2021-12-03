@@ -50,9 +50,7 @@ function SignInScreen() {
 
   // listen for db user result
   useEffect( () => {
-    console.log(data);
     if(data?.signinClient.jwtToken) {
-      console.log(data);
       localStorage.setItem('token', data?.signinClient.jwtToken);
       client.resetStore();
       setUserAuthenticated(true);

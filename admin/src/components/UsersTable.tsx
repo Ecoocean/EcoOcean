@@ -161,7 +161,7 @@ export default function UsersTable() {
     },
   };
 
-  return !loading ? (
+  return !loading && data ? (
     <MUIDataTable
       title={"User List"}
       data={data.allUsers.map((user) => {

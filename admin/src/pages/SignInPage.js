@@ -5,8 +5,8 @@ import * as firebase from "firebase/app";
 import { Helmet } from 'react-helmet';
 import CircularProgress from '@mui/material/CircularProgress';
 import {  Navigate  } from 'react-router-dom'
-import { useLazyQuery } from '@apollo/client';
-import {GET_USER_BY_UID} from '../GraphQL/Queries'
+import { useMutation } from '@apollo/client';
+import { SIGN_IN_ADMIN } from '../GraphQL/Mutations'
 import 'firebase/auth';
 import './SignInPage.css'
 import { Button } from "react-bootstrap";
@@ -46,18 +46,18 @@ function SignInScreen() {
   const [userAuthenticated, setUserAuthenticated] = useState(false);
   const [hasAdminPermission, setHasAdminPermission] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
-  const [getUser, { loading, error, data }] = useLazyQuery(GET_USER_BY_UID, {
+  const [signInAdmin, { client, loading, error, data }] = useMutation(SIGN_IN_ADMIN, {
     fetchPolicy: "network-only" // Doesn't check cache before making a network request
   });
 
 
   // listen for db user result
   useEffect(() => {
-    if(data?.user) {
+    if(data?.signinAdmin.jwtToken) {
+      localStorage.setItem('token', data?.signinAdmin.jwtToken);
+      client.resetStore();
       setUserAuthenticated(true);
-      if(data.user.isAdmin){
-        setHasAdminPermission(true);
-      }
+      setHasAdminPermission(true);
     }
   }, [data])
 
@@ -68,9 +68,11 @@ function SignInScreen() {
       .onAuthStateChanged((user) => {
         if(user){
           setCheckingAuth(true);
-          getUser({
+          signInAdmin({
             variables:{
-              uid: user.uid
+              input: {
+                userId: user.uid
+              }
             }
           })
         }

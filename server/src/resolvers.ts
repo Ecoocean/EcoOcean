@@ -62,7 +62,7 @@ export const PostgresPlugin = makeExtendSchemaPlugin(build => {
               operationName
           );
           if (errors){
-            return errors;
+            return errors[0];
           }
           return data;
           }

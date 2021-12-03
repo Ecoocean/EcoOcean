@@ -870,6 +870,12 @@ type Mutation {
     """
     input: DeleteUserInput!
   ): DeleteUserPayload
+  signinAdmin(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: SigninAdminInput!
+  ): SigninAdminPayload
   signinClient(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -1392,8 +1398,8 @@ input DeleteUserInput {
   uid: String!
 }
 
-"""The output of our `signinClient` mutation."""
-type SigninClientPayload {
+"""The output of our `signinAdmin` mutation."""
+type SigninAdminPayload {
   """
   The exact same `clientMutationId` that was provided in the mutation input,
   unchanged and unused. May be used by a client to track mutations.
@@ -1412,6 +1418,31 @@ A JSON Web Token defined by [RFC 7519](https://tools.ietf.org/html/rfc7519)
 which securely represents claims between two parties.
 """
 scalar JwtToken
+
+"""All input for the `signinAdmin` mutation."""
+input SigninAdminInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  userId: String!
+}
+
+"""The output of our `signinClient` mutation."""
+type SigninClientPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  jwtToken: JwtToken
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
 
 """All input for the `signinClient` mutation."""
 input SigninClientInput {

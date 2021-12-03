@@ -10,6 +10,8 @@ import { cache } from "./cache";
 import "firebase/auth";
 import { StyledEngineProvider } from '@mui/material/styles';
 import { setContext } from "@apollo/client/link/context";
+import {onError} from "@apollo/client/link/error";
+import {setSnackBar} from "./SnackBarUtils";
 
 
 const link = createUploadLink({
@@ -20,6 +22,11 @@ const wsLink = new WebSocketLink({
     uri: `${process.env.REACT_APP_WEB_SOCKET_TYPE}://${process.env.REACT_APP_SERVER_ENDPOINT}`,
     options: {
         reconnect: true,
+        connectionParams: localStorage.getItem('token')
+            ? {
+                authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+            : {},
     },
 });
 
@@ -42,6 +49,21 @@ const authLink = setContext((_, { headers }) => {
     }
 });
 
+// Log any GraphQL errors or network error that occurred
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors) {
+        graphQLErrors.forEach(({message, locations, path}) => {
+            console.log(
+                `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+            );
+            setSnackBar(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`, 'error');
+        })
+    }
+    if (networkError) {
+        console.log(`[Network error]: ${networkError}`);
+        setSnackBar(`[Network error]: ${networkError}`, 'error')
+    }
+});
 
 const splitLink = split(
     ({ query }) => {
@@ -58,7 +80,15 @@ const splitLink = split(
 const client = new ApolloClient({
     ssrMode: typeof window === "undefined",
     cache: cache,
-    link: authLink.concat(splitLink),
+    link: errorLink.concat(authLink.concat(splitLink)),
+    defaultOptions: {
+        query: {
+            errorPolicy: 'all',
+        },
+        mutate: {
+            errorPolicy: 'all',
+        },
+    }
 });
 
 const rootElement = document.getElementById("root");

@@ -35,7 +35,7 @@ const PollutionForm = ({ openTab }) => {
           setSnackBar('Pollution type must be selected', 'error');
           return
         }
-        const { data } = await CreatePollutionReport({
+        const { data, errors } = await CreatePollutionReport({
           variables: {
             files: imageUploaderRef.current.state.pictures,
             input: {
@@ -50,8 +50,10 @@ const PollutionForm = ({ openTab }) => {
             }
           },
         });
-        sideBarCollapsedVar(false);
-        setSnackBar('Pollution report sucssefully submitted', 'success');
+        if(!errors) {
+          sideBarCollapsedVar(false);
+          setSnackBar('Pollution report sucssefully submitted', 'success');
+        }
       }
     } catch (err) {
       setSnackBar(err, 'error');
