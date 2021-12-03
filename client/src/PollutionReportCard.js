@@ -6,14 +6,14 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import MySvg from "./No-Image-Placeholder.svg";
+import noImage from "./noImage.jpeg";
 import './PollutionReportCard.scss';
 
 function PollutionReportCard({report}) {
   return (
-    <Card sx={{ maxWidth: "100%", height: "190px", display: "flex" }}>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <CardContent className="card-content" sx={{ flex: "2 0 auto" }}>
+    <Card sx={{ maxWidth: "100%", maxHeight: "100%", display: "flex" }}>
+      <Box sx={{ maxWidth: "100%", maxHeight: "100%", display: "flex", flexDirection: "column" }}>
+        <CardContent className="card-content" sx={{ display: "flex", flexDirection: "column" }}>
           <div className="card-header">
             {`Report ID: ${report.id}`}
           </div>
@@ -29,7 +29,7 @@ function PollutionReportCard({report}) {
           </Typography>
         </CardContent>
         <Box sx={{ display: "flex", alignItems: "center", pl: 0.5, pb: 1, pr: 1}}>
-          <Grid item xs={6}>
+          <Grid item xs={7}>
             <Avatar
               className="card-avatar"
               src={
@@ -43,7 +43,7 @@ function PollutionReportCard({report}) {
                 {`Reporter: ${report.reporter}`}
               </Typography>
           </Grid>
-          <Grid item xs={7}>
+          <Grid sx={{display: "flex"}} item xs={8}>
               <Typography className="card-date" component="div">
                 {`Date: ${
                   new Date(report.createdAt)?.toString()}`}
@@ -57,7 +57,7 @@ function PollutionReportCard({report}) {
         image={
           report.photoUrls && report.photoUrls.length > 0
             ? report.photoUrls[0]
-            : MySvg
+            : noImage
         }
         alt={report.id}
       />

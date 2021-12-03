@@ -29,22 +29,25 @@
 }
 
 @media (max-width: $screen-very-small ) {
+  .card-content {
+    padding: 0 0 0 0;
+  }
   .card-avatar {
     width: 25px;
     height: 25px;
   }
   .card-date {
-    font-size: 7pt;
+    font-size: 6.7pt;
   }
   .card-reporter {
-    font-size: 7pt;
+    font-size: 6.7pt;
   }
   .card-address {
     font-size: 6.8pt;
 
   }
   .card-header {
-    font-size: 9pt;
+    font-size: 7pt;
   }
   .card-media {
     width: 60px;
@@ -52,6 +55,9 @@
 }
 
 @media (min-width: $screen-very-small ) and (max-width: $screen-small ) {
+  .card-content {
+    padding: 2px 2px 2px 2px;
+  }
   .card-avatar {
     width: 30px;
     height: 30px;
