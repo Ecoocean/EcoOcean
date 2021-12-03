@@ -49,9 +49,10 @@ function SignInScreen() {
   const [signInClient, {client, loading, error, data }] = useMutation(SIGN_IN_CLIENT);
 
   // listen for db user result
-  useEffect(() => {
+  useEffect( () => {
     console.log(data);
     if(data?.signinClient.jwtToken) {
+      console.log(data);
       localStorage.setItem('token', data?.signinClient.jwtToken);
       client.resetStore();
       setUserAuthenticated(true);
