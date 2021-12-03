@@ -95,7 +95,11 @@
 .sidebar-right {
     right: 0
 }
-
+@media (min-width:200px) {
+    .sidebar {
+        transition: width .5s
+    }
+}
 @media (min-width:500px) {
     .sidebar {
         top: 10px;
