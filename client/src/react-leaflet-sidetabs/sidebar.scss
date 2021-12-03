@@ -17,24 +17,39 @@
     bottom: 0;
     width: 80%;
     overflow: inherit;
-    z-index: 1000;
+    z-index: 450;
     box-shadow: 0 1px 5px rgba(0, 0, 0, .65)
 }
 
 .sidebar.collapsed {
     width: 40px
 }
+.sidebar-header {
+    margin: -10px -20px 0;
+    height: 40px;
+    padding: 0 40px;
+    line-height: 40px;
+    font-size: 14.4pt;
+    color: #fff;
+    background-color: #0074d9
+}
 
 @media (max-width: $screen-very-small ) {
+    .sidebar-header {
+        font-size: 10.4pt;
+    }
     .sidebar {
         width: var(--leaflet-sidetabs-width-vvs);
     }
     .sidebar-pane {
-        min-width: 265px
+        min-width: 200px
     }
 }
 
 @media (min-width: $screen-very-small ) and (max-width: $screen-small ) {
+    .sidebar-header {
+        font-size: 11.4pt;
+    }
     .sidebar {
         width: var(--leaflet-sidetabs-width-vs);
     }
@@ -44,6 +59,9 @@
 }
 
 @media (min-width: $screen-small ) and (max-width: $screen-medium ) {
+    .sidebar-header {
+        font-size: 12.4pt;
+    }
     .sidebar {
         width: var(--leaflet-sidetabs-width-s);
     }
@@ -53,12 +71,18 @@
 }
 
 @media (min-width: $screen-medium ) and (max-width: $screen-large ) {
+    .sidebar-header {
+        font-size: 13.4pt;
+    }
     .sidebar {
         width: var(--leaflet-sidetabs-width-m);
     }
 }
 
 @media (min-width: $screen-large) {
+    .sidebar-header {
+        font-size: 14.4pt;
+    }
     .sidebar {
         width: var(--leaflet-sidetabs-width-l);
     }
@@ -72,7 +96,7 @@
     right: 0
 }
 
-@media (min-width:300px) {
+@media (min-width:500px) {
     .sidebar {
         top: 10px;
         bottom: 10px;
@@ -192,15 +216,7 @@
     display: block
 }
 
-.sidebar-header {
-    margin: -10px -20px 0;
-    height: 40px;
-    padding: 0 40px;
-    line-height: 40px;
-    font-size: 14.4pt;
-    color: #fff;
-    background-color: #0074d9
-}
+
 
 .sidebar-right .sidebar-header {
     padding-left: 40px
@@ -242,6 +258,7 @@
 }
 
 @media (min-width:992px) and (max-width:1199px) {
+
     .sidebar-pane {
         min-width: 350px
     }
@@ -326,9 +343,11 @@
 }
 
 @media (max-width: $screen-very-small ) {
-    .rehomed-top-left, .rehomed-bottom-left,
+    .rehomed-top-left, .rehomed-bottom-left {
+        left: var(--leaflet-sidetabs-width-vvs);
+    }
     .rehomed-top-right, .rehomed-bottom-right{
-        display: none;
+        right: var(--leaflet-sidetabs-width-vvs);
     }
 }
 

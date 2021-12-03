@@ -7,29 +7,31 @@ import CardMedia from "@mui/material/CardMedia";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import MySvg from "./No-Image-Placeholder.svg";
+import './PollutionReportCard.scss';
 
 function PollutionReportCard({report}) {
   return (
     <Card sx={{ maxWidth: "100%", height: "190px", display: "flex" }}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <CardContent sx={{ flex: "1 0 auto" }}>
-          <Typography component="div" variant="h6" sx={{fontSize:"18px"}}>
+        <CardContent className="card-content" sx={{ flex: "2 0 auto" }}>
+          <div className="card-header">
             {`Report ID: ${report.id}`}
-          </Typography>
+          </div>
           <Typography
             variant="subtitle1"
+            className="card-address"
             color="text.secondary"
-            component="div"
-            sx={{fontSize:"13px"}}
+            component="p"
           >
             {report.address
               ? `Address: ${report.address}`
               : `Coordinates: lat: ${report.geom.y}, lng: ${report.geom.x}`}
           </Typography>
         </CardContent>
-        <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}>
+        <Box sx={{ display: "flex", alignItems: "center", pl: 0.5, pb: 1, pr: 1}}>
           <Grid item xs={6}>
             <Avatar
+              className="card-avatar"
               src={
                 report.reporterImageUrl
                   ? report.reporterImageUrl
@@ -37,12 +39,12 @@ function PollutionReportCard({report}) {
               }
               alt={report.reporter}
             />
-              <Typography component="div" sx={{fontSize:"12px"}}>
+              <Typography className="card-reporter" component="div">
                 {`Reporter: ${report.reporter}`}
               </Typography>
           </Grid>
           <Grid item xs={7}>
-              <Typography component="div" sx={{fontSize:"12px"}}>
+              <Typography className="card-date" component="div">
                 {`Date: ${
                   new Date(report.createdAt)?.toString()}`}
               </Typography>
@@ -50,8 +52,8 @@ function PollutionReportCard({report}) {
         </Box>
       </Box>
       <CardMedia
+        className="card-media"
         component="img"
-        sx={{ width: 180, height: "auto" }}
         image={
           report.photoUrls && report.photoUrls.length > 0
             ? report.photoUrls[0]

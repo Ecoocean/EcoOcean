@@ -1,0 +1,140 @@
+@import "variables";
+
+.card-media {
+  height: auto;
+}
+
+.card-date {
+  text-overflow:ellipsis;
+  overflow:hidden;
+  // Addition lines for 2 line or multiline ellipsis
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+}
+
+.card-header {
+  background-color: white;
+  padding: 0 0 4px;
+}
+.card-address {
+  text-overflow:ellipsis;
+  overflow:hidden;
+  // Addition lines for 2 line or multiline ellipsis
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+}
+
+@media (max-width: $screen-very-small ) {
+  .card-avatar {
+    width: 25px;
+    height: 25px;
+  }
+  .card-date {
+    font-size: 7pt;
+  }
+  .card-reporter {
+    font-size: 7pt;
+  }
+  .card-address {
+    font-size: 6.8pt;
+
+  }
+  .card-header {
+    font-size: 9pt;
+  }
+  .card-media {
+    width: 60px;
+  }
+}
+
+@media (min-width: $screen-very-small ) and (max-width: $screen-small ) {
+  .card-avatar {
+    width: 30px;
+    height: 30px;
+  }
+  .card-date {
+    font-size: 7.5pt;
+  }
+  .card-reporter{
+    font-size: 7.5pt;
+  }
+  .card-address {
+    font-size: 7.8pt;
+  }
+  .card-header {
+    font-size: 10pt;
+  }
+  .card-media {
+    width: 90px;
+  }
+}
+
+@media (min-width: $screen-small ) and (max-width: $screen-medium ) {
+  .card-avatar {
+    width: 35px;
+    height: 35px;
+  }
+  .card-date {
+    font-size: 8pt;
+  }
+  .card-reporter {
+    font-size: 8pt;
+  }
+  .card-address {
+    font-size: 8.8pt;
+  }
+  .card-header {
+    font-size: 11pt;
+  }
+  .card-media {
+    width: 120px;
+  }
+}
+
+@media (min-width: $screen-medium ) and (max-width: $screen-large ) {
+  .card-avatar {
+    width: 40px;
+    height: 40px;
+  }
+  .card-date {
+    font-size: 8.5pt;
+  }
+  .card-reporter {
+    font-size: 8.5pt;
+  }
+  .card-address {
+    font-size: 9.8pt;
+  }
+  .card-header {
+    font-size: 12pt;
+  }
+  .card-media {
+    width: 150px;
+  }
+}
+
+@media (min-width: $screen-large) {
+  .card-avatar {
+    width: 50px;
+    height: 50px;
+  }
+  .card-date {
+    font-size: 9pt;
+  }
+  .card-reporter {
+    font-size: 9pt;
+  }
+  .card-address {
+    font-size: 10.8pt;
+  }
+  .card-header {
+    font-size: 13pt;
+  }
+  .card-media {
+    width: 180px;
+  }
+}
