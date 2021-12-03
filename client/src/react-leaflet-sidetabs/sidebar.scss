@@ -100,11 +100,10 @@
         transition: width .5s
     }
 }
-@media (min-width:500px) {
+@media (min-width:768px) {
     .sidebar {
         top: 10px;
         bottom: 10px;
-        transition: width .5s
     }
     .sidebar-left {
         left: 10px
