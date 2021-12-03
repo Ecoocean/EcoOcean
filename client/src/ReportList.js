@@ -25,6 +25,7 @@ import { setSnackBar } from "./SnackBarUtils";
 import {
   filteredPollutionReportsVar
 } from "./cache";
+import "./ReportList.scss";
 
 export default function ReportList() {
   const [openInfoWindow, setOpenInfoWindow] = useState(false);
@@ -93,7 +94,7 @@ export default function ReportList() {
                         aria-label="delete"
                         onClick={() => selectedMapReportVar(report)}
                       >
-                        <MapIcon />
+                        <MapIcon className="map-icon" />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="Delete Report" placement="top" arrow>
@@ -101,7 +102,7 @@ export default function ReportList() {
                         aria-label="delete"
                         onClick={() => handleSetReportUnrelevant(report.id)}
                       >
-                        <DeleteForeverIcon />
+                        <DeleteForeverIcon className="delete-icon"/>
                       </IconButton>
                     </Tooltip>
                   </Grid>

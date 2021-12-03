@@ -1,0 +1,76 @@
+@import "variables";
+
+@media (max-width: $screen-very-small ) {
+  .MuiIconButton-root {
+    width: 25px;
+    height: 25px;
+  }
+  .map-icon {
+    width: 15px;
+    height: 15px;
+  }
+  .delete-icon {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+@media (min-width: $screen-very-small ) and (max-width: $screen-small ) {
+  .MuiIconButton-root {
+    width: 30px;
+    height: 30px;
+  }
+  .map-icon {
+    width: 20px;
+    height: 20px;
+  }
+  .delete-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (min-width: $screen-small ) and (max-width: $screen-medium ) {
+  .MuiIconButton-root {
+    width: 32.5px;
+    height: 32.5px;
+  }
+  .map-icon {
+    width: 22.5px;
+    height: 22.5px;
+  }
+  .delete-icon {
+    width: 22.5px;
+    height: 22.5px;
+  }
+}
+
+@media (min-width: $screen-medium ) and (max-width: $screen-large ) {
+  .MuiIconButton-root {
+    width: 35px;
+    height: 35px;
+  }
+  .map-icon {
+    width: 25px;
+    height: 25px;
+  }
+  .delete-icon {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+@media (min-width: $screen-large) {
+  .MuiIconButton-root {
+    width: 35px;
+    height: 35px;
+  }
+  .map-icon {
+    width: 25px;
+    height: 25px;
+  }
+  .delete-icon {
+    width: 25px;
+    height: 25px;
+  }
+}
