@@ -59,6 +59,7 @@ function SignInScreen() {
 
   // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {
+    localStorage.clear();
     const unregisterAuthObserver = firebase
       .auth()
       .onAuthStateChanged((user) => {
