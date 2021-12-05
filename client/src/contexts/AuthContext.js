@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import * as firebase from "firebase/app";
 import "firebase/auth";
+import {useMutation} from "@apollo/client";
+import {SIGN_IN_CLIENT} from "../GraphQL/Mutations";
 const AuthContext = React.createContext(null);
 
 export function useAuth() {
@@ -8,7 +10,15 @@ export function useAuth() {
 }
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
-  const [loading, setLoading] = useState(true);
+  const [signInClient, {client, loading, error, data }] = useMutation(SIGN_IN_CLIENT);
+
+  // listen for db user result
+  useEffect( () => {
+    if(data?.signinClient.jwtToken) {
+      localStorage.setItem('token', data?.signinClient.jwtToken);
+      client.resetStore();
+    }
+  }, [data])
 
   const value = {
     currentUser,
@@ -17,14 +27,20 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     return firebase.auth().onAuthStateChanged((user) => {
       setCurrentUser(user);
-      setLoading(false);
+      signInClient({
+        variables:{
+          input: {
+            userId: user.uid
+          }
+        }
+      })
     });
 
   }, []);
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {!loading && !error && children}
     </AuthContext.Provider>
   );
 }
