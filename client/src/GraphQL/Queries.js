@@ -1,9 +1,9 @@
 import { gql } from "@apollo/client";
 //from server
 
-export const GET_BEACHES_GEOJSON = gql`
-  query getBeachesGeoJson {
-    beaches {
+export const GET_GVULOTS_GEOJSON = gql`
+  query getGvulotsGeoJson {
+    gvulots {
       nodes {
         geom {
           geojson

@@ -1,6 +1,6 @@
 import React from 'react'
 import {useQuery} from "@apollo/client";
-import {GET_BEACHES_GEOJSON} from "./GraphQL/Queries";
+import {GET_GVULOTS_GEOJSON} from "./GraphQL/Queries";
 import {useEffect} from "react";
 import L from "leaflet";
 import {useMap} from "react-leaflet";
@@ -9,7 +9,7 @@ import {useMap} from "react-leaflet";
 const Layers = () => {
 
     const map = useMap();
-    const { data } = useQuery(GET_BEACHES_GEOJSON, {
+    const { data } = useQuery(GET_GVULOTS_GEOJSON, {
         fetchPolicy: "network-only",
     });
 
@@ -26,21 +26,38 @@ const Layers = () => {
             click: whenClicked
         });
     }
+    function polystyle(feature) {
+        return {
+            fillColor: 'blue',
+            weight: 2,
+            opacity: 1,
+            color: 'white',  //Outline color
+            fillOpacity: 0.7
+        };
+    }
 
     useEffect(() => {
-        if(data) {
-            const beaches = data.beaches.nodes.map((beach) => {
-                return L.geoJSON(beach.geom.geojson, {
-                    onEachFeature: onEachFeature
-                })
-            });
-            const beachGroup = L.layerGroup(beaches);
-            const  overlayMaps = {
-                "Beaches": beachGroup
+        if(data) {    
+            var myStyle = {
+                "color": "#0096FF",
+                "weight": 5,
+                "opacity": 0.65
             };
+                 
+            const gvulots = data.gvulots.nodes.map((gvul) => {
+                return L.geoJSON(gvul.geom.geojson, {
+                    style: myStyle,
+                    onEachFeature: onEachFeature
+                });
+            })
+            
+            const gvulGroup = L.layerGroup(gvulots)
+            const  overlayMaps = {
+                "Municipal": gvulGroup
+            };
+            console.log(overlayMaps);
             L.control.layers(null, overlayMaps).addTo(map);
-            // .addTo(map);
-            // })
+           
         }
     }, [data, map])
 
