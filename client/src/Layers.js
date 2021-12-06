@@ -37,14 +37,13 @@ const Layers = () => {
     }
 
     useEffect(() => {
-        if(data) {    
-            var myStyle = {
-                "color": "#0096FF",
-                "weight": 5,
-                "opacity": 0.65
-            };
-                 
-            const gvulots = data.gvulots.nodes.map((gvul) => {
+        if(data) {             
+            const gvulots = data.gvulots.nodes.map((gvul, i) => {
+                var myStyle = {
+                    "color": i % 3 === 0 ? "#EE4B2B" : i % 3 === 1 ? "#ff8c00" : "#0BDA51",
+                    "weight": 5,
+                    "opacity": 0.65
+                };
                 return L.geoJSON(gvul.geom.geojson, {
                     style: myStyle,
                     onEachFeature: onEachFeature
@@ -57,6 +56,8 @@ const Layers = () => {
             };
             console.log(overlayMaps);
             L.control.layers(null, overlayMaps).addTo(map);
+            //make the layer active. 
+            gvulGroup.addTo(map);
            
         }
     }, [data, map])
