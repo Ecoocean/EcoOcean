@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Modal } from "react-bootstrap";
+import Button from '@mui/material/Button';
 import Avatar from "@mui/material/Avatar";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
@@ -38,7 +38,7 @@ const BootstrapDialogTitle = (props) => {
                         color: "white",
                     }}
                 >
-                    <CloseIcon />
+                    <CloseIcon/>
                 </IconButton>
             ) : null}
         </DialogTitle>
@@ -83,7 +83,8 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
                 />
                 <div>{`Reporter: ${report.reporter}`}</div>
                 <div style={{flex: '1 0 0'}} />
-                <Button onClick={handleClose}>
+                <Button color="primary"
+                variant="contained" onClick={handleClose}>
                     Close
                 </Button>
             </DialogActions>
