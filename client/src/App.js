@@ -6,15 +6,11 @@ import CustomizedSnackbar from "./CustomizedSnackbar";
 import { AuthProvider } from "./contexts/AuthContext";
 import PrivateRoute from "./PrivateRoute";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { green } from "@mui/material/colors";
 
 const theme = createTheme({
     palette: {
         primary: {
-            main: "#5d8cc4",
-        },
-        secondary: {
-            main: green[500],
+            main: "#0074d9",
         },
     },
 });

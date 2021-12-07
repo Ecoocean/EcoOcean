@@ -243,8 +243,8 @@ type Query implements Node {
     nodeId: ID!
   ): Node
 
-  """Reads and enables pagination through a set of `Beach`."""
-  beaches(
+  """Reads and enables pagination through a set of `Gvulot`."""
+  gvulots(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -263,14 +263,14 @@ type Query implements Node {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `Beach`."""
-    orderBy: [BeachesOrderBy!] = [PRIMARY_KEY_ASC]
+    """The method to use when ordering `Gvulot`."""
+    orderBy: [GvulotsOrderBy!] = [PRIMARY_KEY_ASC]
 
     """
     A condition to be used in determining which values should be returned by the collection.
     """
-    condition: BeachCondition
-  ): BeachesConnection
+    condition: GvulotCondition
+  ): GvulotsConnection
 
   """Reads and enables pagination through a set of `PollutionReport`."""
   pollutionReports(
@@ -329,7 +329,7 @@ type Query implements Node {
     """
     condition: UserCondition
   ): UsersConnection
-  beach(beachId: Int!): Beach
+  gvulot(id: Int!): Gvulot
   pollutionReport(id: BigInt!): PollutionReport
   user(uid: String!): User
   currentUserId: String
@@ -360,11 +360,11 @@ type Query implements Node {
     after: Cursor
   ): PollutionReportsConnection
 
-  """Reads a single `Beach` using its globally unique `ID`."""
-  beachByNodeId(
-    """The globally unique `ID` to be used in selecting a single `Beach`."""
+  """Reads a single `Gvulot` using its globally unique `ID`."""
+  gvulotByNodeId(
+    """The globally unique `ID` to be used in selecting a single `Gvulot`."""
     nodeId: ID!
-  ): Beach
+  ): Gvulot
 
   """Reads a single `PollutionReport` using its globally unique `ID`."""
   pollutionReportByNodeId(
@@ -392,55 +392,68 @@ interface Node {
   nodeId: ID!
 }
 
-"""A connection to a list of `Beach` values."""
-type BeachesConnection {
-  """A list of `Beach` objects."""
-  nodes: [Beach!]!
+"""A connection to a list of `Gvulot` values."""
+type GvulotsConnection {
+  """A list of `Gvulot` objects."""
+  nodes: [Gvulot!]!
 
   """
-  A list of edges which contains the `Beach` and cursor to aid in pagination.
+  A list of edges which contains the `Gvulot` and cursor to aid in pagination.
   """
-  edges: [BeachesEdge!]!
+  edges: [GvulotsEdge!]!
 
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  """The count of *all* `Beach` you could get from the connection."""
+  """The count of *all* `Gvulot` you could get from the connection."""
   totalCount: Int!
 }
 
-type Beach implements Node {
+type Gvulot implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
   """
   nodeId: ID!
-  beachId: Int!
+  id: Int!
   geom: GeometryMultiPolygon
-  osmId: BigInt
-  class: String
-  type: String
-  name: String
-  address: String
-  extratags: String
-  layer: String
-  path: String
-  pollutionLevel: Int
+  fid: BigFloat
+  muniHeb: String
+  muniEng: String
+  sugMuni: String
+  crPnim: String
+  crLamas: String
+  machoz: String
+  precision: String
+  signDate: String
+  tikun1: String
+  tikun2: String
+  tikun3: String
+  tikun4: String
+  tikun5: String
+  tikun6: String
+  tikun7: String
+  hearot: String
+  eshkolMpn: String
+  tikun8: String
+  tikun9: String
+  firstNafa: String
+  lastNafa2: String
+  shapeLeng: BigFloat
+  shapeArea: BigFloat
 }
 
 """
-A signed eight-byte integer. The upper big integer values are greater than the
-max value for a JavaScript number. Therefore all big integers will be output as
-strings and not numbers.
+A floating point number that requires more precision than IEEE 754 binary 64
 """
-scalar BigInt
+scalar BigFloat
 
-"""A `Beach` edge in the connection."""
-type BeachesEdge {
+"""A `Gvulot` edge in the connection."""
+type GvulotsEdge {
   """A cursor for use in pagination."""
   cursor: Cursor
 
-  """The `Beach` at the end of the edge."""
-  node: Beach!
+  """The `Gvulot` at the end of the edge."""
+  node: Gvulot!
 }
 
 """A location in a connection that can be used for resuming pagination."""
@@ -461,71 +474,146 @@ type PageInfo {
   endCursor: Cursor
 }
 
-"""Methods to use when ordering `Beach`."""
-enum BeachesOrderBy {
+"""Methods to use when ordering `Gvulot`."""
+enum GvulotsOrderBy {
   NATURAL
-  BEACH_ID_ASC
-  BEACH_ID_DESC
+  ID_ASC
+  ID_DESC
   GEOM_ASC
   GEOM_DESC
-  OSM_ID_ASC
-  OSM_ID_DESC
-  CLASS_ASC
-  CLASS_DESC
-  TYPE_ASC
-  TYPE_DESC
-  NAME_ASC
-  NAME_DESC
-  ADDRESS_ASC
-  ADDRESS_DESC
-  EXTRATAGS_ASC
-  EXTRATAGS_DESC
-  LAYER_ASC
-  LAYER_DESC
-  PATH_ASC
-  PATH_DESC
-  POLLUTION_LEVEL_ASC
-  POLLUTION_LEVEL_DESC
+  FID_ASC
+  FID_DESC
+  MUNI_HEB_ASC
+  MUNI_HEB_DESC
+  MUNI_ENG_ASC
+  MUNI_ENG_DESC
+  SUG_MUNI_ASC
+  SUG_MUNI_DESC
+  CR_PNIM_ASC
+  CR_PNIM_DESC
+  CR_LAMAS_ASC
+  CR_LAMAS_DESC
+  MACHOZ_ASC
+  MACHOZ_DESC
+  PRECISION_ASC
+  PRECISION_DESC
+  SIGN_DATE_ASC
+  SIGN_DATE_DESC
+  TIKUN1_ASC
+  TIKUN1_DESC
+  TIKUN2_ASC
+  TIKUN2_DESC
+  TIKUN3_ASC
+  TIKUN3_DESC
+  TIKUN4_ASC
+  TIKUN4_DESC
+  TIKUN5_ASC
+  TIKUN5_DESC
+  TIKUN6_ASC
+  TIKUN6_DESC
+  TIKUN7_ASC
+  TIKUN7_DESC
+  HEAROT_ASC
+  HEAROT_DESC
+  ESHKOL_MPN_ASC
+  ESHKOL_MPN_DESC
+  TIKUN8_ASC
+  TIKUN8_DESC
+  TIKUN9_ASC
+  TIKUN9_DESC
+  FIRST_NAFA_ASC
+  FIRST_NAFA_DESC
+  LAST_NAFA2_ASC
+  LAST_NAFA2_DESC
+  SHAPE_LENG_ASC
+  SHAPE_LENG_DESC
+  SHAPE_AREA_ASC
+  SHAPE_AREA_DESC
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
 }
 
 """
-A condition to be used against `Beach` object types. All fields are tested for equality and combined with a logical ‘and.’
+A condition to be used against `Gvulot` object types. All fields are tested for equality and combined with a logical ‘and.’
 """
-input BeachCondition {
-  """Checks for equality with the object’s `beachId` field."""
-  beachId: Int
+input GvulotCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
 
   """Checks for equality with the object’s `geom` field."""
   geom: GeoJSON
 
-  """Checks for equality with the object’s `osmId` field."""
-  osmId: BigInt
+  """Checks for equality with the object’s `fid` field."""
+  fid: BigFloat
 
-  """Checks for equality with the object’s `class` field."""
-  class: String
+  """Checks for equality with the object’s `muniHeb` field."""
+  muniHeb: String
 
-  """Checks for equality with the object’s `type` field."""
-  type: String
+  """Checks for equality with the object’s `muniEng` field."""
+  muniEng: String
 
-  """Checks for equality with the object’s `name` field."""
-  name: String
+  """Checks for equality with the object’s `sugMuni` field."""
+  sugMuni: String
 
-  """Checks for equality with the object’s `address` field."""
-  address: String
+  """Checks for equality with the object’s `crPnim` field."""
+  crPnim: String
 
-  """Checks for equality with the object’s `extratags` field."""
-  extratags: String
+  """Checks for equality with the object’s `crLamas` field."""
+  crLamas: String
 
-  """Checks for equality with the object’s `layer` field."""
-  layer: String
+  """Checks for equality with the object’s `machoz` field."""
+  machoz: String
 
-  """Checks for equality with the object’s `path` field."""
-  path: String
+  """Checks for equality with the object’s `precision` field."""
+  precision: String
 
-  """Checks for equality with the object’s `pollutionLevel` field."""
-  pollutionLevel: Int
+  """Checks for equality with the object’s `signDate` field."""
+  signDate: String
+
+  """Checks for equality with the object’s `tikun1` field."""
+  tikun1: String
+
+  """Checks for equality with the object’s `tikun2` field."""
+  tikun2: String
+
+  """Checks for equality with the object’s `tikun3` field."""
+  tikun3: String
+
+  """Checks for equality with the object’s `tikun4` field."""
+  tikun4: String
+
+  """Checks for equality with the object’s `tikun5` field."""
+  tikun5: String
+
+  """Checks for equality with the object’s `tikun6` field."""
+  tikun6: String
+
+  """Checks for equality with the object’s `tikun7` field."""
+  tikun7: String
+
+  """Checks for equality with the object’s `hearot` field."""
+  hearot: String
+
+  """Checks for equality with the object’s `eshkolMpn` field."""
+  eshkolMpn: String
+
+  """Checks for equality with the object’s `tikun8` field."""
+  tikun8: String
+
+  """Checks for equality with the object’s `tikun9` field."""
+  tikun9: String
+
+  """Checks for equality with the object’s `firstNafa` field."""
+  firstNafa: String
+
+  """Checks for equality with the object’s `lastNafa2` field."""
+  lastNafa2: String
+
+  """Checks for equality with the object’s `shapeLeng` field."""
+  shapeLeng: BigFloat
+
+  """Checks for equality with the object’s `shapeArea` field."""
+  shapeArea: BigFloat
 }
 
 """A connection to a list of `PollutionReport` values."""
@@ -562,6 +650,13 @@ type PollutionReport implements Node {
   reporterImageUrl: String
   type: String
 }
+
+"""
+A signed eight-byte integer. The upper big integer values are greater than the
+max value for a JavaScript number. Therefore all big integers will be output as
+strings and not numbers.
+"""
+scalar BigInt
 
 """
 A point in time as described by the [ISO
@@ -749,13 +844,13 @@ input UserCondition {
 The root mutation type which contains root level fields which mutate data.
 """
 type Mutation {
-  """Creates a single `Beach`."""
-  createBeach(
+  """Creates a single `Gvulot`."""
+  createGvulot(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
-    input: CreateBeachInput!
-  ): CreateBeachPayload
+    input: CreateGvulotInput!
+  ): CreateGvulotPayload
 
   """Creates a single `PollutionReport`."""
   createPollutionReport(
@@ -773,21 +868,21 @@ type Mutation {
     input: CreateUserInput!
   ): CreateUserPayload
 
-  """Updates a single `Beach` using its globally unique id and a patch."""
-  updateBeachByNodeId(
+  """Updates a single `Gvulot` using its globally unique id and a patch."""
+  updateGvulotByNodeId(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
-    input: UpdateBeachByNodeIdInput!
-  ): UpdateBeachPayload
+    input: UpdateGvulotByNodeIdInput!
+  ): UpdateGvulotPayload
 
-  """Updates a single `Beach` using a unique key and a patch."""
-  updateBeach(
+  """Updates a single `Gvulot` using a unique key and a patch."""
+  updateGvulot(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
-    input: UpdateBeachInput!
-  ): UpdateBeachPayload
+    input: UpdateGvulotInput!
+  ): UpdateGvulotPayload
 
   """
   Updates a single `PollutionReport` using its globally unique id and a patch.
@@ -823,21 +918,21 @@ type Mutation {
     input: UpdateUserInput!
   ): UpdateUserPayload
 
-  """Deletes a single `Beach` using its globally unique id."""
-  deleteBeachByNodeId(
+  """Deletes a single `Gvulot` using its globally unique id."""
+  deleteGvulotByNodeId(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
-    input: DeleteBeachByNodeIdInput!
-  ): DeleteBeachPayload
+    input: DeleteGvulotByNodeIdInput!
+  ): DeleteGvulotPayload
 
-  """Deletes a single `Beach` using a unique key."""
-  deleteBeach(
+  """Deletes a single `Gvulot` using a unique key."""
+  deleteGvulot(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
-    input: DeleteBeachInput!
-  ): DeleteBeachPayload
+    input: DeleteGvulotInput!
+  ): DeleteGvulotPayload
 
   """Deletes a single `PollutionReport` using its globally unique id."""
   deletePollutionReportByNodeId(
@@ -892,54 +987,69 @@ type Mutation {
   ): CreatePollutionReportPayload
 }
 
-"""The output of our create `Beach` mutation."""
-type CreateBeachPayload {
+"""The output of our create `Gvulot` mutation."""
+type CreateGvulotPayload {
   """
   The exact same `clientMutationId` that was provided in the mutation input,
   unchanged and unused. May be used by a client to track mutations.
   """
   clientMutationId: String
 
-  """The `Beach` that was created by this mutation."""
-  beach: Beach
+  """The `Gvulot` that was created by this mutation."""
+  gvulot: Gvulot
 
   """
   Our root query field type. Allows us to run any query from our mutation payload.
   """
   query: Query
 
-  """An edge for our `Beach`. May be used by Relay 1."""
-  beachEdge(
-    """The method to use when ordering `Beach`."""
-    orderBy: [BeachesOrderBy!] = [PRIMARY_KEY_ASC]
-  ): BeachesEdge
+  """An edge for our `Gvulot`. May be used by Relay 1."""
+  gvulotEdge(
+    """The method to use when ordering `Gvulot`."""
+    orderBy: [GvulotsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GvulotsEdge
 }
 
-"""All input for the create `Beach` mutation."""
-input CreateBeachInput {
+"""All input for the create `Gvulot` mutation."""
+input CreateGvulotInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
   """
   clientMutationId: String
 
-  """The `Beach` to be created by this mutation."""
-  beach: BeachInput!
+  """The `Gvulot` to be created by this mutation."""
+  gvulot: GvulotInput!
 }
 
-"""An input for mutations affecting `Beach`"""
-input BeachInput {
-  beachId: Int!
+"""An input for mutations affecting `Gvulot`"""
+input GvulotInput {
+  id: Int
   geom: GeoJSON
-  osmId: BigInt
-  class: String
-  type: String
-  name: String
-  address: String
-  extratags: String
-  layer: String
-  path: String
-  pollutionLevel: Int
+  fid: BigFloat
+  muniHeb: String
+  muniEng: String
+  sugMuni: String
+  crPnim: String
+  crLamas: String
+  machoz: String
+  precision: String
+  signDate: String
+  tikun1: String
+  tikun2: String
+  tikun3: String
+  tikun4: String
+  tikun5: String
+  tikun6: String
+  tikun7: String
+  hearot: String
+  eshkolMpn: String
+  tikun8: String
+  tikun9: String
+  firstNafa: String
+  lastNafa2: String
+  shapeLeng: BigFloat
+  shapeArea: BigFloat
 }
 
 """The output of our create `PollutionReport` mutation."""
@@ -1038,31 +1148,31 @@ input UserInput {
   hasChartAccess: Boolean
 }
 
-"""The output of our update `Beach` mutation."""
-type UpdateBeachPayload {
+"""The output of our update `Gvulot` mutation."""
+type UpdateGvulotPayload {
   """
   The exact same `clientMutationId` that was provided in the mutation input,
   unchanged and unused. May be used by a client to track mutations.
   """
   clientMutationId: String
 
-  """The `Beach` that was updated by this mutation."""
-  beach: Beach
+  """The `Gvulot` that was updated by this mutation."""
+  gvulot: Gvulot
 
   """
   Our root query field type. Allows us to run any query from our mutation payload.
   """
   query: Query
 
-  """An edge for our `Beach`. May be used by Relay 1."""
-  beachEdge(
-    """The method to use when ordering `Beach`."""
-    orderBy: [BeachesOrderBy!] = [PRIMARY_KEY_ASC]
-  ): BeachesEdge
+  """An edge for our `Gvulot`. May be used by Relay 1."""
+  gvulotEdge(
+    """The method to use when ordering `Gvulot`."""
+    orderBy: [GvulotsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GvulotsEdge
 }
 
-"""All input for the `updateBeachByNodeId` mutation."""
-input UpdateBeachByNodeIdInput {
+"""All input for the `updateGvulotByNodeId` mutation."""
+input UpdateGvulotByNodeIdInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -1070,35 +1180,50 @@ input UpdateBeachByNodeIdInput {
   clientMutationId: String
 
   """
-  The globally unique `ID` which will identify a single `Beach` to be updated.
+  The globally unique `ID` which will identify a single `Gvulot` to be updated.
   """
   nodeId: ID!
 
   """
-  An object where the defined keys will be set on the `Beach` being updated.
+  An object where the defined keys will be set on the `Gvulot` being updated.
   """
-  patch: BeachPatch!
+  patch: GvulotPatch!
 }
 
 """
-Represents an update to a `Beach`. Fields that are set will be updated.
+Represents an update to a `Gvulot`. Fields that are set will be updated.
 """
-input BeachPatch {
-  beachId: Int
+input GvulotPatch {
+  id: Int
   geom: GeoJSON
-  osmId: BigInt
-  class: String
-  type: String
-  name: String
-  address: String
-  extratags: String
-  layer: String
-  path: String
-  pollutionLevel: Int
+  fid: BigFloat
+  muniHeb: String
+  muniEng: String
+  sugMuni: String
+  crPnim: String
+  crLamas: String
+  machoz: String
+  precision: String
+  signDate: String
+  tikun1: String
+  tikun2: String
+  tikun3: String
+  tikun4: String
+  tikun5: String
+  tikun6: String
+  tikun7: String
+  hearot: String
+  eshkolMpn: String
+  tikun8: String
+  tikun9: String
+  firstNafa: String
+  lastNafa2: String
+  shapeLeng: BigFloat
+  shapeArea: BigFloat
 }
 
-"""All input for the `updateBeach` mutation."""
-input UpdateBeachInput {
+"""All input for the `updateGvulot` mutation."""
+input UpdateGvulotInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -1106,10 +1231,10 @@ input UpdateBeachInput {
   clientMutationId: String
 
   """
-  An object where the defined keys will be set on the `Beach` being updated.
+  An object where the defined keys will be set on the `Gvulot` being updated.
   """
-  patch: BeachPatch!
-  beachId: Int!
+  patch: GvulotPatch!
+  id: Int!
 }
 
 """The output of our update `PollutionReport` mutation."""
@@ -1254,32 +1379,32 @@ input UpdateUserInput {
   uid: String!
 }
 
-"""The output of our delete `Beach` mutation."""
-type DeleteBeachPayload {
+"""The output of our delete `Gvulot` mutation."""
+type DeleteGvulotPayload {
   """
   The exact same `clientMutationId` that was provided in the mutation input,
   unchanged and unused. May be used by a client to track mutations.
   """
   clientMutationId: String
 
-  """The `Beach` that was deleted by this mutation."""
-  beach: Beach
-  deletedBeachNodeId: ID
+  """The `Gvulot` that was deleted by this mutation."""
+  gvulot: Gvulot
+  deletedGvulotNodeId: ID
 
   """
   Our root query field type. Allows us to run any query from our mutation payload.
   """
   query: Query
 
-  """An edge for our `Beach`. May be used by Relay 1."""
-  beachEdge(
-    """The method to use when ordering `Beach`."""
-    orderBy: [BeachesOrderBy!] = [PRIMARY_KEY_ASC]
-  ): BeachesEdge
+  """An edge for our `Gvulot`. May be used by Relay 1."""
+  gvulotEdge(
+    """The method to use when ordering `Gvulot`."""
+    orderBy: [GvulotsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GvulotsEdge
 }
 
-"""All input for the `deleteBeachByNodeId` mutation."""
-input DeleteBeachByNodeIdInput {
+"""All input for the `deleteGvulotByNodeId` mutation."""
+input DeleteGvulotByNodeIdInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -1287,19 +1412,19 @@ input DeleteBeachByNodeIdInput {
   clientMutationId: String
 
   """
-  The globally unique `ID` which will identify a single `Beach` to be deleted.
+  The globally unique `ID` which will identify a single `Gvulot` to be deleted.
   """
   nodeId: ID!
 }
 
-"""All input for the `deleteBeach` mutation."""
-input DeleteBeachInput {
+"""All input for the `deleteGvulot` mutation."""
+input DeleteGvulotInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
   """
   clientMutationId: String
-  beachId: Int!
+  id: Int!
 }
 
 """The output of our delete `PollutionReport` mutation."""
