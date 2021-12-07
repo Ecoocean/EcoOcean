@@ -1,6 +1,6 @@
 import React from 'react'
 import {useQuery} from "@apollo/client";
-import {GET_BEACHES_GEOJSON} from "./GraphQL/Queries";
+import {GET_GVULOTS_GEOJSON} from "./GraphQL/Queries";
 import {useEffect} from "react";
 import L from "leaflet";
 import {useMap} from "react-leaflet";
@@ -9,7 +9,7 @@ import {useMap} from "react-leaflet";
 const Layers = () => {
 
     const map = useMap();
-    const { data } = useQuery(GET_BEACHES_GEOJSON, {
+    const { data } = useQuery(GET_GVULOTS_GEOJSON, {
         fetchPolicy: "network-only",
     });
 
@@ -26,21 +26,39 @@ const Layers = () => {
             click: whenClicked
         });
     }
+    function polystyle(feature) {
+        return {
+            fillColor: 'blue',
+            weight: 2,
+            opacity: 1,
+            color: 'white',  //Outline color
+            fillOpacity: 0.7
+        };
+    }
 
     useEffect(() => {
-        if(data) {
-            const beaches = data.beaches.nodes.map((beach) => {
-                return L.geoJSON(beach.geom.geojson, {
+        if(data) {             
+            const gvulots = data.gvulots.nodes.map((gvul, i) => {
+                var myStyle = {
+                    "color": i % 3 === 0 ? "#EE4B2B" : i % 3 === 1 ? "#ff8c00" : "#0BDA51",
+                    "weight": 5,
+                    "opacity": 0.65
+                };
+                return L.geoJSON(gvul.geom.geojson, {
+                    style: myStyle,
                     onEachFeature: onEachFeature
-                })
-            });
-            const beachGroup = L.layerGroup(beaches);
+                });
+            })
+            
+            const gvulGroup = L.layerGroup(gvulots)
             const  overlayMaps = {
-                "Beaches": beachGroup
+                "Municipal": gvulGroup
             };
+            console.log(overlayMaps);
             L.control.layers(null, overlayMaps).addTo(map);
-            // .addTo(map);
-            // })
+            //make the layer active. 
+            gvulGroup.addTo(map);
+           
         }
     }, [data, map])
 
