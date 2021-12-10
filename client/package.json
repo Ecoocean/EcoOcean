@@ -39,11 +39,12 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
+    "react-app-rewired": "^2.1.8",
     "typescript": "3.8.3"
   },
   "scripts": {
-    "start": "env-cmd -f .env.development react-scripts start",
-    "build": "env-cmd -f .env.production react-scripts build",
+    "start": "env-cmd -f .env.development react-app-rewired start",
+    "build": "env-cmd -f .env.production react-app-rewired build",
     "test": "jest --passWithNoTests",
     "eject": "react-scripts eject"
   },
