@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from "react";
-import Paper from "@mui/material/Paper";
+import React, {useState} from "react";
+import { TransitionGroup } from 'react-transition-group';
+import Collapse from '@mui/material/Collapse';
 import List from "@mui/material/List";
 import { useMutation, useReactiveVar } from "@apollo/client";
 import MapIcon from "@mui/icons-material/Map";
@@ -78,47 +79,51 @@ export default function ReportList() {
         </Grid>
       </Backdrop>
         <List sx={{ display: "list-item", width: "100%" }} >
+        <TransitionGroup>
           {filteredPollutionReports.map((report) => {
             return (
-              <ListItem divider key={report.id} component="div" disablePadding>
-                <Grid container direction="column">
-                  <Grid
-                    item
-                    justifyContent="left"
-                    alignItems="left"
-                    sx={{ marginLeft: 2 }}
-                  >
-                    <Tooltip title="Show Report On Map" placement="top" arrow>
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => selectedMapReportVar(report)}
-                      >
-                        <MapIcon className="map-icon" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete Report" placement="top" arrow>
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => handleSetReportUnrelevant(report.id)}
-                      >
-                        <DeleteForeverIcon className="delete-icon"/>
-                      </IconButton>
-                    </Tooltip>
-                  </Grid>
-                  <Grid item>
-                    <ListItemButton
-                      onClick={() => {
-                        selectedReportVar(report);
-                        setOpenInfoWindow(true);
-                      }}
+              <Collapse key={report.id}>
+                <ListItem divider component="div" disablePadding>
+                  <Grid container direction="column">
+                    <Grid
+                      item
+                      justifyContent="left"
+                      alignItems="left"
+                      sx={{ marginLeft: 2 }}
                     >
-                      <PollutionReportCard report={report} />
-                    </ListItemButton>
+                      <Tooltip title="Show Report On Map" placement="top" arrow>
+                        <IconButton
+                          aria-label="delete"
+                          onClick={() => selectedMapReportVar(report)}
+                        >
+                          <MapIcon className="map-icon" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete Report" placement="top" arrow>
+                        <IconButton
+                          aria-label="delete"
+                          onClick={() => handleSetReportUnrelevant(report.id)}
+                        >
+                          <DeleteForeverIcon className="delete-icon"/>
+                        </IconButton>
+                      </Tooltip>
+                    </Grid>
+                    <Grid item>
+                      <ListItemButton
+                        onClick={() => {
+                          selectedReportVar(report);
+                          setOpenInfoWindow(true);
+                        }}
+                      >
+                        <PollutionReportCard report={report} />
+                      </ListItemButton>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </ListItem>
+                </ListItem>
+                </Collapse>
             );
           })}
+          </TransitionGroup>
         </List>
       <PollutionReportModal
         report={selectedReport}
