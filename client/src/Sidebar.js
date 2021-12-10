@@ -11,6 +11,7 @@ import {
 import {useReactiveVar} from "@apollo/client";
 import EcooceanHome from "./tabs/EcooceanHome";
 import BackToTop from "./ScrollToTop";
+import { FaDrawPolygon } from "react-icons/fa";
 
 
 const SidebarComponent = ({ map }) => {
@@ -48,6 +49,8 @@ const SidebarComponent = ({ map }) => {
                <BackToTop>
                   <ReportList/>
                </BackToTop>
+            </Tab>
+            <Tab id="beach-segments" header="Beach Segments" icon={<FaDrawPolygon />}>
             </Tab>
             <Tab id="add-report" header="Add Pollution Report" icon={<FiPlusCircle/>}>
                <PollutionForm openTab={openTab}/>
