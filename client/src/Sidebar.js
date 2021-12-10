@@ -12,12 +12,20 @@ import {useReactiveVar} from "@apollo/client";
 import EcooceanHome from "./tabs/EcooceanHome";
 import BackToTop from "./ScrollToTop";
 import { FaDrawPolygon } from "react-icons/fa";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import AlertTitle from '@mui/material/AlertTitle';
+import {useQuery} from "@apollo/client";
+import {GET_GVULOTS_GEOJSON} from "./GraphQL/Queries";
 
 
 const SidebarComponent = ({ map }) => {
 
    const openTab = useReactiveVar(sideBarOpenTabVar);
    const sideBarCollapsed = useReactiveVar(sideBarCollapsedVar);
+   const { data } = useQuery(GET_GVULOTS_GEOJSON, {
+      fetchPolicy: "network-only",
+  });
 
    const onClose = () => {
       sideBarOpenTabVar('');
@@ -51,6 +59,16 @@ const SidebarComponent = ({ map }) => {
                </BackToTop>
             </Tab>
             <Tab id="beach-segments" header="Beach Segments" icon={<FaDrawPolygon />}>
+            <Stack sx={{ width: '100%' }} spacing={2}>
+               { 
+            data && data.gvulots.nodes.map((gvul, i) => {
+                return <Alert severity={ i % 3 === 0 ? "error" : i % 3 === 1 ? "warning" : "success"}>
+                <AlertTitle>{gvul.muniHeb}</AlertTitle>
+                information regarding pollution status <strong>check it out!</strong>
+                </Alert>
+            })
+         }
+            </Stack>
             </Tab>
             <Tab id="add-report" header="Add Pollution Report" icon={<FiPlusCircle/>}>
                <PollutionForm openTab={openTab}/>

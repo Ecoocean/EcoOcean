@@ -5,6 +5,7 @@ export const GET_GVULOTS_GEOJSON = gql`
   query getGvulotsGeoJson {
     gvulots {
       nodes {
+        muniHeb
         geom {
           geojson
         }
