@@ -13,7 +13,7 @@ import InputBase from '@mui/material/InputBase';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import CustomChip from '../CustomChip';
+import Chip from '@mui/material/Chip';
 
 import './PollutionReportModal.scss';
 
@@ -141,7 +141,7 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
             </DialogContent>
             <DialogActions sx={{alignItems: 'end'}}>
                 <div></div>
-                <CustomChip  variant="outlined" size={1.3} avatar={ <Avatar
+                <Chip  variant="outlined" avatar={ <Avatar
                         alt={report.reporter}
                         src={!!report.reporterImageUrl ? report.reporterImageUrl : "/"}
                     />} label={'Reporter: ' + report.reporter} />
