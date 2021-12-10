@@ -1,5 +1,5 @@
-import Chip from '@mui/material/Chip';
 import React from "react";
+import Chip from '@mui/material/Chip';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,16 +22,16 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function CustomChip(props) {
+const CustomChip = (props) => {
     const { size = 1, ...restProps } = props;
     const classes = useStyles({ size });
-  
+
     return (
-      <Chip
-        className={classes.root}
-        classes={{ avatar: classes.avatar, deleteIcon: classes.deleteIcon }}
-        {...restProps}
-      />
+    <Chip
+    className={classes.root}
+    classes={{ avatar: classes.avatar, deleteIcon: classes.deleteIcon }}
+    {...restProps}
+    />
     );
 }
 
