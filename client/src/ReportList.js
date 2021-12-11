@@ -26,6 +26,7 @@ import { setSnackBar } from "./SnackBarUtils";
 import {
   filteredPollutionReportsVar
 } from "./cache";
+import Typography from "@mui/material/Typography";
 import "./ReportList.scss";
 
 export default function ReportList() {
@@ -78,6 +79,17 @@ export default function ReportList() {
           <Grid item>Loading reports please wait ...</Grid>
         </Grid>
       </Backdrop>
+      {filteredPollutionReports.length === 0 &&
+      <Typography
+                sx={{ display: "flex", justifyContent:"center"}}
+                variant="subtitle1"
+                className="no-reports"
+                color="text.secondary"
+                component="p"
+              >
+                No Reports in this area ...
+        </Typography>
+        }
         <List sx={{ display: "list-item", width: "100%" }} >
         <TransitionGroup>
         {filteredPollutionReports && filteredPollutionReports.map((report) => {
@@ -122,7 +134,8 @@ export default function ReportList() {
                 </ListItem>
                 </Collapse>
             );
-          })}
+          })
+        }
           </TransitionGroup>
         </List>
       <PollutionReportModal
