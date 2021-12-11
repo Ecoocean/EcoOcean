@@ -1,15 +1,10 @@
-import React, { useState } from "react";
-// import L from "leaflet";
+import React from "react";
 import {
-	Map,
-	TileLayer,
-	Marker,
-	Popup,
 	FeatureGroup,
-	Circle
 } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 import L from "leaflet";
+import ErrorBoundary from "./ErrorBoundary";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -80,47 +75,34 @@ const DrawTools = () => {
 		console.log("_onDrawStart", e);
 	};
 
-	/*onEdited	function	hook to leaflet-draw's draw:edited event
-onCreated	function	hook to leaflet-draw's draw:created event
-onDeleted	function	hook to leaflet-draw's draw:deleted event
-onMounted	function	hook to leaflet-draw's draw:mounted event
-onEditStart	function	hook to leaflet-draw's draw:editstart event
-onEditStop	function	hook to leaflet-draw's draw:editstop event
-onDeleteStart	function	hook to leaflet-draw's draw:deletestart event
-onDeleteStop	function	hook to leaflet-draw's draw:deletestop event
-onDrawStart	function	hook to leaflet-draw's draw:drawstart event
-onDrawStop	function	hook to leaflet-draw's draw:drawstop event
-onDrawVertex	function	hook to leaflet-draw's draw:drawvertex event
-onEditMove	function	hook to leaflet-draw's draw:editmove event
-onEditResize	function	hook to leaflet-draw's draw:editresize event
-onEditVertex	function	hook to leaflet-draw's draw:editvertex event*/
 	return (
 		<FeatureGroup>
-			<EditControl
-				onDrawStart={_onDrawStart}
-				position="bottomleft"
-				onEdited={_onEdited}
-				onCreated={_onCreated}
-				onDeleted={_onDeleted}
-				draw={{
-					polyline: {
-						icon: new L.DivIcon({
-							iconSize: new L.Point(8, 8),
-							className: "leaflet-div-icon leaflet-editing-icon"
-						}),
-						shapeOptions: {
-							guidelineDistance: 10,
-							color: "navy",
-							weight: 3
-						}
-					},
-					rectangle: true,
-                    marker: false,
-					circlemarker: false,
-					circle: true,
-					polygon: true
-				}}
-			/>
+			<ErrorBoundary>
+				<EditControl
+					onDrawStart={_onDrawStart}
+					position="bottomleft"
+					onEdited={_onEdited}
+					onCreated={_onCreated}
+					onDeleted={_onDeleted}
+					draw={{
+						polyline: {
+							icon: new L.DivIcon({
+								iconSize: new L.Point(8, 8),
+								className: "leaflet-div-icon leaflet-editing-icon"
+							}),
+							shapeOptions: {
+								guidelineDistance: 10,
+								color: "navy",
+								weight: 3
+							}
+						},
+						rectangle: true,
+						marker: false,
+						circlemarker: false,
+						circle: true,
+						polygon: true
+					}}/>
+				</ErrorBoundary>
 		</FeatureGroup>
 	);
 };

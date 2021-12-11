@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import DrawTools from "./DrawTools";
-
+import ErrorBoundary from "./ErrorBoundary"
 
 const MapSmall = props => {
 
@@ -16,7 +16,9 @@ const MapSmall = props => {
              zoom={8}
              maxZoom={18}
             whenCreated={props.setMap}>
-            <DrawTools/>
+             <ErrorBoundary>
+                 <DrawTools/>
+             </ErrorBoundary>
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'/>
