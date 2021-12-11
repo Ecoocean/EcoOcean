@@ -10,7 +10,6 @@ import 'firebase/auth';
 import './SignInPage.css'
 import { Button } from "react-bootstrap";
 import {SIGN_IN_CLIENT} from "../GraphQL/Mutations";
-import {jwtTokenVar} from "../cache";
 
 // Configure Firebase.
 const firebaseConfig = {

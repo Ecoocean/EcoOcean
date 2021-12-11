@@ -12,23 +12,32 @@ import { StyledEngineProvider } from '@mui/material/styles';
 import { setContext } from "@apollo/client/link/context";
 import {onError} from "@apollo/client/link/error";
 import {setSnackBar} from "./SnackBarUtils";
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 
 const link = createUploadLink({
     uri: process.env.REACT_APP_SERVER_ENDPOINT_URL,
 });
 
-const wsLink = new WebSocketLink({
-    uri: `${process.env.REACT_APP_WEB_SOCKET_TYPE}://${process.env.REACT_APP_SERVER_ENDPOINT}`,
-    options: {
-        reconnect: true,
-        connectionParams: localStorage.getItem('token')
+const graphqlEndpoint = `${process.env.REACT_APP_WEB_SOCKET_TYPE}://${process.env.REACT_APP_SERVER_ENDPOINT}`;
+
+const wsClient = new SubscriptionClient(
+    graphqlEndpoint,
+    {
+      reconnect: true,
+      connectionParams: localStorage.getItem('token')
             ? {
                 authorization: `Bearer ${localStorage.getItem('token')}`,
             }
             : {},
-    },
-});
+    }
+);
+
+wsClient.onConnected(() => console.log('CONNECTED to GraphqlEndpoint'));
+wsClient.onDisconnected(() => setSnackBar('No internet connection - offline mode', 'error'));
+wsClient.onReconnected(() => setSnackBar('Reconnected to the server', 'success'));
+
+const wsLink = new WebSocketLink(wsClient);
 
 const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
@@ -61,7 +70,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     }
     if (networkError) {
         console.log(`[Network error]: ${networkError}`);
-        setSnackBar(`[Network error]: ${networkError}`, 'error')
+        setSnackBar(`[Network error]: could not establish connection to the server`, 'error')
     }
 });
 

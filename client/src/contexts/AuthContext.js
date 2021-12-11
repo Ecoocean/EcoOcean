@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
 
   // listen for db user result
   useEffect( () => {
-    if(data?.signinClient.jwtToken) {
+    if(data?.signinClient?.jwtToken) {
       localStorage.setItem('token', data?.signinClient.jwtToken);
       client.resetStore();
     }

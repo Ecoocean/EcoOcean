@@ -27,6 +27,24 @@ const CustomizedSnackbar = () => {
     showSnackBarVar(false);
   };
 
+  if(severity === 'error') {
+    return (
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={open}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={severity}
+          sx={{ width: "100%" }}
+        >
+          {msg}
+        </Alert>
+      </Snackbar>
+    ); 
+  }
+
   return (
     <Snackbar
       anchorOrigin={{ vertical: "top", horizontal: "center" }}

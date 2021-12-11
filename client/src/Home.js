@@ -4,7 +4,7 @@ import "./styles.scss";
 import Sidebar from './Sidebar'
 import L from 'leaflet';
 import ShowReports from "./ShowReports";
-
+import { Helmet } from 'react-helmet';
 
 export default function Home() {
 
@@ -17,6 +17,9 @@ export default function Home() {
 
     return (
         <div className="App">
+            <Helmet>
+                <title>EcoOcean</title>
+            </Helmet>
             {map && <Sidebar map={map} />}
             <Map setMap={mapReady} >
                 <ShowReports />

@@ -130,7 +130,11 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
                      </FormControl>
                 </Box>
                 {report.photoUrls?.length > 0 &&
-                    <ImageGallery showPlayButton={false} items={report.photoUrls?.map((photoUrl) => {
+                    <ImageGallery
+                    showBullets= {report.photoUrls?.length > 1}
+                    showThumbnails= {report.photoUrls?.length > 1}
+                    showPlayButton={false}
+                    items={report.photoUrls?.map((photoUrl) => {
                             return {
                                 original: photoUrl,
                                 thumbnail: photoUrl,

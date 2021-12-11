@@ -80,7 +80,7 @@ export default function ReportList() {
       </Backdrop>
         <List sx={{ display: "list-item", width: "100%" }} >
         <TransitionGroup>
-          {filteredPollutionReports.map((report) => {
+        {filteredPollutionReports && filteredPollutionReports.map((report) => {
             return (
               <Collapse key={report.id}>
                 <ListItem divider component="div" disablePadding>

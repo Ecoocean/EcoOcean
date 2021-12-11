@@ -26,16 +26,7 @@ const Layers = () => {
             click: whenClicked
         });
     }
-    function polystyle(feature) {
-        return {
-            fillColor: 'blue',
-            weight: 2,
-            opacity: 1,
-            color: 'white',  //Outline color
-            fillOpacity: 0.7
-        };
-    }
-
+    
     useEffect(() => {
         if(data) {             
             const gvulots = data.gvulots.nodes.map((gvul, i) => {
@@ -54,7 +45,6 @@ const Layers = () => {
             const  overlayMaps = {
                 "Municipal": gvulGroup
             };
-            console.log(overlayMaps);
             L.control.layers(null, overlayMaps).addTo(map);
             //make the layer active. 
             gvulGroup.addTo(map);

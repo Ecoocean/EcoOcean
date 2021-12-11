@@ -3,10 +3,10 @@ import L from 'leaflet';
 import { Marker } from 'react-leaflet'
 import {  Tooltip, useMapEvents, useMap } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-markercluster";
-import { GET_BEACHES_GEOJSON, GET_LOCATION_REPORTS } from "./GraphQL/Queries";
+import { GET_LOCATION_REPORTS } from "./GraphQL/Queries";
 import Typography from "@mui/material/Typography";
 import { PollutionReportModal } from "./modals/PollutionReportModal";
-import { useQuery, useLazyQuery, useReactiveVar, useSubscription } from "@apollo/client";
+import {  useLazyQuery, useReactiveVar, useSubscription } from "@apollo/client";
 import {
     REPORT_ADDED_SUBSCRIPTION, REPORT_IRRELEVANT_SUBSCRIPTION
 } from "./GraphQL/Subscriptions";
@@ -175,7 +175,7 @@ function ShowReports() {
     return (
         <div>
             <MarkerClusterGroup>
-                {filteredPollutionReports.map((report) => {
+                {filteredPollutionReports && filteredPollutionReports.map((report) => {
                     let markerColor = null;
                     const reportType = report.type;
                     if (reportType === "TRASH") {
