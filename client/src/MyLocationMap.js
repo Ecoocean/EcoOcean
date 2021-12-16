@@ -87,7 +87,7 @@ export default function MyLocationMap({onLocationFound}) {
     }
     const mapReady = (map) =>{
         map.addControl(L.control.zoom({ position: 'bottomright' }));
-        setTimeout(function(){ map.invalidateSize()}, 100);
+        setTimeout(function(){ map.invalidateSize()}, 300);
     }
    
     return (

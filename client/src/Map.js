@@ -11,8 +11,8 @@ const Map = props => {
             doubleClickZoom={true}
             zoomControl={false}
             id="mapId"
-            center={[31.8117257, 33.5818155]}
-            zoom={8}
+            center={[31.8117257, 34.5818155]}
+            zoom={7}
             maxZoom={18}
             whenCreated={props.setMap}>
    
