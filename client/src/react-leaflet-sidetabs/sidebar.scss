@@ -15,7 +15,7 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 80%;
+    width: 100%;
     overflow: inherit;
     z-index: 450;
     box-shadow: 0 1px 5px rgba(0, 0, 0, .65)
@@ -34,17 +34,17 @@
     background-color: #0074d9
 }
 
-@media (max-width: $screen-very-small ) {
-    .sidebar-header {
-        font-size: 10.4pt;
-    }
-    .sidebar {
-        width: var(--leaflet-sidetabs-width-vvs);
-    }
-    .sidebar-pane {
-        min-width: 200px
-    }
-}
+//@media (max-width: $screen-very-small ) {
+//    .sidebar-header {
+//        font-size: 10.4pt;
+//    }
+//    .sidebar {
+//        width: var(--leaflet-sidetabs-width-vvs);
+//    }
+//    .sidebar-pane {
+//        min-width: 200px
+//    }
+//}
 
 @media (min-width: $screen-very-small ) and (max-width: $screen-small ) {
     .sidebar-header {

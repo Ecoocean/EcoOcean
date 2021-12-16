@@ -8,7 +8,7 @@ const MapSmall = props => {
    const map = useMemo( () => {
       return  (
          <MapContainer
-             style={{ height: '40vh', width: '100wh' }}
+             style={{ height: '60vh', width: '100wh' }}
             doubleClickZoom={true}
             zoomControl={false}
             id="mapId"
@@ -20,9 +20,7 @@ const MapSmall = props => {
                  <DrawTools/>
              </ErrorBoundary>
             <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'/>
-
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
              {props.children}
          </MapContainer>
       )

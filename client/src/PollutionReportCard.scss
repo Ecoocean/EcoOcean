@@ -30,27 +30,27 @@
 
 @media (max-width: $screen-very-small ) {
   .card-content {
-    padding: 0 0 0 0;
+    padding: 1px 1px 1px 1px;
   }
   .card-avatar {
     width: 25px;
     height: 25px;
   }
   .card-date {
-    font-size: 6.7pt;
+    font-size: 8.7pt;
   }
   .card-reporter {
-    font-size: 6.7pt;
+    font-size: 8.7pt;
   }
   .card-address {
-    font-size: 6.8pt;
+    font-size: 8.8pt;
 
   }
   .card-header {
-    font-size: 7pt;
+    font-size: 9pt;
   }
   .card-media {
-    width: 60px;
+    width: 100px;
   }
 }
 

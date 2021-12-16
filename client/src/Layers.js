@@ -45,7 +45,7 @@ const Layers = () => {
             const  overlayMaps = {
                 "Municipal": gvulGroup
             };
-            L.control.layers(null, overlayMaps).addTo(map);
+            L.control.layers(null, overlayMaps, {position: 'bottomright'}).addTo(map);
             //make the layer active. 
             gvulGroup.addTo(map);
            
