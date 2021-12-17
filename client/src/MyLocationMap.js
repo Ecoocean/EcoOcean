@@ -24,8 +24,7 @@ const search = new GeoSearch.GeoSearchControl({
     style: 'bar',
     marker: {
         // optional: L.Marker    - default L.Icon.Default
-        icon: blueMarker,
-        draggable: true,
+        icon: blueMarker
       },
   });
 
@@ -41,7 +40,7 @@ export default function MyLocationMap({onLocationFound}) {
 
         map.addControl(search);
         map.addControl(L.control.zoom({ position: 'bottomright' }));
-
+        map.locate({setView: false, maxZoom: 18});
         const lc = L.control.locate({
             locateOptions: {
                 enableHighAccuracy: true}}).addTo(map);
@@ -52,15 +51,12 @@ export default function MyLocationMap({onLocationFound}) {
             setUsingSearch(false);
         });
         map.on('geosearch/showlocation', function (e) {
+            map.stopLocate();
+            lc.stopFollowing();
             onLocationFound(e.location.x, e.location.y);
             setLocation(e.location);
             setUsingSearch(true);
             map.panTo({lat: e.location.y, lng: e.location.x}, 10);
-        });
-        map.on('geosearch/marker/dragend', function (e) {
-            onLocationFound(e.location.lng, e.location.lat);
-            setLocation(e.location);
-            setUsingSearch(true);
         });
 
         setMapInstance(map);
