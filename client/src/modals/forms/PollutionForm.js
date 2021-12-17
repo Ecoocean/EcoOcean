@@ -29,7 +29,7 @@ const PollutionForm = ({ openTab }) => {
         pollutionTypePickerRef.current &&
         imageUploaderRef.current
       ) {
-        // exteranl validation - we validate here because we can't use formik validation
+        // external validation - we validate here because we can't use formik validation
         // pollution type picker is special component
         if(!pollutionTypePickerRef.current.state.image.value){
           setSnackBar('Pollution type must be selected', 'error');
@@ -77,7 +77,6 @@ const PollutionForm = ({ openTab }) => {
 
   return (
       <div>
-        {openTab === 'add-report' ?
             <Formik
                 innerRef={formRef}
                 validateOnBlur={true}
@@ -117,7 +116,7 @@ const PollutionForm = ({ openTab }) => {
                     </Modal.Footer>
                   </Form>
               )}
-            </Formik> : null
+            </Formik>
         }
       </div>
   );

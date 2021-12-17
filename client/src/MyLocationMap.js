@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import { Button, Spinner } from "react-bootstrap";
+import React, { useState } from 'react';
 import L from 'leaflet';
-import { Marker, useMap } from "react-leaflet";
-
+import { Marker } from "react-leaflet";
 import blueFilledMarker from './icons/marker-blue-optimized.svg';
 // when the docs use an import:
 import * as GeoSearch from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
 import MapSmall from "./MapSmall";
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.locatecontrol';
+import {useReactiveVar} from "@apollo/client";
+import {sideBarOpenTabVar} from "./cache";
 
 const blueMarker = L.icon({
     iconUrl: blueFilledMarker,
@@ -28,85 +29,54 @@ const search = new GeoSearch.GeoSearchControl({
       },
   });
 
-
-
-function MyLocation({onLocationFound, onGpsLocationFound}) {
-    const map = useMap();
-    const [location, setLocation] = useState({lat: 31.4117257, lng:35.0818155});
-    const [usingSearch, setUsingSearch] = useState(false);
-    const [gpsLocaionFound, setGpsLocationFound] = useState(false);
-    map.addControl(search);
-
-    useEffect(() =>{
-        const locationWatchID = navigator.geolocation.watchPosition(
-            ({ coords: { latitude: lat, longitude: lng, accuracy: acc } }) => {
-                if (acc < 50 && !usingSearch && !gpsLocaionFound) {
-                    // if the location is within 50 meters
-                    setGpsLocationFound(true);
-                    onGpsLocationFound();
-                    setLocation({lat: lat, lng:lng});
-                    onLocationFound(lng, lat);
-                    map.flyTo({lat: lat, lng:lng}, 18);
-                }
-            },
-            (err) => console.log(err),
-            {
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 1000,
-            }
-        );
-
-        return () => {
-            navigator.geolocation.clearWatch(locationWatchID);
-        }
-    }, [])
-    
-    
-    map.on('geosearch/showlocation', function (e) {
-        setUsingSearch(true);
-        onLocationFound(e.location.x, e.location.y);
- 
-    });
-    map.on('geosearch/marker/dragend', function (e) {
-        onLocationFound(e.location.lng, e.location.lat)
-    });
-    return (gpsLocaionFound || usingSearch) ? <Marker
-                    position={[location.lat, location.lng]} icon={blueMarker}>
-
-                    </Marker> : null
-            
-    
-}
-
 export default function MyLocationMap({onLocationFound}) {
-    const [gpsLocationFound, setGpsLocationFound] = useState(false);
+    const [mapInstance, setMapInstance] = useState(null);
+    const [usingSearch, setUsingSearch] = useState(false);
+    const [location, setLocation] = useState(null);
+    const [lc, setLc] = useState(null);
+    const openTab = useReactiveVar(sideBarOpenTabVar);
 
-    const onGpsLocationFound = () => {
-        setGpsLocationFound(true);
-    }
+
     const mapReady = (map) =>{
+
+        map.addControl(search);
         map.addControl(L.control.zoom({ position: 'bottomright' }));
-        setTimeout(function(){ map.invalidateSize()}, 300);
+
+        const lc = L.control.locate({
+            locateOptions: {
+                enableHighAccuracy: true}}).addTo(map);
+        setLc(lc);
+
+        map.on('locationfound', function (e) {
+            onLocationFound(e.latlng.lng, e.latlng.lat);
+            setUsingSearch(false);
+        });
+        map.on('geosearch/showlocation', function (e) {
+            onLocationFound(e.location.x, e.location.y);
+            setLocation(e.location);
+            setUsingSearch(true);
+            map.panTo({lat: e.location.y, lng: e.location.x}, 10);
+        });
+        map.on('geosearch/marker/dragend', function (e) {
+            onLocationFound(e.location.lng, e.location.lat);
+            setLocation(e.location);
+            setUsingSearch(true);
+        });
+
+        setMapInstance(map);
     }
-   
+    if (openTab === 'add-report' && mapInstance){
+        mapInstance._onResize();
+        // request location update and set location
+        lc.start();
+    }
+
     return (
-        <div>
-             {!gpsLocationFound && (
-            <Button variant="primary">
-              <Spinner
-                as="span"
-                animation="grow"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-              />
-              getting accurate location...
-            </Button>
-          )}
-            <MapSmall setMap={mapReady} >
-                <MyLocation onLocationFound={onLocationFound} onGpsLocationFound={onGpsLocationFound}/>
-            </MapSmall>
-    </div>
+        <MapSmall setMap={mapReady} >
+            {usingSearch && <Marker
+            position={[location.y, location.x]} icon={blueMarker}>
+
+        </Marker>}
+        </MapSmall>
     )
 }

@@ -13,7 +13,6 @@ import EcooceanHome from "./tabs/EcooceanHome";
 import BackToTop from "./ScrollToTop";
 import { FaDrawPolygon } from "react-icons/fa";
 import Alert from '@mui/material/Alert';
-import Card from '@mui/material/Card';
 import AlertTitle from '@mui/material/AlertTitle';
 import {useQuery} from "@apollo/client";
 import {GET_GVULOTS_GEOJSON} from "./GraphQL/Queries";
@@ -75,7 +74,7 @@ const SidebarComponent = ({ map }) => {
                </List>
             </Tab>
             <Tab id="add-report" header="Add Pollution Report" icon={<FiPlusCircle/>}>
-               <PollutionForm openTab={openTab}/>
+                <PollutionForm />
             </Tab>
             <Tab id="settings" header="Settings" icon={<FiSettings />} anchor="bottom">
                <SettingsTab/>

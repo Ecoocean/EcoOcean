@@ -3,7 +3,7 @@
 @import "~leaflet-draw/dist/leaflet.draw.css";
 @import "~react-leaflet-markercluster/dist/styles.min.css";
 @import "~react-image-gallery/styles/scss/image-gallery.scss";
-
+@import url('https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css');
 .App {
   font: 14px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
