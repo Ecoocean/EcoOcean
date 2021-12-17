@@ -40,7 +40,6 @@ export default function MyLocationMap({onLocationFound}) {
 
         map.addControl(search);
         map.addControl(L.control.zoom({ position: 'bottomright' }));
-        map.locate({setView: false, maxZoom: 18});
         const lc = L.control.locate({
             locateOptions: {
                 enableHighAccuracy: true}}).addTo(map);

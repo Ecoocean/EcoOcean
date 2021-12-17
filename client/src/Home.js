@@ -13,6 +13,10 @@ export default function Home() {
     const mapReady = (map) =>{
         setMap(map)
         map.addControl(L.control.zoom({ position: 'bottomright' }));
+        L.control.locate({
+            position: 'bottomright',
+            locateOptions: {
+                enableHighAccuracy: true}}).addTo(map);
     }
 
     return (

@@ -14,12 +14,14 @@ const MapSmall = props => {
             id="mapId"
              center={[31.8117257, 33.5818155]}
              zoom={8}
-             maxZoom={18}
+             maxZoom={19}
             whenCreated={props.setMap}>
              <ErrorBoundary>
                  <DrawTools/>
              </ErrorBoundary>
             <TileLayer
+                maxNativeZoom={19}
+                maxZoom={22}
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
              {props.children}
          </MapContainer>
