@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import * as formik from "formik";
 import * as yup from "yup";
-import { Button, Modal, Form, Spinner } from "react-bootstrap";
 import PollutionTypePicker from "./PollutionTypePicker";
 import { useMutation } from "@apollo/client";
 import { CREATE_POLLUTION_REPORT } from "../../GraphQL/Mutations";
@@ -9,9 +8,13 @@ import {setSnackBar} from "../../SnackBarUtils"
 import ImageUploaderComp from "../../ImageUploaderComp";
 import MyLocationMap from "../../MyLocationMap.js";
 import * as firebase from "firebase/app";
+import LoadingButton from '@mui/lab/LoadingButton';
+import SaveIcon from '@mui/icons-material/Save';
 
 import 'firebase/auth';
 import {sideBarOpenTabVar} from "../../cache";
+
+
 const PollutionForm = ({ openTab }) => {
   const { Formik } = formik;
 
@@ -94,30 +97,24 @@ const PollutionForm = ({ openTab }) => {
                   isValid,
                   errors,
                 }) => (
-                  <Form onSubmit={handleSubmit}>
-                    <Modal.Body>
+                  <div>
                       <MyLocationMap onLocationFound={onLocationFound}/>
                       <PollutionTypePicker ref={pollutionTypePickerRef}/>
                       <ImageUploaderComp ref={imageUploaderRef}/>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button type="submit" variant="primary" disabled={loading || !locationFound}>
-                        {loading && (
-                            <Spinner
-                                as="span"
-                                animation="border"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                            />
-                        )}
-                        {loading ? "" : "Sumbit"}
-                      </Button>
-                    </Modal.Footer>
-                  </Form>
+                      <LoadingButton
+                          onClick={AddPollutionReport}
+                          loading={loading}
+                          disabled={loading || !locationFound}
+                          loadingPosition="start"
+                          startIcon={<SaveIcon />}
+                          variant="outlined"
+                      >
+                        Save
+                      </LoadingButton>
+
+                  </div>
               )}
             </Formik>
-        }
       </div>
   );
 };

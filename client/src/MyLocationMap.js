@@ -3,8 +3,7 @@ import L from 'leaflet';
 import MapSmall from "./MapSmall";
 import 'leaflet.locatecontrol';
 import 'leaflet-search';
-import '@geoman-io/leaflet-geoman-free';
-import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
+import 'leaflet-measure';
 import {useReactiveVar} from "@apollo/client";
 import {sideBarOpenTabVar} from "./cache";
 
@@ -30,11 +29,14 @@ export default function MyLocationMap({onLocationFound}) {
             onLocationFound(e.latlng.lng, e.latlng.lat);
         });
 
-        // add Leaflet-Geoman controls with some options to the map
-        map.pm.addControls({
+        const measureControl = new L.Control.Measure({
             position: 'bottomleft',
-            drawCircle: false,
+            primaryLengthUnit: 'meters',
+            primaryAreaUnit: 'sqmeters',
+            activeColor: "#0074d9",
+            completedColor:  "#9c27b0"
         });
+        measureControl.addTo(map);
 
         const searchLayer = new L.Control.Search({
             position: 'topleft',

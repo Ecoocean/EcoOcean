@@ -8,7 +8,7 @@ import { Navigate  } from 'react-router-dom'
 import { useMutation } from '@apollo/client';
 import 'firebase/auth';
 import './SignInPage.css'
-import { Button } from "react-bootstrap";
+import Button from '@mui/material/Button';
 import {SIGN_IN_CLIENT} from "../GraphQL/Mutations";
 
 // Configure Firebase.
@@ -94,7 +94,7 @@ function SignInScreen() {
       isSignedIn && !userAuthenticated? 
       <div> 
         <h4 style={{color: "white"}}>User is not authorized</h4>
-        <Button style={{color: "white"}} onClick={() => {
+        <Button variant="contained"> onClick={() => {
           setUserAuthenticated(false);
           setIsSignedIn(null);
           setCheckingAuth(false);
