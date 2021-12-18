@@ -1,7 +1,6 @@
 import React, {useMemo} from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
-import DrawTools from "./DrawTools";
-import ErrorBoundary from "./ErrorBoundary"
+
 
 const MapSmall = props => {
 
@@ -16,9 +15,6 @@ const MapSmall = props => {
              zoom={8}
              maxZoom={19}
             whenCreated={props.setMap}>
-             <ErrorBoundary>
-                 <DrawTools/>
-             </ErrorBoundary>
             <TileLayer
                 maxNativeZoom={19}
                 maxZoom={22}

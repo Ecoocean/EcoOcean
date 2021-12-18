@@ -1,62 +1,61 @@
 import React, { useState } from 'react';
 import L from 'leaflet';
-import { Marker } from "react-leaflet";
-import blueFilledMarker from './icons/marker-blue-optimized.svg';
-// when the docs use an import:
-import * as GeoSearch from 'leaflet-geosearch';
-import 'leaflet-geosearch/dist/geosearch.css';
 import MapSmall from "./MapSmall";
-import 'leaflet/dist/leaflet.css';
 import 'leaflet.locatecontrol';
+import 'leaflet-search';
+import '@geoman-io/leaflet-geoman-free';
+import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import {useReactiveVar} from "@apollo/client";
 import {sideBarOpenTabVar} from "./cache";
 
-const blueMarker = L.icon({
-    iconUrl: blueFilledMarker,
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-});
 
-
-const provider = new GeoSearch.OpenStreetMapProvider()
-const search = new GeoSearch.GeoSearchControl({
-    provider: provider,
-    style: 'bar',
-    marker: {
-        // optional: L.Marker    - default L.Icon.Default
-        icon: blueMarker
-      },
-  });
 
 export default function MyLocationMap({onLocationFound}) {
     const [mapInstance, setMapInstance] = useState(null);
-    const [usingSearch, setUsingSearch] = useState(false);
-    const [location, setLocation] = useState(null);
     const [lc, setLc] = useState(null);
     const openTab = useReactiveVar(sideBarOpenTabVar);
 
 
     const mapReady = (map) =>{
 
-        map.addControl(search);
+        //map.addControl(search);
         map.addControl(L.control.zoom({ position: 'bottomright' }));
         const lc = L.control.locate({
+            position: 'topright',
             locateOptions: {
                 enableHighAccuracy: true}}).addTo(map);
         setLc(lc);
 
         map.on('locationfound', function (e) {
             onLocationFound(e.latlng.lng, e.latlng.lat);
-            setUsingSearch(false);
         });
-        map.on('geosearch/showlocation', function (e) {
+
+        // add Leaflet-Geoman controls with some options to the map
+        map.pm.addControls({
+            position: 'bottomleft',
+            drawCircle: false,
+        });
+
+        const searchLayer = new L.Control.Search({
+            position: 'topleft',
+            zoom: 15,
+            url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}',
+            jsonpParam: 'json_callback',
+            propertyName: 'display_name',
+            propertyLoc: ['lat','lon'],
+            marker: L.circleMarker([0,0],{radius:30}),
+            autoCollapse: true,
+            autoType: false,
+            minLength: 1
+        });
+
+        searchLayer.on('search:locationfound', function (e) {
             map.stopLocate();
             lc.stopFollowing();
-            onLocationFound(e.location.x, e.location.y);
-            setLocation(e.location);
-            setUsingSearch(true);
-            map.panTo({lat: e.location.y, lng: e.location.x}, 10);
+            onLocationFound(e.latlng.lng, e.latlng.lat);
+            map.panTo({lat: e.latlng.lat, lng: e.latlng.lng}, 10);
         });
+        map.addControl(searchLayer);
 
         setMapInstance(map);
     }
@@ -67,11 +66,6 @@ export default function MyLocationMap({onLocationFound}) {
     }
 
     return (
-        <MapSmall setMap={mapReady} >
-            {usingSearch && <Marker
-            position={[location.y, location.x]} icon={blueMarker}>
-
-        </Marker>}
-        </MapSmall>
+        <MapSmall setMap={mapReady} />
     )
 }
