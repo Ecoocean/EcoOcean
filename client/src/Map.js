@@ -15,11 +15,7 @@ const Map = props => {
             zoom={7}
             maxZoom={19}
             whenCreated={props.setMap}>
-   
-            <TileLayer
-                maxNativeZoom={19}
-                maxZoom={22}
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+
              {props.children}
              <Layers/>
          </MapContainer>

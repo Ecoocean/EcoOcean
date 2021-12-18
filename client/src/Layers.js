@@ -40,14 +40,54 @@ const Layers = () => {
                     onEachFeature: onEachFeature
                 });
             })
-            
-            const gvulGroup = L.layerGroup(gvulots)
+            const googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+                maxZoom: 20,
+                subdomains:['mt0','mt1','mt2','mt3']
+            });
+
+            const googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+                maxZoom: 20,
+                subdomains:['mt0','mt1','mt2','mt3']
+            });
+
+            const googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+                maxZoom: 20,
+                subdomains:['mt0','mt1','mt2','mt3']
+            });
+
+            const googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
+                maxZoom: 20,
+                subdomains:['mt0','mt1','mt2','mt3']
+            });
+
+            const basicLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxNativeZoom: 19,
+                maxZoom: 22
+            });
+            const estriSat = L.tileLayer(
+                'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    maxZoom: 20,
+                });
+
+
+            const baseMaps = {
+                "Base": basicLayer,
+                "Streets": googleStreets,
+                "Hybrid": googleHybrid,
+                "Terrain": googleTerrain,
+                "Satellite": googleSat,
+                "Another Satellite": estriSat,
+            };
+            const gvulGroup = L.layerGroup(gvulots);
+
             const  overlayMaps = {
                 "Municipal": gvulGroup
             };
-            L.control.layers(null, overlayMaps, {position: 'topright'}).addTo(map);
-            //make the layer active. 
+            L.control.layers(baseMaps, overlayMaps, {position: 'topright'}).addTo(map);
+            //make the layer active.
+            basicLayer.addTo(map);
             gvulGroup.addTo(map);
+
            
         }
     }, [data, map])
