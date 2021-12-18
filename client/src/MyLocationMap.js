@@ -6,6 +6,7 @@ import 'leaflet-search';
 import 'leaflet-measure';
 import {useReactiveVar} from "@apollo/client";
 import {sideBarOpenTabVar} from "./cache";
+import './MyLocationMap.scss';
 
 
 
