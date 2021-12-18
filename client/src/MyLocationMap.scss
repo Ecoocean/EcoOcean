@@ -2,46 +2,21 @@
 
 
 @media (max-width: $screen-very-small ) {
-    .leaflet-control-measure-interaction {
-        font-size: 0.7em;
-    }
-    .leaflet-popup-content {
-        font-size: 0.7em;
-    }
+
 }
 
 @media (min-width: $screen-very-small ) and (max-width: $screen-small ) {
-    .leaflet-control-measure-interaction {
-        font-size: 0.7em;
-    }
-    .leaflet-popup-content {
-        font-size: 0.7em;
-    }
+
 }
 
 @media (min-width: $screen-small ) and (max-width: $screen-medium ) {
-    .leaflet-control-measure-interaction {
-        font-size: 0.8em;
-    }
-    .leaflet-popup-content {
-        font-size: 0.8em;
-    }
+
 }
 
 @media (min-width: $screen-medium ) and (max-width: $screen-large ) {
-    .leaflet-control-measure-interaction {
-        font-size: 0.9em;
-    }
-    .leaflet-popup-content {
-        font-size: 0.9em;
-    }
+
 }
 
 @media (min-width: $screen-large) {
-    .leaflet-control-measure-interaction {
-        font-size: 1em;
-    }
-    .leaflet-popup-content {
-        font-size: 1em;
-    }
+
 }

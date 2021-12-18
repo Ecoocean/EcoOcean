@@ -5,6 +5,7 @@ import Sidebar from './Sidebar'
 import L from 'leaflet';
 import ShowReports from "./ShowReports";
 import { Helmet } from 'react-helmet';
+import 'leaflet-easyprint';
 
 export default function Home() {
 
@@ -17,6 +18,12 @@ export default function Home() {
             position: 'bottomright',
             locateOptions: {
                 enableHighAccuracy: true}}).addTo(map);
+
+        L.easyPrint({
+            title: 'Print Map',
+            position: 'bottomright',
+            sizeModes: ['A4Portrait', 'A4Landscape']
+        }).addTo(map);
     }
 
     return (
