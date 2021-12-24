@@ -1,0 +1,8 @@
+INSERT INTO public.users VALUES ('mvEwQHA8y8fA7bLW2zUAM213xZj2', 'Dor Birendorf', 'dorbiren@gmail.com', true, 'https://lh3.googleusercontent.com/a-/AOh14GhjAAO3go97dH_unxdhmiMc9sJCux2t3yULJViJLcU=s96-c', true, true, true, true);
+INSERT INTO public.users VALUES ('QAZQfvg4M9SF0c0xgvQ8s1iAqng1', 'test', 'test@walla.com', false, NULL, true, NULL, NULL, NULL);
+INSERT INTO public.users VALUES ('oRum6Gno2uMlmhC0H1av2Gw9Izg1', 'dor biren walla', 'dorbiren@walla.com', false, NULL, true, true, true, true);
+INSERT INTO public.users VALUES ('DQ9nIQmTCcT9rHBgpOjhVncWdln1', 'היליי וייס', 'hilaywa@gmail.com', true, 'https://lh3.googleusercontent.com/a/AATXAJyCJ1v-2CikVCxwUl4lOL_QnmwZvztM3z1a6lBu=s96-c', true, true, true, true);
+INSERT INTO public.users VALUES ('MZNapM3G3wXgzj1Xr2Zc7ij66Yr1', 'Tomer Levy', 'tomer19611@gmail.com', true, 'https://lh3.googleusercontent.com/a-/AOh14Givd-hSJfSVgv_g2IV7A71F0o4Z0XYAHpWiWIfSMQ=s96-c', true, true, true, true);
+INSERT INTO public.users VALUES ('zuvF2i49Z9hqbgRI8KcjMRkQZT53', 'Tomer Levy', 'tomer1@post.bgu.ac.il', true, 'https://lh3.googleusercontent.com/a/AATXAJwl4C3VN0ZLvtb7aW2WNENILwlWnmNSQY_Sv-Lo=s96-c', true, NULL, NULL, NULL);
+INSERT INTO public.users VALUES ('NsKlWS5MURN5cYSaGx2TtR7yjis1', 'hliay vais', 'vaish@post.bgu.ac.il', false, NULL, true, true, false, NULL);
+INSERT INTO public.users VALUES ('ZyeJtL2qSOVjL8VBcshx2JHf17v2', 'דור אוחיון', 'dor856@gmail.com', true, 'https://lh3.googleusercontent.com/a-/AOh14Gju6130Ky299PcaPMU2lOeaW90Lxmq7YaT9qWKzR9M=s96-c', true, true, true, true);

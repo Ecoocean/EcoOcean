@@ -2,8 +2,11 @@
   "name": "functions",
   "scripts": {
     "start": "env-cmd -f .env.production node src/index.js",
+    "startLocalContainer": "docker run --name postgis -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgis/postgis",
     "gcp-build": "tsc -p .",
+    "migrate": "node-pg-migrate",
     "start:dev": "env-cmd -f .env.development ts-node-dev --respawn src/index.ts",
+    "migrateUp": "env-cmd -f .env.development npm run migrate up",
     "test": "jest --passWithNoTests",
     "build": "tsc -p ."
   },
@@ -36,6 +39,7 @@
     "node-fetch": "^3.0.0",
     "node-geocoder": "^3.27.0",
     "node-open-geocoder": "^4.0.1",
+    "node-pg-migrate": "^6.2.0",
     "pg": "^8.7.1",
     "postgraphile": "^4.12.5",
     "postgraphile-apollo-server": "^0.1.1",
