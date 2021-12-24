@@ -49,7 +49,7 @@
   "scripts": {
     "start": "env-cmd -f .env.development react-app-rewired start",
     "build": "env-cmd -f .env.production react-app-rewired build",
-    "test": "jest --passWithNoTests",
+    "test": "",
     "eject": "react-scripts eject"
   },
   "browserslist": [
