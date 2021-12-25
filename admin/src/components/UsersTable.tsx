@@ -124,10 +124,10 @@ export default function UsersTable() {
         filter: false,
         sort: false,
         customBodyRender: (permissions, tableMeta, updateValue) => {
-          const { uid, admin, isOnboard, reporter, charts } = permissions;
+          const { uid, admin, isOnboarded, reporter, charts } = permissions;
 
           const Permissions = () => {
-            const [showPermissions, setShowPermissions] = useState(isOnboard);
+            const [showPermissions, setShowPermissions] = useState(isOnboarded);
             const lastOnboardUserUID = useReactiveVar(lastOnboardUserUIDVar);
 
             useEffect(() => {
@@ -167,7 +167,7 @@ export default function UsersTable() {
       data={data.allUsers.map((user) => {
         const {
           uid,
-          isOnboard, isAdmin, isReporter, hasChartAccess,
+          isOnboarded, isAdmin, isReporter, hasChartAccess,
           displayName, email, emailVerified, photoUrl ,
           metadata: { lastSignInTime },
         } = user;
@@ -176,7 +176,7 @@ export default function UsersTable() {
           name: {
             uid: uid,
             emailVerified: emailVerified,
-            isOnboard: isOnboard,
+            isOnboarded: isOnboarded,
             displayName: displayName,
             email: email,
             photoURL: photoUrl,
@@ -185,7 +185,7 @@ export default function UsersTable() {
           status: { emailVerified: emailVerified },
           permissions: {
             uid,
-            isOnboard: isOnboard,
+            isOnboarded: isOnboarded,
             admin: isAdmin,
             reporter: isReporter,
             charts: hasChartAccess,
