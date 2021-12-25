@@ -1,8 +1,7 @@
-name: Migration Upgrade DB
+name: Backup DB
 on:
-  push:
-    branches:
-      - master
+  schedule:
+    - cron: '00 3 * * 5'
 
 env:
   node-version: 14
@@ -32,9 +31,6 @@ jobs:
         run: |
           wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
           chmod +x cloud_sql_proxy
-      - name: Run migration
-        env:
-          DATABASE_URL: postgres://postgres:bengurion@localhost:5432/postgres
+      - name: Backup staging database
         run: |
-          ./cloud_sql_proxy -instances=ecoocean:europe-west1:ecoocean-db1=tcp:5432 & sleep 10 &&
-          npm run migrateUp
+            gcloud sql backups create --instance=${{env.gcp-cloud-sql-instance}}

@@ -272,6 +272,35 @@ type Query implements Node {
     condition: GvulotCondition
   ): GvulotsConnection
 
+  """Reads and enables pagination through a set of `Pgmigration`."""
+  pgmigrations(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Pgmigration`."""
+    orderBy: [PgmigrationsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PgmigrationCondition
+  ): PgmigrationsConnection
+
   """Reads and enables pagination through a set of `PollutionReport`."""
   pollutionReports(
     """Only read the first `n` values of the set."""
@@ -300,6 +329,35 @@ type Query implements Node {
     """
     condition: PollutionReportCondition
   ): PollutionReportsConnection
+
+  """Reads and enables pagination through a set of `PubSen`."""
+  pubSens(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PubSen`."""
+    orderBy: [PubSensOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PubSenCondition
+  ): PubSensConnection
 
   """Reads and enables pagination through a set of `User`."""
   users(
@@ -330,9 +388,10 @@ type Query implements Node {
     condition: UserCondition
   ): UsersConnection
   gvulot(id: Int!): Gvulot
-  pollutionReport(id: BigInt!): PollutionReport
+  pgmigration(id: Int!): Pgmigration
+  pollutionReport(id: Int!): PollutionReport
+  pubSen(id: Int!): PubSen
   user(uid: String!): User
-  currentUserId: String
 
   """Reads and enables pagination through a set of `PollutionReport`."""
   getLocationPollutionReports(
@@ -366,6 +425,14 @@ type Query implements Node {
     nodeId: ID!
   ): Gvulot
 
+  """Reads a single `Pgmigration` using its globally unique `ID`."""
+  pgmigrationByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `Pgmigration`.
+    """
+    nodeId: ID!
+  ): Pgmigration
+
   """Reads a single `PollutionReport` using its globally unique `ID`."""
   pollutionReportByNodeId(
     """
@@ -373,6 +440,12 @@ type Query implements Node {
     """
     nodeId: ID!
   ): PollutionReport
+
+  """Reads a single `PubSen` using its globally unique `ID`."""
+  pubSenByNodeId(
+    """The globally unique `ID` to be used in selecting a single `PubSen`."""
+    nodeId: ID!
+  ): PubSen
 
   """Reads a single `User` using its globally unique `ID`."""
   userByNodeId(
@@ -416,36 +489,9 @@ type Gvulot implements Node {
   nodeId: ID!
   id: Int!
   geom: GeometryMultiPolygon
-  fid: BigFloat
   muniHeb: String
   muniEng: String
-  sugMuni: String
-  crPnim: String
-  crLamas: String
-  machoz: String
-  precision: String
-  signDate: String
-  tikun1: String
-  tikun2: String
-  tikun3: String
-  tikun4: String
-  tikun5: String
-  tikun6: String
-  tikun7: String
-  hearot: String
-  eshkolMpn: String
-  tikun8: String
-  tikun9: String
-  firstNafa: String
-  lastNafa2: String
-  shapeLeng: BigFloat
-  shapeArea: BigFloat
 }
-
-"""
-A floating point number that requires more precision than IEEE 754 binary 64
-"""
-scalar BigFloat
 
 """A `Gvulot` edge in the connection."""
 type GvulotsEdge {
@@ -481,54 +527,10 @@ enum GvulotsOrderBy {
   ID_DESC
   GEOM_ASC
   GEOM_DESC
-  FID_ASC
-  FID_DESC
   MUNI_HEB_ASC
   MUNI_HEB_DESC
   MUNI_ENG_ASC
   MUNI_ENG_DESC
-  SUG_MUNI_ASC
-  SUG_MUNI_DESC
-  CR_PNIM_ASC
-  CR_PNIM_DESC
-  CR_LAMAS_ASC
-  CR_LAMAS_DESC
-  MACHOZ_ASC
-  MACHOZ_DESC
-  PRECISION_ASC
-  PRECISION_DESC
-  SIGN_DATE_ASC
-  SIGN_DATE_DESC
-  TIKUN1_ASC
-  TIKUN1_DESC
-  TIKUN2_ASC
-  TIKUN2_DESC
-  TIKUN3_ASC
-  TIKUN3_DESC
-  TIKUN4_ASC
-  TIKUN4_DESC
-  TIKUN5_ASC
-  TIKUN5_DESC
-  TIKUN6_ASC
-  TIKUN6_DESC
-  TIKUN7_ASC
-  TIKUN7_DESC
-  HEAROT_ASC
-  HEAROT_DESC
-  ESHKOL_MPN_ASC
-  ESHKOL_MPN_DESC
-  TIKUN8_ASC
-  TIKUN8_DESC
-  TIKUN9_ASC
-  TIKUN9_DESC
-  FIRST_NAFA_ASC
-  FIRST_NAFA_DESC
-  LAST_NAFA2_ASC
-  LAST_NAFA2_DESC
-  SHAPE_LENG_ASC
-  SHAPE_LENG_DESC
-  SHAPE_AREA_ASC
-  SHAPE_AREA_DESC
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
 }
@@ -543,77 +545,81 @@ input GvulotCondition {
   """Checks for equality with the object’s `geom` field."""
   geom: GeoJSON
 
-  """Checks for equality with the object’s `fid` field."""
-  fid: BigFloat
-
   """Checks for equality with the object’s `muniHeb` field."""
   muniHeb: String
 
   """Checks for equality with the object’s `muniEng` field."""
   muniEng: String
+}
 
-  """Checks for equality with the object’s `sugMuni` field."""
-  sugMuni: String
+"""A connection to a list of `Pgmigration` values."""
+type PgmigrationsConnection {
+  """A list of `Pgmigration` objects."""
+  nodes: [Pgmigration!]!
 
-  """Checks for equality with the object’s `crPnim` field."""
-  crPnim: String
+  """
+  A list of edges which contains the `Pgmigration` and cursor to aid in pagination.
+  """
+  edges: [PgmigrationsEdge!]!
 
-  """Checks for equality with the object’s `crLamas` field."""
-  crLamas: String
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
 
-  """Checks for equality with the object’s `machoz` field."""
-  machoz: String
+  """The count of *all* `Pgmigration` you could get from the connection."""
+  totalCount: Int!
+}
 
-  """Checks for equality with the object’s `precision` field."""
-  precision: String
+type Pgmigration implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  name: String!
+  runOn: Datetime!
+}
 
-  """Checks for equality with the object’s `signDate` field."""
-  signDate: String
+"""
+A point in time as described by the [ISO
+8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
+"""
+scalar Datetime
 
-  """Checks for equality with the object’s `tikun1` field."""
-  tikun1: String
+"""A `Pgmigration` edge in the connection."""
+type PgmigrationsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
 
-  """Checks for equality with the object’s `tikun2` field."""
-  tikun2: String
+  """The `Pgmigration` at the end of the edge."""
+  node: Pgmigration!
+}
 
-  """Checks for equality with the object’s `tikun3` field."""
-  tikun3: String
+"""Methods to use when ordering `Pgmigration`."""
+enum PgmigrationsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  NAME_ASC
+  NAME_DESC
+  RUN_ON_ASC
+  RUN_ON_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
 
-  """Checks for equality with the object’s `tikun4` field."""
-  tikun4: String
+"""
+A condition to be used against `Pgmigration` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input PgmigrationCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
 
-  """Checks for equality with the object’s `tikun5` field."""
-  tikun5: String
+  """Checks for equality with the object’s `name` field."""
+  name: String
 
-  """Checks for equality with the object’s `tikun6` field."""
-  tikun6: String
-
-  """Checks for equality with the object’s `tikun7` field."""
-  tikun7: String
-
-  """Checks for equality with the object’s `hearot` field."""
-  hearot: String
-
-  """Checks for equality with the object’s `eshkolMpn` field."""
-  eshkolMpn: String
-
-  """Checks for equality with the object’s `tikun8` field."""
-  tikun8: String
-
-  """Checks for equality with the object’s `tikun9` field."""
-  tikun9: String
-
-  """Checks for equality with the object’s `firstNafa` field."""
-  firstNafa: String
-
-  """Checks for equality with the object’s `lastNafa2` field."""
-  lastNafa2: String
-
-  """Checks for equality with the object’s `shapeLeng` field."""
-  shapeLeng: BigFloat
-
-  """Checks for equality with the object’s `shapeArea` field."""
-  shapeArea: BigFloat
+  """Checks for equality with the object’s `runOn` field."""
+  runOn: Datetime
 }
 
 """A connection to a list of `PollutionReport` values."""
@@ -640,29 +646,16 @@ type PollutionReport implements Node {
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
   """
   nodeId: ID!
+  id: Int!
   geom: GeometryPoint
-  id: BigInt!
   reporter: String
-  isRelevant: Boolean
-  address: String
-  createdAt: Datetime
-  photoUrls: [String]
   reporterImageUrl: String
   type: String
+  isRelevant: Boolean
+  address: String
+  photoUrls: [String]
+  createdAt: Datetime!
 }
-
-"""
-A signed eight-byte integer. The upper big integer values are greater than the
-max value for a JavaScript number. Therefore all big integers will be output as
-strings and not numbers.
-"""
-scalar BigInt
-
-"""
-A point in time as described by the [ISO
-8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
-"""
-scalar Datetime
 
 """A `PollutionReport` edge in the connection."""
 type PollutionReportsEdge {
@@ -676,24 +669,24 @@ type PollutionReportsEdge {
 """Methods to use when ordering `PollutionReport`."""
 enum PollutionReportsOrderBy {
   NATURAL
-  GEOM_ASC
-  GEOM_DESC
   ID_ASC
   ID_DESC
+  GEOM_ASC
+  GEOM_DESC
   REPORTER_ASC
   REPORTER_DESC
-  IS_RELEVANT_ASC
-  IS_RELEVANT_DESC
-  ADDRESS_ASC
-  ADDRESS_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PHOTO_URLS_ASC
-  PHOTO_URLS_DESC
   REPORTER_IMAGE_URL_ASC
   REPORTER_IMAGE_URL_DESC
   TYPE_ASC
   TYPE_DESC
+  IS_RELEVANT_ASC
+  IS_RELEVANT_DESC
+  ADDRESS_ASC
+  ADDRESS_DESC
+  PHOTO_URLS_ASC
+  PHOTO_URLS_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
 }
@@ -703,14 +696,20 @@ A condition to be used against `PollutionReport` object types. All fields are
 tested for equality and combined with a logical ‘and.’
 """
 input PollutionReportCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
   """Checks for equality with the object’s `geom` field."""
   geom: GeoJSON
 
-  """Checks for equality with the object’s `id` field."""
-  id: BigInt
-
   """Checks for equality with the object’s `reporter` field."""
   reporter: String
+
+  """Checks for equality with the object’s `reporterImageUrl` field."""
+  reporterImageUrl: String
+
+  """Checks for equality with the object’s `type` field."""
+  type: String
 
   """Checks for equality with the object’s `isRelevant` field."""
   isRelevant: Boolean
@@ -718,17 +717,68 @@ input PollutionReportCondition {
   """Checks for equality with the object’s `address` field."""
   address: String
 
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-
   """Checks for equality with the object’s `photoUrls` field."""
   photoUrls: [String]
 
-  """Checks for equality with the object’s `reporterImageUrl` field."""
-  reporterImageUrl: String
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
 
-  """Checks for equality with the object’s `type` field."""
-  type: String
+"""A connection to a list of `PubSen` values."""
+type PubSensConnection {
+  """A list of `PubSen` objects."""
+  nodes: [PubSen!]!
+
+  """
+  A list of edges which contains the `PubSen` and cursor to aid in pagination.
+  """
+  edges: [PubSensEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `PubSen` you could get from the connection."""
+  totalCount: Int!
+}
+
+type PubSen implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  geom: GeometryMultiPolygon
+}
+
+"""A `PubSen` edge in the connection."""
+type PubSensEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `PubSen` at the end of the edge."""
+  node: PubSen!
+}
+
+"""Methods to use when ordering `PubSen`."""
+enum PubSensOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  GEOM_ASC
+  GEOM_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `PubSen` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input PubSenCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `geom` field."""
+  geom: GeoJSON
 }
 
 """A connection to a list of `User` values."""
@@ -758,7 +808,7 @@ type User implements Node {
   email: String
   emailVerified: Boolean
   photoUrl: String
-  isOnboard: Boolean
+  isOnboarded: Boolean
   isAdmin: Boolean
   isReporter: Boolean
   hasChartAccess: Boolean
@@ -796,8 +846,8 @@ enum UsersOrderBy {
   EMAIL_VERIFIED_DESC
   PHOTO_URL_ASC
   PHOTO_URL_DESC
-  IS_ONBOARD_ASC
-  IS_ONBOARD_DESC
+  IS_ONBOARDED_ASC
+  IS_ONBOARDED_DESC
   IS_ADMIN_ASC
   IS_ADMIN_DESC
   IS_REPORTER_ASC
@@ -827,8 +877,8 @@ input UserCondition {
   """Checks for equality with the object’s `photoUrl` field."""
   photoUrl: String
 
-  """Checks for equality with the object’s `isOnboard` field."""
-  isOnboard: Boolean
+  """Checks for equality with the object’s `isOnboarded` field."""
+  isOnboarded: Boolean
 
   """Checks for equality with the object’s `isAdmin` field."""
   isAdmin: Boolean
@@ -852,6 +902,14 @@ type Mutation {
     input: CreateGvulotInput!
   ): CreateGvulotPayload
 
+  """Creates a single `Pgmigration`."""
+  createPgmigration(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePgmigrationInput!
+  ): CreatePgmigrationPayload
+
   """Creates a single `PollutionReport`."""
   createPollutionReport(
     """
@@ -859,6 +917,14 @@ type Mutation {
     """
     input: CreatePollutionReportInput!
   ): CreatePollutionReportPayload
+
+  """Creates a single `PubSen`."""
+  createPubSen(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePubSenInput!
+  ): CreatePubSenPayload
 
   """Creates a single `User`."""
   createUser(
@@ -885,6 +951,24 @@ type Mutation {
   ): UpdateGvulotPayload
 
   """
+  Updates a single `Pgmigration` using its globally unique id and a patch.
+  """
+  updatePgmigrationByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePgmigrationByNodeIdInput!
+  ): UpdatePgmigrationPayload
+
+  """Updates a single `Pgmigration` using a unique key and a patch."""
+  updatePgmigration(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePgmigrationInput!
+  ): UpdatePgmigrationPayload
+
+  """
   Updates a single `PollutionReport` using its globally unique id and a patch.
   """
   updatePollutionReportByNodeId(
@@ -901,6 +985,22 @@ type Mutation {
     """
     input: UpdatePollutionReportInput!
   ): UpdatePollutionReportPayload
+
+  """Updates a single `PubSen` using its globally unique id and a patch."""
+  updatePubSenByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePubSenByNodeIdInput!
+  ): UpdatePubSenPayload
+
+  """Updates a single `PubSen` using a unique key and a patch."""
+  updatePubSen(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePubSenInput!
+  ): UpdatePubSenPayload
 
   """Updates a single `User` using its globally unique id and a patch."""
   updateUserByNodeId(
@@ -934,6 +1034,22 @@ type Mutation {
     input: DeleteGvulotInput!
   ): DeleteGvulotPayload
 
+  """Deletes a single `Pgmigration` using its globally unique id."""
+  deletePgmigrationByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePgmigrationByNodeIdInput!
+  ): DeletePgmigrationPayload
+
+  """Deletes a single `Pgmigration` using a unique key."""
+  deletePgmigration(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePgmigrationInput!
+  ): DeletePgmigrationPayload
+
   """Deletes a single `PollutionReport` using its globally unique id."""
   deletePollutionReportByNodeId(
     """
@@ -949,6 +1065,22 @@ type Mutation {
     """
     input: DeletePollutionReportInput!
   ): DeletePollutionReportPayload
+
+  """Deletes a single `PubSen` using its globally unique id."""
+  deletePubSenByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePubSenByNodeIdInput!
+  ): DeletePubSenPayload
+
+  """Deletes a single `PubSen` using a unique key."""
+  deletePubSen(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePubSenInput!
+  ): DeletePubSenPayload
 
   """Deletes a single `User` using its globally unique id."""
   deleteUserByNodeId(
@@ -1026,30 +1158,50 @@ input CreateGvulotInput {
 input GvulotInput {
   id: Int
   geom: GeoJSON
-  fid: BigFloat
   muniHeb: String
   muniEng: String
-  sugMuni: String
-  crPnim: String
-  crLamas: String
-  machoz: String
-  precision: String
-  signDate: String
-  tikun1: String
-  tikun2: String
-  tikun3: String
-  tikun4: String
-  tikun5: String
-  tikun6: String
-  tikun7: String
-  hearot: String
-  eshkolMpn: String
-  tikun8: String
-  tikun9: String
-  firstNafa: String
-  lastNafa2: String
-  shapeLeng: BigFloat
-  shapeArea: BigFloat
+}
+
+"""The output of our create `Pgmigration` mutation."""
+type CreatePgmigrationPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Pgmigration` that was created by this mutation."""
+  pgmigration: Pgmigration
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Pgmigration`. May be used by Relay 1."""
+  pgmigrationEdge(
+    """The method to use when ordering `Pgmigration`."""
+    orderBy: [PgmigrationsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PgmigrationsEdge
+}
+
+"""All input for the create `Pgmigration` mutation."""
+input CreatePgmigrationInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Pgmigration` to be created by this mutation."""
+  pgmigration: PgmigrationInput!
+}
+
+"""An input for mutations affecting `Pgmigration`"""
+input PgmigrationInput {
+  id: Int
+  name: String!
+  runOn: Datetime!
 }
 
 """The output of our create `PollutionReport` mutation."""
@@ -1089,15 +1241,56 @@ input CreatePollutionReportInput {
 
 """An input for mutations affecting `PollutionReport`"""
 input PollutionReportInput {
+  id: Int
   geom: GeoJSON
-  id: BigInt
   reporter: String
-  isRelevant: Boolean
-  address: String
-  createdAt: Datetime
-  photoUrls: [String]
   reporterImageUrl: String
   type: String
+  isRelevant: Boolean
+  address: String
+  photoUrls: [String]
+  createdAt: Datetime
+}
+
+"""The output of our create `PubSen` mutation."""
+type CreatePubSenPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PubSen` that was created by this mutation."""
+  pubSen: PubSen
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `PubSen`. May be used by Relay 1."""
+  pubSenEdge(
+    """The method to use when ordering `PubSen`."""
+    orderBy: [PubSensOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PubSensEdge
+}
+
+"""All input for the create `PubSen` mutation."""
+input CreatePubSenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PubSen` to be created by this mutation."""
+  pubSen: PubSenInput!
+}
+
+"""An input for mutations affecting `PubSen`"""
+input PubSenInput {
+  id: Int
+  geom: GeoJSON
 }
 
 """The output of our create `User` mutation."""
@@ -1142,7 +1335,7 @@ input UserInput {
   email: String
   emailVerified: Boolean
   photoUrl: String
-  isOnboard: Boolean
+  isOnboarded: Boolean
   isAdmin: Boolean
   isReporter: Boolean
   hasChartAccess: Boolean
@@ -1196,30 +1389,8 @@ Represents an update to a `Gvulot`. Fields that are set will be updated.
 input GvulotPatch {
   id: Int
   geom: GeoJSON
-  fid: BigFloat
   muniHeb: String
   muniEng: String
-  sugMuni: String
-  crPnim: String
-  crLamas: String
-  machoz: String
-  precision: String
-  signDate: String
-  tikun1: String
-  tikun2: String
-  tikun3: String
-  tikun4: String
-  tikun5: String
-  tikun6: String
-  tikun7: String
-  hearot: String
-  eshkolMpn: String
-  tikun8: String
-  tikun9: String
-  firstNafa: String
-  lastNafa2: String
-  shapeLeng: BigFloat
-  shapeArea: BigFloat
 }
 
 """All input for the `updateGvulot` mutation."""
@@ -1234,6 +1405,72 @@ input UpdateGvulotInput {
   An object where the defined keys will be set on the `Gvulot` being updated.
   """
   patch: GvulotPatch!
+  id: Int!
+}
+
+"""The output of our update `Pgmigration` mutation."""
+type UpdatePgmigrationPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Pgmigration` that was updated by this mutation."""
+  pgmigration: Pgmigration
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Pgmigration`. May be used by Relay 1."""
+  pgmigrationEdge(
+    """The method to use when ordering `Pgmigration`."""
+    orderBy: [PgmigrationsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PgmigrationsEdge
+}
+
+"""All input for the `updatePgmigrationByNodeId` mutation."""
+input UpdatePgmigrationByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Pgmigration` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `Pgmigration` being updated.
+  """
+  patch: PgmigrationPatch!
+}
+
+"""
+Represents an update to a `Pgmigration`. Fields that are set will be updated.
+"""
+input PgmigrationPatch {
+  id: Int
+  name: String
+  runOn: Datetime
+}
+
+"""All input for the `updatePgmigration` mutation."""
+input UpdatePgmigrationInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Pgmigration` being updated.
+  """
+  patch: PgmigrationPatch!
   id: Int!
 }
 
@@ -1283,15 +1520,15 @@ input UpdatePollutionReportByNodeIdInput {
 Represents an update to a `PollutionReport`. Fields that are set will be updated.
 """
 input PollutionReportPatch {
+  id: Int
   geom: GeoJSON
-  id: BigInt
   reporter: String
-  isRelevant: Boolean
-  address: String
-  createdAt: Datetime
-  photoUrls: [String]
   reporterImageUrl: String
   type: String
+  isRelevant: Boolean
+  address: String
+  photoUrls: [String]
+  createdAt: Datetime
 }
 
 """All input for the `updatePollutionReport` mutation."""
@@ -1306,7 +1543,72 @@ input UpdatePollutionReportInput {
   An object where the defined keys will be set on the `PollutionReport` being updated.
   """
   patch: PollutionReportPatch!
-  id: BigInt!
+  id: Int!
+}
+
+"""The output of our update `PubSen` mutation."""
+type UpdatePubSenPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PubSen` that was updated by this mutation."""
+  pubSen: PubSen
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `PubSen`. May be used by Relay 1."""
+  pubSenEdge(
+    """The method to use when ordering `PubSen`."""
+    orderBy: [PubSensOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PubSensEdge
+}
+
+"""All input for the `updatePubSenByNodeId` mutation."""
+input UpdatePubSenByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `PubSen` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `PubSen` being updated.
+  """
+  patch: PubSenPatch!
+}
+
+"""
+Represents an update to a `PubSen`. Fields that are set will be updated.
+"""
+input PubSenPatch {
+  id: Int
+  geom: GeoJSON
+}
+
+"""All input for the `updatePubSen` mutation."""
+input UpdatePubSenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `PubSen` being updated.
+  """
+  patch: PubSenPatch!
+  id: Int!
 }
 
 """The output of our update `User` mutation."""
@@ -1358,7 +1660,7 @@ input UserPatch {
   email: String
   emailVerified: Boolean
   photoUrl: String
-  isOnboard: Boolean
+  isOnboarded: Boolean
   isAdmin: Boolean
   isReporter: Boolean
   hasChartAccess: Boolean
@@ -1427,6 +1729,54 @@ input DeleteGvulotInput {
   id: Int!
 }
 
+"""The output of our delete `Pgmigration` mutation."""
+type DeletePgmigrationPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Pgmigration` that was deleted by this mutation."""
+  pgmigration: Pgmigration
+  deletedPgmigrationNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Pgmigration`. May be used by Relay 1."""
+  pgmigrationEdge(
+    """The method to use when ordering `Pgmigration`."""
+    orderBy: [PgmigrationsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PgmigrationsEdge
+}
+
+"""All input for the `deletePgmigrationByNodeId` mutation."""
+input DeletePgmigrationByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Pgmigration` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deletePgmigration` mutation."""
+input DeletePgmigrationInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
 """The output of our delete `PollutionReport` mutation."""
 type DeletePollutionReportPayload {
   """
@@ -1472,7 +1822,55 @@ input DeletePollutionReportInput {
   payload verbatim. May be used to track mutations by the client.
   """
   clientMutationId: String
-  id: BigInt!
+  id: Int!
+}
+
+"""The output of our delete `PubSen` mutation."""
+type DeletePubSenPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PubSen` that was deleted by this mutation."""
+  pubSen: PubSen
+  deletedPubSenNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `PubSen`. May be used by Relay 1."""
+  pubSenEdge(
+    """The method to use when ordering `PubSen`."""
+    orderBy: [PubSensOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PubSensEdge
+}
+
+"""All input for the `deletePubSenByNodeId` mutation."""
+input DeletePubSenByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `PubSen` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deletePubSen` mutation."""
+input DeletePubSenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
 }
 
 """The output of our delete `User` mutation."""

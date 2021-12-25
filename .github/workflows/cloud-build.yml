@@ -2,7 +2,7 @@ name: Build and Deploy to Cloud Run
 
 on:
   workflow_run:
-    workflows: ["Backup and Migrate DB"]
+    workflows: ["Migration Upgrade DB"]
     branches: [master]
     types:
       - completed
