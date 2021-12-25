@@ -1,7 +1,7 @@
 on:
   workflow_run:
-    workflows: ["Migrate DB"]
-    branches: [main]
+    workflows: ["Backup and Migrate DB"]
+    branches: [master]
     types:
       - completed
 
