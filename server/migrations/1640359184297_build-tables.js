@@ -88,6 +88,8 @@ exports.up = pgm => {
 
     pgm.sql("GRANT USAGE, SELECT ON SEQUENCE pollution_reports_id_seq TO ecoocean_user;");
 
+    pgm.sql("GRANT anonymous TO postgres;");
+
     pgm.sql(fs.readFileSync('./sql_files/pollution_report_added.sql').toString());
 
     pgm.sql(fs.readFileSync('./sql_files/pollution_report_irrelevant.sql').toString());
