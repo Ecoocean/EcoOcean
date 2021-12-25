@@ -34,5 +34,5 @@ jobs:
           chmod +x cloud_sql_proxy
       - name: Run migration
         run: |
-          ./cloud_sql_proxy -instances=ecoocean-db=tcp:5432 &
+          ./cloud_sql_proxy -instances=ecoocean:europe-west1:ecoocean-db=tcp:5432 &
           npm run migrateUp
