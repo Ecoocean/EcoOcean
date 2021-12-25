@@ -1,3 +1,5 @@
+name: Build and Deploy to Cloud Run
+
 on:
   workflow_run:
     workflows: ["Backup and Migrate DB"]
@@ -5,7 +7,6 @@ on:
     types:
       - completed
 
-name: Build and Deploy to Cloud Run
 env:
   PROJECT_ID: ecoocean
   SERVICE: ecoocean-server
