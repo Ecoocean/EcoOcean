@@ -4,7 +4,7 @@
     "start": "env-cmd -f .env.production node src/index.js",
     "startLocalContainer": "docker run --name postgis -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgis/postgis",
     "gcp-build": "tsc -p .",
-    "migrate": "env-cmd -f .env.production node-pg-migrate --verbose false",
+    "migrate": "node-pg-migrate --verbose false",
     "migrateLocal": "env-cmd -f .env.development node-pg-migrate",
     "start:dev": "env-cmd -f .env.development ts-node-dev --respawn src/index.ts",
     "migrateUpLocal": "npm run migrateLocal up",
