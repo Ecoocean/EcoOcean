@@ -23,7 +23,7 @@ export const GET_ALL_USERS = gql`
     emailVerified
     isAdmin
     hasChartAccess
-    isOnboard
+    isOnboarded
     isReporter
     photoUrl
     uid

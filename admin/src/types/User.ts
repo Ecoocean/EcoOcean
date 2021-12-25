@@ -1,5 +1,5 @@
 export interface UserPermissions {
-  isOnboard: boolean;
+  isOnboarded: boolean;
   isAdmin: boolean;
   isReporter: boolean;
   hasChartAccess: boolean;

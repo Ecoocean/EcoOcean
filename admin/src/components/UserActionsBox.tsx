@@ -26,7 +26,7 @@ export default function UserActionsBox({ user }) {
     createUser,
     { loading: loadingUser, error: errorUser, data: dataUser },
   ] = useMutation(CREATE_USER);
-  const [userOnboard, setUserOnboard] = useState(user.isOnboard);
+  const [userOnboard, setUserOnboard] = useState(user.isOnboarded);
   const onOnboardUserClick = async () => {
     const { data } = await createUser({
       variables: {
@@ -37,7 +37,7 @@ export default function UserActionsBox({ user }) {
             email: user.email,
             emailVerified: user.emailVerified,
             photoUrl: user.photoURL,
-            isOnboard: true,
+            isOnboarded: true,
           }
         },
       },

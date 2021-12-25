@@ -83,7 +83,7 @@ export const PostgresPlugin = makeExtendSchemaPlugin(build => {
                     emailVerified
                     hasChartAccess
                     isAdmin
-                    isOnboard
+                    isOnboarded
                     isReporter
                     nodeId
                     photoUrl
@@ -116,7 +116,7 @@ export const PostgresPlugin = makeExtendSchemaPlugin(build => {
                   displayName: firebaseUser.displayName,
                   email: firebaseUser.email,
                   photoUrl: firebaseUser.photoURL,
-                  isOnboard: false,
+                  isOnboarded: false,
                 }),
               };
             });
