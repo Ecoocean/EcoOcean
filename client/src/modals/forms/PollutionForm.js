@@ -10,6 +10,7 @@ import MyLocationMap from "../../MyLocationMap.js";
 import * as firebase from "firebase/app";
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
+import { mainMapVar } from "../../cache";
 
 import 'firebase/auth';
 import {sideBarOpenTabVar} from "../../cache";
@@ -55,17 +56,19 @@ const PollutionForm = ({ openTab }) => {
         });
         if(!errors) {
           sideBarOpenTabVar('pollution-reports');
-          setSnackBar('Pollution report sucssefully submitted', 'success');
+          setSnackBar('Pollution report successfully submitted', 'success');
+
+          mainMapVar().setView({lat: location.lat, lng: location.lng}, 17);
           const anchor = document.querySelector(
               '#back-to-top-anchor',
           );
-
           if (anchor) {
             anchor.scrollIntoView({
               behavior: 'smooth',
               block: 'center',
             });
           }
+
         }
       }
     } catch (err) {

@@ -6,13 +6,15 @@ import L from 'leaflet';
 import ShowReports from "./ShowReports";
 import { Helmet } from 'react-helmet';
 import 'leaflet-easyprint';
+import { useReactiveVar } from "@apollo/client";
+import { mainMapVar } from "./cache";
 
 export default function Home() {
 
-    const [map, setMap] = useState(null);
+    const map = useReactiveVar(mainMapVar);
 
     const mapReady = (map) =>{
-        setMap(map)
+        mainMapVar(map);
         map.addControl(L.control.zoom({ position: 'bottomright' }));
         L.control.locate({
             position: 'bottomright',

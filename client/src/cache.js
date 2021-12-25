@@ -1,5 +1,7 @@
 import { InMemoryCache, makeVar } from "@apollo/client";
 
+// all the reports
+export const mainMapVar = makeVar(null);
 
 // all the reports
 export const allPollutionReportsVar = makeVar([]);
