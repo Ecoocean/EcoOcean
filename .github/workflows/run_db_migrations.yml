@@ -34,7 +34,7 @@ jobs:
           chmod +x cloud_sql_proxy
       - name: Run migration
         env:
-          DATABASE_URL: postgres://postgres:bengurion@10.11.224.7:5432/postgres
+          DATABASE_URL: postgres://postgres:bengurion@localhost:5432/postgres
         run: |
           ./cloud_sql_proxy -instances=ecoocean:europe-west1:ecoocean-db1=tcp:5432 & sleep 10 &&
           npm run migrateUp
