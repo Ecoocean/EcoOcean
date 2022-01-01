@@ -1,11 +1,12 @@
-export const admin = require("firebase-admin");
-const serviceAccount = require("./keys/ecoOcean_firebase_key.json");
+export const admin = require('firebase-admin');
+//import admin from 'firebase-admin';
+const serviceAccount = require('./keys/ecoOcean_firebase_key.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL:
-    "https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app",
-  storageBucket: "gs://ecoocean.appspot.com",
+    'https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app',
+  storageBucket: 'gs://ecoocean.appspot.com',
 });
 
 export const auth = admin.auth();

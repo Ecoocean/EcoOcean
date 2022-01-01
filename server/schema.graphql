@@ -455,6 +455,7 @@ type Query implements Node {
   getAllPollutionReports: [PollutionReport]!
   allUsers: [User]!
   getUserByUID(uid: String!): User
+  exportCsv: String
 }
 
 """An object with a globally unique `ID`."""

@@ -1,4 +1,4 @@
-const { gql } = require("graphile-utils");
+const { gql } = require('graphile-utils');
 
 // The GraphQL schema
 const typeDefs = gql`
@@ -8,7 +8,7 @@ const typeDefs = gql`
     url: String!
     filename: String!
   }
-  
+
   type UserMetadata {
     creationTime: Date
     lastRefreshTime: Date
@@ -23,9 +23,13 @@ const typeDefs = gql`
     getAllPollutionReports: [PollutionReport]!
     allUsers: [User]!
     getUserByUID(uid: String!): User
+    exportCsv: String
   }
   extend type Mutation {
-    createPollutionReportExtend(files: [Upload], input: CreatePollutionReportInput!): CreatePollutionReportPayload
+    createPollutionReportExtend(
+      files: [Upload]
+      input: CreatePollutionReportInput!
+    ): CreatePollutionReportPayload
   }
 `;
 
