@@ -5,14 +5,14 @@ import 'leaflet.locatecontrol';
 import 'leaflet-search';
 import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
-import {useReactiveVar} from "@apollo/client";
-import {sideBarOpenTabVar} from "./cache";
+import { useReactiveVar } from "@apollo/client";
+import { locationMapVar, sideBarOpenTabVar } from "./cache";
 import './MyLocationMap.scss';
 
 
 
 export default function MyLocationMap({onLocationFound}) {
-    const [mapInstance, setMapInstance] = useState(null);
+    const mapInstance = useReactiveVar(locationMapVar);
     const [lc, setLc] = useState(null);
     const openTab = useReactiveVar(sideBarOpenTabVar);
 
@@ -34,17 +34,12 @@ export default function MyLocationMap({onLocationFound}) {
         // add Leaflet-Geoman controls with some options to the map
         map.pm.addControls({
             position: 'bottomleft',
-        });
+            drawPolyline: false,
+            drawMarker: false,
+            drawCircle: false,
+            cutPolygon: false,
+            drawCircleMarker: false,
 
-        // listen to when a new layer is created
-        map.on('pm:create', function(e) {
-            console.log(e);
-            e.layer.showMeasurements();
-
-            // listen to changes on the new layer
-            e.layer.on('pm:edit', function(x) {
-                console.log('edit', x)
-            });
         });
 
         const searchLayer = new L.Control.Search({
@@ -68,7 +63,7 @@ export default function MyLocationMap({onLocationFound}) {
         });
         map.addControl(searchLayer);
 
-        setMapInstance(map);
+        locationMapVar(map);
     }
     if (openTab === 'add-report' && mapInstance){
         mapInstance._onResize();

@@ -330,6 +330,35 @@ type Query implements Node {
     condition: PollutionReportCondition
   ): PollutionReportsConnection
 
+  """Reads and enables pagination through a set of `PolygonReport`."""
+  polygonReports(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PolygonReport`."""
+    orderBy: [PolygonReportsOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PolygonReportCondition
+  ): PolygonReportsConnection
+
   """Reads and enables pagination through a set of `PubSen`."""
   pubSens(
     """Only read the first `n` values of the set."""
@@ -655,6 +684,92 @@ type PollutionReport implements Node {
   address: String
   photoUrls: [String]
   createdAt: Datetime!
+
+  """Reads and enables pagination through a set of `PolygonReport`."""
+  polygonReports(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PolygonReport`."""
+    orderBy: [PolygonReportsOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PolygonReportCondition
+  ): PolygonReportsConnection!
+}
+
+"""A connection to a list of `PolygonReport` values."""
+type PolygonReportsConnection {
+  """A list of `PolygonReport` objects."""
+  nodes: [PolygonReport!]!
+
+  """
+  A list of edges which contains the `PolygonReport` and cursor to aid in pagination.
+  """
+  edges: [PolygonReportsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `PolygonReport` you could get from the connection."""
+  totalCount: Int!
+}
+
+type PolygonReport {
+  geom: GeometryPolygon!
+  pollutionReportId: Int!
+
+  """
+  Reads a single `PollutionReport` that is related to this `PolygonReport`.
+  """
+  pollutionReport: PollutionReport
+}
+
+"""A `PolygonReport` edge in the connection."""
+type PolygonReportsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `PolygonReport` at the end of the edge."""
+  node: PolygonReport!
+}
+
+"""Methods to use when ordering `PolygonReport`."""
+enum PolygonReportsOrderBy {
+  NATURAL
+  GEOM_ASC
+  GEOM_DESC
+  POLLUTION_REPORT_ID_ASC
+  POLLUTION_REPORT_ID_DESC
+}
+
+"""
+A condition to be used against `PolygonReport` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input PolygonReportCondition {
+  """Checks for equality with the object’s `geom` field."""
+  geom: GeoJSON
+
+  """Checks for equality with the object’s `pollutionReportId` field."""
+  pollutionReportId: Int
 }
 
 """A `PollutionReport` edge in the connection."""
@@ -918,6 +1033,14 @@ type Mutation {
     input: CreatePollutionReportInput!
   ): CreatePollutionReportPayload
 
+  """Creates a single `PolygonReport`."""
+  createPolygonReport(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePolygonReportInput!
+  ): CreatePolygonReportPayload
+
   """Creates a single `PubSen`."""
   createPubSen(
     """
@@ -1110,6 +1233,7 @@ type Mutation {
     input: SigninClientInput!
   ): SigninClientPayload
   createPollutionReportExtend(
+    geometries: [GeoJSON]
     files: [Upload]
 
     """
@@ -1250,6 +1374,52 @@ input PollutionReportInput {
   address: String
   photoUrls: [String]
   createdAt: Datetime
+}
+
+"""The output of our create `PolygonReport` mutation."""
+type CreatePolygonReportPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PolygonReport` that was created by this mutation."""
+  polygonReport: PolygonReport
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `PollutionReport` that is related to this `PolygonReport`.
+  """
+  pollutionReport: PollutionReport
+
+  """An edge for our `PolygonReport`. May be used by Relay 1."""
+  polygonReportEdge(
+    """The method to use when ordering `PolygonReport`."""
+    orderBy: [PolygonReportsOrderBy!] = [NATURAL]
+  ): PolygonReportsEdge
+}
+
+"""All input for the create `PolygonReport` mutation."""
+input CreatePolygonReportInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PolygonReport` to be created by this mutation."""
+  polygonReport: PolygonReportInput!
+}
+
+"""An input for mutations affecting `PolygonReport`"""
+input PolygonReportInput {
+  geom: GeoJSON!
+  pollutionReportId: Int!
 }
 
 """The output of our create `PubSen` mutation."""

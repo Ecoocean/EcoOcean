@@ -13,6 +13,21 @@ export const GET_GVULOTS_GEOJSON = gql`
     }
   }
 `;
+export const GET_REPORTS_POLY_GEOJSON = gql`
+  query allPolyReports {
+    pollutionReports {
+      nodes {
+        polygonReports {
+          nodes {
+            geom {
+              geojson
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 
 export const GET_LOCATION_REPORTS = gql`
   query getLocationPollutionReports($xmax: Float!, $xmin: Float!, $ymax: Float!, $ymin: Float!) {
@@ -36,12 +51,4 @@ export const GET_LOCATION_REPORTS = gql`
   }
 `;
 
-export const GET_USER_BY_UID = gql`
-  query user($uid: String!) {
-    user(uid: $uid) {
-      uid
-      isAdmin
-    }
-  }
-`;
 

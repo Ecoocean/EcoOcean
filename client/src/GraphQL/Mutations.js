@@ -2,10 +2,12 @@ import { gql } from "@apollo/client";
 
 export const CREATE_POLLUTION_REPORT = gql`
   mutation createPollutionReport(
+    $geometries: [GeoJSON]
     $files: [Upload]
     $input: CreatePollutionReportInput!
   ) {
     createPollutionReportExtend(
+      geometries: $geometries
       files: $files
       input: $input
     ) {

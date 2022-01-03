@@ -22,6 +22,10 @@ export const PostgresPlugin = makeExtendSchemaPlugin(build => {
 
       Mutation: {
         createPollutionReportExtend: async (parent, args, context, info) => {
+          // The pgClient on context is already in a transaction configured for the user:
+          const { pgClient } = context;
+          // Create a savepoint we can roll back to
+          await pgClient.query("SAVEPOINT mutation_wrapper");
           const urls = await Promise.all(
               args.files.map(async (file) => {
                 const {createReadStream, filename} = await file;
@@ -36,7 +40,7 @@ export const PostgresPlugin = makeExtendSchemaPlugin(build => {
           if (res) {
             args.input.pollutionReport.address = res[0].formattedAddress;
           }
-          const document = /* GraphQL */ `
+          const createReportDocument = /* GraphQL */ `
             mutation createPollutionReport(
               $input: CreatePollutionReportInput!
             ) {
@@ -49,21 +53,53 @@ export const PostgresPlugin = makeExtendSchemaPlugin(build => {
               }
             }
           `;
-          const operationName = "createPollutionReport";
+          const createPolyDocument = /* GraphQL */ `
+            mutation createPolygonReport($input: CreatePolygonReportInput!) {
+              createPolygonReport(
+                input: $input
+              ) {
+                clientMutationId
+              }
+            }
+          `;
+
           args.input.pollutionReport.photoUrls = urls;
           const variables = {input: args.input};
           // The name of the operation in your query document (optional)
           const {data, errors} = await graphql(
               info.schema,
-              document,
+              createReportDocument,
               null,
               context,
               variables,
-              operationName
+              "createPollutionReport"
           );
           if (errors){
+            await pgClient.query("ROLLBACK TO SAVEPOINT mutation_wrapper");
             return errors[0];
           }
+          await Promise.all( args.geometries?.map(async (geometry) => {
+            const {data: dataPoly, errors: errorsPoly} = await graphql(
+                info.schema,
+                createPolyDocument,
+                null,
+                context,
+                {
+                  input: {
+                    polygonReport: {
+                      geom: geometry,
+                      pollutionReportId: data.createPollutionReport.pollutionReport.id
+                    }
+                  }
+                },
+                "createPolygonReport"
+            );
+            if (errorsPoly){
+              await pgClient.query("ROLLBACK TO SAVEPOINT mutation_wrapper");
+              return errorsPoly[0];
+            }
+          }));
+          await pgClient.query("RELEASE SAVEPOINT mutation_wrapper");
           return data;
           }
         },
