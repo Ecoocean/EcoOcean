@@ -14,6 +14,7 @@ import './MyLocationMap.scss';
 export default function MyLocationMap({onLocationFound}) {
     const mapInstance = useReactiveVar(locationMapVar);
     const [lc, setLc] = useState(null);
+    const [loaded, setLoaded] = useState(false);
     const openTab = useReactiveVar(sideBarOpenTabVar);
 
 
@@ -65,10 +66,11 @@ export default function MyLocationMap({onLocationFound}) {
 
         locationMapVar(map);
     }
-    if (openTab === 'add-report' && mapInstance){
+    if (openTab === 'add-report' && mapInstance && !loaded){
         mapInstance._onResize();
         // request location update and set location
         lc.start();
+        setLoaded(true);
     }
 
     return (

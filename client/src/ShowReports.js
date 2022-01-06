@@ -56,7 +56,7 @@ function ShowReports() {
     useEffect( () => {
         if(selectedMapReport){
             sideBarCollapsedVar(false);
-            map.flyTo({lat: selectedMapReport.geom.y,
+            map.setView({lat: selectedMapReport.geom.y,
                 lng:selectedMapReport.geom.x},18);
             filteredPollutionReportsVar([selectedMapReport]);
         }

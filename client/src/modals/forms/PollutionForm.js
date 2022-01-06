@@ -43,7 +43,10 @@ const PollutionForm = ({ openTab }) => {
   useEffect(() =>{
     if(map) {
       map.on('pm:create', (e) => {
-
+        const northEast = e.layer._bounds._northEast;
+        const southWest = e.layer._bounds._southWest;
+        map.setView({lat: (southWest.lat + northEast.lat) / 2 ,
+          lng: (southWest.lng + northEast.lng) / 2}, map.getZoom());
         e.layer.on('pm:edit', (e) =>{
           const featureGroup = L.featureGroup().addLayer(e.layer);
           const data = featureGroup.toGeoJSON();
@@ -52,6 +55,13 @@ const PollutionForm = ({ openTab }) => {
         const featureGroup = L.featureGroup().addLayer(e.layer);
         const data = featureGroup.toGeoJSON();
         updateItemInMap(e.layer._leaflet_id, data.features[0].geometry);
+        e.layer.bindPopup('<h1>'+ "choose pollution type" + '</h1>', {
+          keepInView: true,
+          closeOnClick: false,
+          autoClose: false,
+          closeButton: false
+        }
+        ).openPopup();
       });
 
       map.on('pm:remove', (e) => {
