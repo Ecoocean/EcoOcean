@@ -67,10 +67,12 @@ export default function MyLocationMap({onLocationFound}) {
         locationMapVar(map);
     }
     if (openTab === 'add-report' && mapInstance && !loaded){
-        mapInstance._onResize();
-        // request location update and set location
-        lc.start();
         setLoaded(true);
+        setTimeout(() => {
+            mapInstance._onResize();
+            // request location update and set location
+            lc.start();
+        }, 500);
     }
 
     return (

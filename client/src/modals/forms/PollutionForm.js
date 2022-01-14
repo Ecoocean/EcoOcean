@@ -78,8 +78,7 @@ const PollutionForm = ({ openTab }) => {
               updateItemInMap(e.layer._leaflet_id, {geometry: data.features[0].geometry});
               setSelectedPolygon(e.layer);
               setOpenTypePickerWindow(true);
-        }, 800
-        );
+        }, 800);
       });
 
       map.on('pm:remove', (e) => {
