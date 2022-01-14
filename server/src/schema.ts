@@ -14,6 +14,11 @@ const typeDefs = gql`
     lastRefreshTime: Date
     lastSignInTime: Date
   }
+  
+  input PolygonInput {
+    geometry: GeoJSON!
+    type: String!
+  }
 
   extend type User {
     metadata: UserMetadata
@@ -25,7 +30,7 @@ const typeDefs = gql`
     getUserByUID(uid: String!): User
   }
   extend type Mutation {
-    createPollutionReportExtend(geometries: [GeoJSON], files: [Upload], input: CreatePollutionReportInput!): CreatePollutionReportPayload
+    createPollutionReportExtend(polygons: [PolygonInput], files: [Upload], input: CreatePollutionReportInput!): CreatePollutionReportPayload
   }
 `;
 

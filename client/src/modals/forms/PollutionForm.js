@@ -12,20 +12,38 @@ import * as firebase from "firebase/app";
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
 import {locationMapVar, mainMapVar} from "../../cache";
-
 import 'firebase/auth';
 import {sideBarOpenTabVar} from "../../cache";
-
+import PollutionReportPickerModal  from "../PollutionReportPickerModal";
 
 const PollutionForm = ({ openTab }) => {
   const { Formik } = formik;
   const map = useReactiveVar(locationMapVar);
   const formRef = useRef(null);
-  const pollutionTypePickerRef = useRef(null);
   const imageUploaderRef = useRef(null);
   const [locationFound, setLocationFound] = useState(false);
+  const [openTypePickerWindow, setOpenTypePickerWindow] = useState(false);
+  const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [location, setLocation] = useState();
   const [polygonReports, setPolygonReports] = useState(new Map());
+
+  const randomColor  = (i) => {
+    return i % 3 === 0 ? "#EE4B2B" : i % 3 === 1 ? "#ff8c00" : "#0BDA51"
+  }
+
+  const handlePollutionReportPickerClose = (value) => {
+    const myStyle = {
+      "color": randomColor(selectedPolygon._leaflet_id),
+      "weight": 5,
+      "opacity": 0.65
+    };
+    selectedPolygon.bindPopup(value).openPopup();
+    selectedPolygon.setStyle(myStyle);
+    const polygon = polygonReports.get(selectedPolygon._leaflet_id);
+    polygon.type = value;
+    updateItemInMap(selectedPolygon._leaflet_id, polygon);
+    setOpenTypePickerWindow(false);
+  };
 
   const updateItemInMap = (key, value) => {
     setPolygonReports(map => new Map(map.set(key, value)));
@@ -50,18 +68,18 @@ const PollutionForm = ({ openTab }) => {
         e.layer.on('pm:edit', (e) =>{
           const featureGroup = L.featureGroup().addLayer(e.layer);
           const data = featureGroup.toGeoJSON();
-          updateItemInMap(e.layer._leaflet_id, data.features[0].geometry);
+          const polygon = polygonReports.get(e.layer._leaflet_id);
+          polygon.geometry = data.features[0].geometry
+          updateItemInMap(e.layer._leaflet_id, polygon);
         });
-        const featureGroup = L.featureGroup().addLayer(e.layer);
-        const data = featureGroup.toGeoJSON();
-        updateItemInMap(e.layer._leaflet_id, data.features[0].geometry);
-        e.layer.bindPopup('<h1>'+ "choose pollution type" + '</h1>', {
-          keepInView: true,
-          closeOnClick: false,
-          autoClose: false,
-          closeButton: false
-        }
-        ).openPopup();
+        setTimeout(() => {
+              const featureGroup = L.featureGroup().addLayer(e.layer);
+              const data = featureGroup.toGeoJSON();
+              updateItemInMap(e.layer._leaflet_id, {geometry: data.features[0].geometry});
+              setSelectedPolygon(e.layer);
+              setOpenTypePickerWindow(true);
+        }, 800
+        );
       });
 
       map.on('pm:remove', (e) => {
@@ -73,18 +91,13 @@ const PollutionForm = ({ openTab }) => {
   const AddPollutionReport = async () => {
     try {
       if (
-        pollutionTypePickerRef.current &&
         imageUploaderRef.current
       ) {
         // external validation - we validate here because we can't use formik validation
         // pollution type picker is special component
-        if(!pollutionTypePickerRef.current.state.image.value){
-          setSnackBar('Pollution type must be selected', 'error');
-          return
-        }
         const { data, errors } = await CreatePollutionReport({
           variables: {
-            geometries: [...polygonReports.values()],
+            polygons: [...polygonReports.values()],
             files: imageUploaderRef.current.state.pictures,
             input: {
               pollutionReport:{
@@ -92,7 +105,6 @@ const PollutionForm = ({ openTab }) => {
                 reporterImageUrl: firebase.auth().currentUser? firebase.auth().currentUser.photoURL: null,
                 isRelevant: true,
                 photoUrls: [],
-                type: pollutionTypePickerRef.current.state.image.value,
                 geom: { "type": "Point", "coordinates": [ location.lng, location.lat ] }
               }
             }
@@ -146,7 +158,6 @@ const PollutionForm = ({ openTab }) => {
                 }) => (
                   <div>
                       <MyLocationMap onLocationFound={onLocationFound}/>
-                      <PollutionTypePicker ref={pollutionTypePickerRef}/>
                       <ImageUploaderComp ref={imageUploaderRef}/>
                       <LoadingButton
                           onClick={AddPollutionReport}
@@ -162,6 +173,10 @@ const PollutionForm = ({ openTab }) => {
                   </div>
               )}
             </Formik>
+        <PollutionReportPickerModal
+            show={openTypePickerWindow}
+            handleClose={handlePollutionReportPickerClose}
+        />
       </div>
   );
 };

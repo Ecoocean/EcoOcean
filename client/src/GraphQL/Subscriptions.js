@@ -15,7 +15,6 @@ export const REPORT_ADDED_SUBSCRIPTION = gql`
           photoUrls
           reporter
           reporterImageUrl
-          type
           geom {
             x
             y

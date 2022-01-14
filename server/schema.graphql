@@ -679,7 +679,6 @@ type PollutionReport implements Node {
   geom: GeometryPoint
   reporter: String
   reporterImageUrl: String
-  type: String
   isRelevant: Boolean
   address: String
   photoUrls: [String]
@@ -735,6 +734,7 @@ type PolygonReportsConnection {
 type PolygonReport {
   geom: GeometryPolygon!
   pollutionReportId: Int!
+  type: String
 
   """
   Reads a single `PollutionReport` that is related to this `PolygonReport`.
@@ -758,6 +758,8 @@ enum PolygonReportsOrderBy {
   GEOM_DESC
   POLLUTION_REPORT_ID_ASC
   POLLUTION_REPORT_ID_DESC
+  TYPE_ASC
+  TYPE_DESC
 }
 
 """
@@ -770,6 +772,9 @@ input PolygonReportCondition {
 
   """Checks for equality with the object’s `pollutionReportId` field."""
   pollutionReportId: Int
+
+  """Checks for equality with the object’s `type` field."""
+  type: String
 }
 
 """A `PollutionReport` edge in the connection."""
@@ -792,8 +797,6 @@ enum PollutionReportsOrderBy {
   REPORTER_DESC
   REPORTER_IMAGE_URL_ASC
   REPORTER_IMAGE_URL_DESC
-  TYPE_ASC
-  TYPE_DESC
   IS_RELEVANT_ASC
   IS_RELEVANT_DESC
   ADDRESS_ASC
@@ -822,9 +825,6 @@ input PollutionReportCondition {
 
   """Checks for equality with the object’s `reporterImageUrl` field."""
   reporterImageUrl: String
-
-  """Checks for equality with the object’s `type` field."""
-  type: String
 
   """Checks for equality with the object’s `isRelevant` field."""
   isRelevant: Boolean
@@ -1233,7 +1233,7 @@ type Mutation {
     input: SigninClientInput!
   ): SigninClientPayload
   createPollutionReportExtend(
-    geometries: [GeoJSON]
+    polygons: [PolygonInput]
     files: [Upload]
 
     """
@@ -1369,7 +1369,6 @@ input PollutionReportInput {
   geom: GeoJSON
   reporter: String
   reporterImageUrl: String
-  type: String
   isRelevant: Boolean
   address: String
   photoUrls: [String]
@@ -1420,6 +1419,7 @@ input CreatePolygonReportInput {
 input PolygonReportInput {
   geom: GeoJSON!
   pollutionReportId: Int!
+  type: String
 }
 
 """The output of our create `PubSen` mutation."""
@@ -1694,7 +1694,6 @@ input PollutionReportPatch {
   geom: GeoJSON
   reporter: String
   reporterImageUrl: String
-  type: String
   isRelevant: Boolean
   address: String
   photoUrls: [String]
@@ -2145,6 +2144,11 @@ input SigninClientInput {
   """
   clientMutationId: String
   userId: String!
+}
+
+input PolygonInput {
+  geometry: GeoJSON!
+  type: String!
 }
 
 """The `Upload` scalar type represents a file upload."""
