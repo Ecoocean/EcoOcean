@@ -7,6 +7,8 @@ export const locationMapVar = makeVar(null);
 // all the reports
 export const allPollutionReportsVar = makeVar([]);
 
+export const reportPolyLayersVar = makeVar(new Map());
+
 //visible reports based on location in the map
 export const filteredPollutionReportsVar = makeVar([]);
 

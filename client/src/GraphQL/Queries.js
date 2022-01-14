@@ -45,6 +45,14 @@ export const GET_LOCATION_REPORTS = gql`
         photoUrls
         reporter
         reporterImageUrl
+        polygonReports {
+          nodes {
+            type
+            geom {
+              geojson
+            }
+          }
+        }
       }
     }
   }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Button from '@mui/material/Button';
 import Avatar from "@mui/material/Avatar";
 import ImageGallery from 'react-image-gallery';
@@ -16,6 +16,10 @@ import FormControl from '@mui/material/FormControl';
 import CustomChip from '../CustomChip';
 
 import './PollutionReportModal.scss';
+import {mainMapVar, reportPolyLayersVar} from "../cache";
+import L from "leaflet";
+import {useReactiveVar} from "@apollo/client";
+import {polygonColors} from "../PolygonColors";
 
 
 
@@ -93,8 +97,55 @@ BootstrapDialogTitle.propTypes = {
     children: PropTypes.node,
     onClose: PropTypes.func.isRequired,
 };
-
+const onEachFeature = (feature, layer) => {
+    //bind click
+    layer.on({
+        click: () => {console.log("report polygon clicked")}
+    });
+}
 export const PollutionReportModal = ({ report, show, handleClose }) => {
+    const [polygons, setPolygons] = useState(null);
+    const [showHide, setShowHide] = useState(false);
+    const map = useReactiveVar(mainMapVar);
+    useEffect(() =>{
+        setShowHide(false);
+        if(report) {
+            const cachePolygons = reportPolyLayersVar().get(report.id);
+            if (cachePolygons) {
+                setPolygons(cachePolygons);
+                const res = map.hasLayer(cachePolygons);
+                setShowHide(res);
+            }
+            else {
+                const polys = report.polygonReports.nodes.map((polyReport) => {
+                    const myStyle = {
+                        "color": polygonColors[polyReport.type],
+                        "weight": 5,
+                        "opacity": 0.65
+                    };
+                    return L.geoJSON(polyReport.geom.geojson, {
+                        style: myStyle,
+                        onEachFeature: onEachFeature
+                    });
+                });
+                const polyGroup = L.layerGroup(polys.flat());
+                setPolygons(polyGroup);
+            }
+
+        }
+    }, [show, report])
+
+    const showPolygonsOnMap = () => {
+        reportPolyLayersVar().set(report.id, polygons);
+        polygons.addTo(map);
+        setShowHide(map.hasLayer(polygons));
+    }
+    const hidePolygonsOnMap = () => {
+        map.removeLayer(polygons);
+        setShowHide(map.hasLayer(polygons));
+        reportPolyLayersVar().delete(report.id);
+    }
+
   return (
     report && (
         <BootstrapDialog
@@ -129,6 +180,18 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
                             : `lat: ${report.geom.y}, lng: ${report.geom.x}`} id="bootstrap-input2" />
                      </FormControl>
                 </Box>
+                {
+                    (polygons && showHide) ?
+                        <Button color="primary"
+                                variant="contained" onClick={hidePolygonsOnMap}>
+                            Hide Polygon Reports
+                        </Button> :
+                        <Button color="primary"
+                                variant="contained" onClick={showPolygonsOnMap}>
+                            Show Polygon Reports
+                        </Button>
+                }
+
                 {report.photoUrls?.length > 0 &&
                     <ImageGallery
                     showBullets= {report.photoUrls?.length > 1}

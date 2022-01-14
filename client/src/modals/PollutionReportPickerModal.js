@@ -21,7 +21,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const BootstrapDialogTitle = (props) => {
-    const { children, onClose, ...other } = props;
+    const { children, ...other } = props;
 
     return (
         <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
@@ -32,7 +32,6 @@ const BootstrapDialogTitle = (props) => {
 
 BootstrapDialogTitle.propTypes = {
     children: PropTypes.node,
-    onClose: PropTypes.func.isRequired,
 };
 
 const PollutionReportPickerModal = ({ show, handleClose }) => {

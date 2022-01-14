@@ -12,9 +12,6 @@ const Layers = () => {
     const { data: dataGvulot } = useQuery(GET_GVULOTS_GEOJSON, {
         fetchPolicy: "network-only",
     });
-    const { data: dataPoly } = useQuery(GET_REPORTS_POLY_GEOJSON, {
-        fetchPolicy: "network-only",
-    });
 
     const whenClicked = (e) => {
         // e = event
@@ -35,7 +32,7 @@ const Layers = () => {
     }, [map])
     
     useEffect(() => {
-        if(dataPoly && dataGvulot) {
+        if(dataGvulot) {
 
             const gvulots = dataGvulot.gvulots.nodes.map((gvul, i) => {
                 var myStyle = {
@@ -48,13 +45,6 @@ const Layers = () => {
                     onEachFeature: onEachFeature
                 });
             });
-            const polys = dataPoly.pollutionReports.nodes.map((pollutionReport) => {
-                return pollutionReport.polygonReports.nodes.map((polyReport) => {
-                    return L.geoJSON(polyReport.geom.geojson, {
-                        onEachFeature: onEachFeature
-                    });
-                })
-            })
 
             const googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
                 maxZoom: 20,
@@ -95,20 +85,17 @@ const Layers = () => {
                 "Another Satellite": estriSat,
             };
             const gvulGroup = L.layerGroup(gvulots);
-            const polyGroup =  L.layerGroup(polys.flat());
             const  overlayMaps = {
                 "Municipal": gvulGroup,
-                "Reports Polygons": polyGroup
             };
             L.control.layers(baseMaps, overlayMaps, {position: 'topright'}).addTo(map);
             //make the layer active.
             basicLayer.addTo(map);
             gvulGroup.addTo(map);
-            polyGroup.addTo(map);
 
            
         }
-    }, [dataGvulot, dataPoly, map])
+    }, [dataGvulot, map])
 
     return (
         <div>

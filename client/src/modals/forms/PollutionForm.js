@@ -15,6 +15,7 @@ import {locationMapVar, mainMapVar} from "../../cache";
 import 'firebase/auth';
 import {sideBarOpenTabVar} from "../../cache";
 import PollutionReportPickerModal  from "../PollutionReportPickerModal";
+import {polygonColors} from "../../PolygonColors";
 
 const PollutionForm = ({ openTab }) => {
   const { Formik } = formik;
@@ -27,13 +28,11 @@ const PollutionForm = ({ openTab }) => {
   const [location, setLocation] = useState();
   const [polygonReports, setPolygonReports] = useState(new Map());
 
-  const randomColor  = (i) => {
-    return i % 3 === 0 ? "#EE4B2B" : i % 3 === 1 ? "#ff8c00" : "#0BDA51"
-  }
+
 
   const handlePollutionReportPickerClose = (value) => {
     const myStyle = {
-      "color": randomColor(selectedPolygon._leaflet_id),
+      "color": polygonColors[value],
       "weight": 5,
       "opacity": 0.65
     };
