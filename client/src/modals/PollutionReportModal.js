@@ -97,12 +97,7 @@ BootstrapDialogTitle.propTypes = {
     children: PropTypes.node,
     onClose: PropTypes.func.isRequired,
 };
-const onEachFeature = (feature, layer) => {
-    //bind click
-    layer.on({
-        click: () => {console.log("report polygon clicked")}
-    });
-}
+
 export const PollutionReportModal = ({ report, show, handleClose }) => {
     const [polygons, setPolygons] = useState(null);
     const [showHide, setShowHide] = useState(false);
@@ -123,10 +118,11 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
                         "weight": 5,
                         "opacity": 0.65
                     };
-                    return L.geoJSON(polyReport.geom.geojson, {
-                        style: myStyle,
-                        onEachFeature: onEachFeature
+                    const layer = L.geoJSON(polyReport.geom.geojson, {
+                        style: myStyle
                     });
+                    layer.bindPopup(polyReport.type);
+                    return layer;
                 });
                 const polyGroup = L.layerGroup(polys.flat());
                 setPolygons(polyGroup);

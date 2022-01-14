@@ -81,7 +81,6 @@ const PollutionForm = ({ openTab }) => {
       });
 
       map.on('pm:remove', (e) => {
-        console.log("deleted!!");
         deleteItemInMap(e.layer._leaflet_id);
       });
     }
