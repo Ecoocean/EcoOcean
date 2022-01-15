@@ -1,61 +1,28 @@
 import React, {useState} from "react";
 import { TransitionGroup } from 'react-transition-group';
-import Collapse from '@mui/material/Collapse';
 import List from "@mui/material/List";
-import { useMutation, useReactiveVar } from "@apollo/client";
-import MapIcon from "@mui/icons-material/Map";
-import PollutionReportCard from "./PollutionReportCard.js";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useReactiveVar } from "@apollo/client";
 import {
   loadingPollutionReportsVar,
   selectedReportVar,
-  selectedMapReportVar,
 } from "./cache";
 import {
   Backdrop,
-  CircularProgress,
+  CircularProgress, Collapse,
   Grid,
-  IconButton,
-  ListItem,
-  ListItemButton,
-  Tooltip,
 } from "@mui/material";
 import { PollutionReportModal } from "./modals/PollutionReportModal";
-import { SET_REPORT_UNRELEVANT } from "./GraphQL/Mutations";
-import { setSnackBar } from "./SnackBarUtils";
 import {
   filteredPollutionReportsVar
 } from "./cache";
 import Typography from "@mui/material/Typography";
 import "./ReportList.scss";
+import ReportItemList from "./ReportItemList";
 
 export default function ReportList() {
-  const [openInfoWindow, setOpenInfoWindow] = useState(false);
+
   const loadingFilteredReports = useReactiveVar(loadingPollutionReportsVar);
-  const selectedReport = useReactiveVar(selectedReportVar);
   const filteredPollutionReports = useReactiveVar(filteredPollutionReportsVar);
-  const [
-    setReportUnrelevant,
-    { loading: loadingUnrelevant, error: errorUnreleant, data: dataUnrelevant },
-  ] = useMutation(SET_REPORT_UNRELEVANT);
-
-  const handleClose = () => {
-    setOpenInfoWindow(false);
-  };
-
-  const handleSetReportUnrelevant = async (reportId) => {
-    await setReportUnrelevant({
-      variables: {
-        input: {
-          id: reportId,
-          patch: {
-            isRelevant: false
-          }
-        }
-      },
-    });
-    setSnackBar("Pollution report successfully deleted", "success");
-  };
 
   return (
     <div style={{ position: "relative" }}>
@@ -94,55 +61,13 @@ export default function ReportList() {
         <TransitionGroup>
         {filteredPollutionReports && filteredPollutionReports.map((report) => {
             return (
-              <Collapse key={report.id}>
-                <ListItem divider component="div" disablePadding>
-                  <Grid container direction="column">
-                    <Grid
-                      item
-                      justifyContent="left"
-                      alignItems="left"
-                      sx={{ marginLeft: 2 }}
-                    >
-                      <Tooltip title="Show Report On Map" placement="top" arrow>
-                        <IconButton
-                          aria-label="delete"
-                          onClick={() => selectedMapReportVar(report)}
-                        >
-                          <MapIcon className="map-icon" />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Delete Report" placement="top" arrow>
-                        <IconButton
-                          aria-label="delete"
-                          onClick={() => handleSetReportUnrelevant(report.id)}
-                        >
-                          <DeleteForeverIcon className="delete-icon"/>
-                        </IconButton>
-                      </Tooltip>
-                    </Grid>
-                    <Grid item>
-                      <ListItemButton
-                        onClick={() => {
-                          selectedReportVar(report);
-                          setOpenInfoWindow(true);
-                        }}
-                      >
-                        <PollutionReportCard report={report} />
-                      </ListItemButton>
-                    </Grid>
-                  </Grid>
-                </ListItem>
-                </Collapse>
-            );
+                <Collapse key={report.id}>
+                  <ReportItemList report={report}/>
+                </Collapse>)
           })
         }
           </TransitionGroup>
         </List>
-      <PollutionReportModal
-        report={selectedReport}
-        show={openInfoWindow}
-        handleClose={handleClose}
-      />
     </div>
   );
 }

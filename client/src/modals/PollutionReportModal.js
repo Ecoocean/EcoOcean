@@ -21,8 +21,6 @@ import L from "leaflet";
 import {useReactiveVar} from "@apollo/client";
 import {polygonColors} from "../PolygonColors";
 
-
-
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
       marginTop: theme.spacing(3),
@@ -100,16 +98,12 @@ BootstrapDialogTitle.propTypes = {
 
 export const PollutionReportModal = ({ report, show, handleClose }) => {
     const [polygons, setPolygons] = useState(null);
-    const [showHide, setShowHide] = useState(false);
     const map = useReactiveVar(mainMapVar);
     useEffect(() =>{
-        setShowHide(false);
         if(report) {
             const cachePolygons = reportPolyLayersVar().get(report.id);
             if (cachePolygons) {
                 setPolygons(cachePolygons);
-                const res = map.hasLayer(cachePolygons);
-                setShowHide(res);
             }
             else {
                 const polys = report.polygonReports.nodes.map((polyReport) => {
@@ -131,16 +125,6 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
         }
     }, [show, report])
 
-    const showPolygonsOnMap = () => {
-        reportPolyLayersVar().set(report.id, polygons);
-        polygons.addTo(map);
-        setShowHide(map.hasLayer(polygons));
-    }
-    const hidePolygonsOnMap = () => {
-        map.removeLayer(polygons);
-        setShowHide(map.hasLayer(polygons));
-        reportPolyLayersVar().delete(report.id);
-    }
 
   return (
     report && (
@@ -176,17 +160,6 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
                             : `lat: ${report.geom.y}, lng: ${report.geom.x}`} id="bootstrap-input2" />
                      </FormControl>
                 </Box>
-                {
-                    (polygons && showHide) ?
-                        <Button color="primary"
-                                variant="contained" onClick={hidePolygonsOnMap}>
-                            Hide Polygon Reports
-                        </Button> :
-                        <Button color="primary"
-                                variant="contained" onClick={showPolygonsOnMap}>
-                            Show Polygon Reports
-                        </Button>
-                }
 
                 {report.photoUrls?.length > 0 &&
                     <ImageGallery
