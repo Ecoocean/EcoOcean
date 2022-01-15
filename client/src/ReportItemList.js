@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {Grid, IconButton, ListItem, ListItemButton, Tooltip} from "@mui/material";
 import {mainMapVar, reportPolyLayersVar, selectedMapReportVar, selectedReportVar} from "./cache";
-import MapIcon from "@mui/icons-material/Map";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PollutionReportCard from "./PollutionReportCard";
 import {setSnackBar} from "./SnackBarUtils";
@@ -10,9 +9,9 @@ import {SET_REPORT_UNRELEVANT} from "./GraphQL/Mutations";
 import {PollutionReportModal} from "./modals/PollutionReportModal";
 import {polygonColors} from "./PolygonColors";
 import L from "leaflet";
-import Button from "@mui/material/Button";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 
 
 
@@ -120,7 +119,7 @@ const ReportItemList = ({report}) => {
                                     aria-label="delete"
                                     onClick={() => selectedMapReportVar(report)}
                                 >
-                                    <MapIcon className="map-icon" />
+                                    <GpsFixedIcon className="map-icon" />
                                 </IconButton>
                             </Tooltip>
                             <Tooltip title="Delete Report" placement="top" arrow>
