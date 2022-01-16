@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from "react";
 import * as formik from "formik";
 import * as yup from "yup";
 import L from 'leaflet';
-import PollutionTypePicker from "./PollutionTypePicker";
 import {useMutation, useReactiveVar} from "@apollo/client";
 import {CREATE_POLLUTION_REPORT} from "../../GraphQL/Mutations";
 import {setSnackBar} from "../../SnackBarUtils"
@@ -16,6 +15,9 @@ import 'firebase/auth';
 import {sideBarOpenTabVar} from "../../cache";
 import PollutionReportPickerModal  from "../PollutionReportPickerModal";
 import {polygonColors} from "../../PolygonColors";
+import '../../leaflet-measure-path.js';
+import '../../leaflet-measure-path.css';
+
 
 const PollutionForm = ({ openTab }) => {
   const { Formik } = formik;
@@ -60,6 +62,7 @@ const PollutionForm = ({ openTab }) => {
   useEffect(() =>{
     if(map) {
       map.on('pm:create', (e) => {
+        e.layer.showMeasurements();
         const northEast = e.layer._bounds._northEast;
         const southWest = e.layer._bounds._southWest;
         map.setView({lat: (southWest.lat + northEast.lat) / 2 ,

@@ -12,7 +12,8 @@ import L from "leaflet";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import GpsFixedIcon from '@mui/icons-material/GpsFixed';
-
+import './leaflet-measure-path.js';
+import './leaflet-measure-path.css';
 
 
 const ReportItemList = ({report}) => {
@@ -44,7 +45,8 @@ const ReportItemList = ({report}) => {
                         "opacity": 0.65
                     };
                     const layer = L.geoJSON(polyReport.geom.geojson, {
-                        style: myStyle
+                        style: myStyle,
+                        showMeasurements: true
                     });
                     layer.bindPopup(polyReport.type);
                     return layer;

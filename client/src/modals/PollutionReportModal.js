@@ -97,34 +97,6 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export const PollutionReportModal = ({ report, show, handleClose }) => {
-    const [polygons, setPolygons] = useState(null);
-    const map = useReactiveVar(mainMapVar);
-    useEffect(() =>{
-        if(report) {
-            const cachePolygons = reportPolyLayersVar().get(report.id);
-            if (cachePolygons) {
-                setPolygons(cachePolygons);
-            }
-            else {
-                const polys = report.polygonReports.nodes.map((polyReport) => {
-                    const myStyle = {
-                        "color": polygonColors[polyReport.type],
-                        "weight": 5,
-                        "opacity": 0.65
-                    };
-                    const layer = L.geoJSON(polyReport.geom.geojson, {
-                        style: myStyle
-                    });
-                    layer.bindPopup(polyReport.type);
-                    return layer;
-                });
-                const polyGroup = L.layerGroup(polys.flat());
-                setPolygons(polyGroup);
-            }
-
-        }
-    }, [show, report])
-
 
   return (
     report && (
