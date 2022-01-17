@@ -124,6 +124,15 @@ const PollutionForm = ({ openTab }) => {
               block: 'center',
             });
           }
+          setPolygonReports(new Map());
+          map.eachLayer(function(layer) {
+            if (!!layer.toGeoJSON) {
+              const geojson = layer.toGeoJSON();
+              if(geojson.geometry?.type === 'Polygon'){
+                map.removeLayer(layer);
+              }
+            }
+          });
 
         }
       }

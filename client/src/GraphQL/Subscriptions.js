@@ -19,6 +19,14 @@ export const REPORT_ADDED_SUBSCRIPTION = gql`
             x
             y
           }
+          polygonReports {
+            nodes {
+              type
+              geom {
+                geojson
+              }
+            }
+          }
         }
       }
     }
