@@ -13,21 +13,18 @@ export const GET_GVULOTS_GEOJSON = gql`
     }
   }
 `;
-export const GET_REPORTS_POLY_GEOJSON = gql`
-  query allPolyReports {
-    pollutionReports {
+export const GET_SENS_GEOJSON = gql`
+  query getSensGeoJson {
+    pubSens {
       nodes {
-        polygonReports {
-          nodes {
-            geom {
-              geojson
-            }
-          }
+        geom {
+          geojson
         }
       }
     }
   }
 `;
+
 
 export const GET_LOCATION_REPORTS = gql`
   query getLocationPollutionReports($xmax: Float!, $xmin: Float!, $ymax: Float!, $ymin: Float!) {

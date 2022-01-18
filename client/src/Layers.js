@@ -1,6 +1,6 @@
 import React from 'react'
 import {useQuery} from "@apollo/client";
-import {GET_GVULOTS_GEOJSON, GET_REPORTS_POLY_GEOJSON} from "./GraphQL/Queries";
+import {GET_GVULOTS_GEOJSON, GET_SENS_GEOJSON } from "./GraphQL/Queries";
 import {useEffect} from "react";
 import L from "leaflet";
 import {useMap} from "react-leaflet";
@@ -10,6 +10,9 @@ const Layers = () => {
 
     const map = useMap();
     const { data: dataGvulot } = useQuery(GET_GVULOTS_GEOJSON, {
+        fetchPolicy: "network-only",
+    });
+    const { data: dataSens } = useQuery(GET_SENS_GEOJSON, {
         fetchPolicy: "network-only",
     });
 
@@ -32,7 +35,7 @@ const Layers = () => {
     }, [map])
     
     useEffect(() => {
-        if(dataGvulot) {
+        if(dataGvulot && dataSens) {
 
             const gvulots = dataGvulot.gvulots.nodes.map((gvul, i) => {
                 var myStyle = {
@@ -41,6 +44,18 @@ const Layers = () => {
                     "opacity": 0.65
                 };
                 return L.geoJSON(gvul.geom.geojson, {
+                    style: myStyle,
+                    onEachFeature: onEachFeature
+                });
+            });
+
+            const pub_sens = dataSens.pubSens.nodes.map((sens, i) => {
+                var myStyle = {
+                    "color": i % 3 === 0 ? "#EE4B2B" : i % 3 === 1 ? "#ff8c00" : "#0BDA51",
+                    "weight": 5,
+                    "opacity": 0.65
+                };
+                return L.geoJSON(sens.geom.geojson, {
                     style: myStyle,
                     onEachFeature: onEachFeature
                 });
@@ -85,8 +100,10 @@ const Layers = () => {
                 "Another Satellite": estriSat,
             };
             const gvulGroup = L.layerGroup(gvulots);
+            const sensGroup = L.layerGroup(pub_sens);
             const  overlayMaps = {
                 "Municipal": gvulGroup,
+                "Beach Segments": sensGroup
             };
             L.control.layers(baseMaps, overlayMaps, {position: 'topright'}).addTo(map);
             //make the layer active.
@@ -95,7 +112,7 @@ const Layers = () => {
 
            
         }
-    }, [dataGvulot, map])
+    }, [dataGvulot, dataSens, map])
 
     return (
         <div>

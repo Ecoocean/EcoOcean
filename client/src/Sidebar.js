@@ -60,7 +60,7 @@ const SidebarComponent = ({ map }) => {
                   <ReportList/>
                </BackToTop>
             </Tab>
-            <Tab id="beach-segments" header="Beach Segments" icon={<FaDrawPolygon />}>
+            <Tab id="municipals" header="Municipals" icon={<FaDrawPolygon />}>
                <List sx={{ display: "list-item", width: "100%" }} >
                   <TransitionGroup>
                      { data && data.gvulots.nodes.map((gvul, i) => {
