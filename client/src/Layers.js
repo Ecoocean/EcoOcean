@@ -4,6 +4,7 @@ import {GET_GVULOTS_GEOJSON, GET_SENS_GEOJSON } from "./GraphQL/Queries";
 import {useEffect} from "react";
 import L from "leaflet";
 import {useMap} from "react-leaflet";
+import * as turf from '@turf/turf';
 
 
 const Layers = () => {
@@ -55,10 +56,12 @@ const Layers = () => {
                     "weight": 5,
                     "opacity": 0.65
                 };
-                return L.geoJSON(sens.geom.geojson, {
+                const layer =  L.geoJSON(sens.geom.geojson, {
                     style: myStyle,
                     onEachFeature: onEachFeature
                 });
+                layer.bindPopup(`<p>ID ${sens.id}<br />area: ${turf.area(layer.toGeoJSON())}</p>`);
+                return layer;
             });
 
             const googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{

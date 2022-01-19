@@ -243,6 +243,35 @@ type Query implements Node {
     nodeId: ID!
   ): Node
 
+  """Reads and enables pagination through a set of `GvulSensIntersect`."""
+  gvulSensIntersects(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GvulSensIntersect`."""
+    orderBy: [GvulSensIntersectsOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GvulSensIntersectCondition
+  ): GvulSensIntersectsConnection
+
   """Reads and enables pagination through a set of `Gvulot`."""
   gvulots(
     """Only read the first `n` values of the set."""
@@ -494,6 +523,180 @@ interface Node {
   nodeId: ID!
 }
 
+"""A connection to a list of `GvulSensIntersect` values."""
+type GvulSensIntersectsConnection {
+  """A list of `GvulSensIntersect` objects."""
+  nodes: [GvulSensIntersect!]!
+
+  """
+  A list of edges which contains the `GvulSensIntersect` and cursor to aid in pagination.
+  """
+  edges: [GvulSensIntersectsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `GvulSensIntersect` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type GvulSensIntersect {
+  sensId: Int!
+  gvulId: Int!
+  squareMeters: Float!
+  muniHeb: String
+  muniEng: String
+
+  """Reads a single `PubSen` that is related to this `GvulSensIntersect`."""
+  sens: PubSen
+
+  """Reads a single `Gvulot` that is related to this `GvulSensIntersect`."""
+  gvul: Gvulot
+}
+
+type PubSen implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  geom: GeometryMultiPolygon
+
+  """Reads and enables pagination through a set of `GvulSensIntersect`."""
+  gvulSensIntersectsBySensId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GvulSensIntersect`."""
+    orderBy: [GvulSensIntersectsOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GvulSensIntersectCondition
+  ): GvulSensIntersectsConnection!
+}
+
+"""A location in a connection that can be used for resuming pagination."""
+scalar Cursor
+
+"""Methods to use when ordering `GvulSensIntersect`."""
+enum GvulSensIntersectsOrderBy {
+  NATURAL
+  SENS_ID_ASC
+  SENS_ID_DESC
+  GVUL_ID_ASC
+  GVUL_ID_DESC
+  SQUARE_METERS_ASC
+  SQUARE_METERS_DESC
+  MUNI_HEB_ASC
+  MUNI_HEB_DESC
+  MUNI_ENG_ASC
+  MUNI_ENG_DESC
+}
+
+"""
+A condition to be used against `GvulSensIntersect` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input GvulSensIntersectCondition {
+  """Checks for equality with the object’s `sensId` field."""
+  sensId: Int
+
+  """Checks for equality with the object’s `gvulId` field."""
+  gvulId: Int
+
+  """Checks for equality with the object’s `squareMeters` field."""
+  squareMeters: Float
+
+  """Checks for equality with the object’s `muniHeb` field."""
+  muniHeb: String
+
+  """Checks for equality with the object’s `muniEng` field."""
+  muniEng: String
+}
+
+type Gvulot implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  geom: GeometryMultiPolygon
+  muniHeb: String
+  muniEng: String
+
+  """Reads and enables pagination through a set of `GvulSensIntersect`."""
+  gvulSensIntersectsByGvulId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GvulSensIntersect`."""
+    orderBy: [GvulSensIntersectsOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GvulSensIntersectCondition
+  ): GvulSensIntersectsConnection!
+}
+
+"""A `GvulSensIntersect` edge in the connection."""
+type GvulSensIntersectsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `GvulSensIntersect` at the end of the edge."""
+  node: GvulSensIntersect!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: Cursor
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: Cursor
+}
+
 """A connection to a list of `Gvulot` values."""
 type GvulotsConnection {
   """A list of `Gvulot` objects."""
@@ -511,17 +714,6 @@ type GvulotsConnection {
   totalCount: Int!
 }
 
-type Gvulot implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  geom: GeometryMultiPolygon
-  muniHeb: String
-  muniEng: String
-}
-
 """A `Gvulot` edge in the connection."""
 type GvulotsEdge {
   """A cursor for use in pagination."""
@@ -529,24 +721,6 @@ type GvulotsEdge {
 
   """The `Gvulot` at the end of the edge."""
   node: Gvulot!
-}
-
-"""A location in a connection that can be used for resuming pagination."""
-scalar Cursor
-
-"""Information about pagination in a connection."""
-type PageInfo {
-  """When paginating forwards, are there more items?"""
-  hasNextPage: Boolean!
-
-  """When paginating backwards, are there more items?"""
-  hasPreviousPage: Boolean!
-
-  """When paginating backwards, the cursor to continue."""
-  startCursor: Cursor
-
-  """When paginating forwards, the cursor to continue."""
-  endCursor: Cursor
 }
 
 """Methods to use when ordering `Gvulot`."""
@@ -856,15 +1030,6 @@ type PubSensConnection {
   totalCount: Int!
 }
 
-type PubSen implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  geom: GeometryMultiPolygon
-}
-
 """A `PubSen` edge in the connection."""
 type PubSensEdge {
   """A cursor for use in pagination."""
@@ -1009,6 +1174,14 @@ input UserCondition {
 The root mutation type which contains root level fields which mutate data.
 """
 type Mutation {
+  """Creates a single `GvulSensIntersect`."""
+  createGvulSensIntersect(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateGvulSensIntersectInput!
+  ): CreateGvulSensIntersectPayload
+
   """Creates a single `Gvulot`."""
   createGvulot(
     """
@@ -1241,6 +1414,56 @@ type Mutation {
     """
     input: CreatePollutionReportInput!
   ): CreatePollutionReportPayload
+}
+
+"""The output of our create `GvulSensIntersect` mutation."""
+type CreateGvulSensIntersectPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GvulSensIntersect` that was created by this mutation."""
+  gvulSensIntersect: GvulSensIntersect
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `PubSen` that is related to this `GvulSensIntersect`."""
+  sens: PubSen
+
+  """Reads a single `Gvulot` that is related to this `GvulSensIntersect`."""
+  gvul: Gvulot
+
+  """An edge for our `GvulSensIntersect`. May be used by Relay 1."""
+  gvulSensIntersectEdge(
+    """The method to use when ordering `GvulSensIntersect`."""
+    orderBy: [GvulSensIntersectsOrderBy!] = [NATURAL]
+  ): GvulSensIntersectsEdge
+}
+
+"""All input for the create `GvulSensIntersect` mutation."""
+input CreateGvulSensIntersectInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `GvulSensIntersect` to be created by this mutation."""
+  gvulSensIntersect: GvulSensIntersectInput!
+}
+
+"""An input for mutations affecting `GvulSensIntersect`"""
+input GvulSensIntersectInput {
+  sensId: Int!
+  gvulId: Int!
+  squareMeters: Float!
+  muniHeb: String
+  muniEng: String
 }
 
 """The output of our create `Gvulot` mutation."""

@@ -17,6 +17,7 @@ export const GET_SENS_GEOJSON = gql`
   query getSensGeoJson {
     pubSens {
       nodes {
+        id
         geom {
           geojson
         }
