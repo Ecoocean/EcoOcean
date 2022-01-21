@@ -180,11 +180,6 @@
         }
     };
 
-    var circleArea = function circleArea(d) {
-        var rho = d / RADIUS;
-        return 2 * Math.PI * RADIUS * RADIUS * (1 - Math.cos(rho));
-    };
-
     var override = function(method, fn, hookAfter) {
         if (!hookAfter) {
             return function() {

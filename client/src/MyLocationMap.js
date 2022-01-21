@@ -19,9 +19,9 @@ export default function MyLocationMap({onLocationFound}) {
 
 
     const mapReady = (map) =>{
-
-        //map.addControl(search);
+        L.PM.setOptIn(true);
         map.addControl(L.control.zoom({ position: 'bottomright' }));
+
         const lc = L.control.locate({
             position: 'topright',
             locateOptions: {
@@ -37,7 +37,7 @@ export default function MyLocationMap({onLocationFound}) {
             position: 'bottomleft',
             drawPolyline: false,
             drawMarker: false,
-            drawCircle: false,
+            drawCircle: true,
             cutPolygon: false,
             drawCircleMarker: false,
 

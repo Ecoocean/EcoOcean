@@ -18,6 +18,13 @@ import {polygonColors} from "../../PolygonColors";
 import '../../leaflet-measure-path.js';
 import '../../leaflet-measure-path.css';
 
+let polygonReports = new Map();
+const updateItemInMap = (key, value) => {
+  polygonReports.set(key, value);
+}
+const deleteItemInMap = (key) => {
+  polygonReports.delete(key);
+}
 
 const PollutionForm = ({ openTab }) => {
   const { Formik } = formik;
@@ -28,7 +35,6 @@ const PollutionForm = ({ openTab }) => {
   const [openTypePickerWindow, setOpenTypePickerWindow] = useState(false);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [location, setLocation] = useState();
-  const [polygonReports, setPolygonReports] = useState(new Map());
 
 
 
@@ -46,15 +52,7 @@ const PollutionForm = ({ openTab }) => {
     setOpenTypePickerWindow(false);
   };
 
-  const updateItemInMap = (key, value) => {
-    setPolygonReports(map => new Map(map.set(key, value)));
-  }
-  const deleteItemInMap = (key) => {
-    setPolygonReports(map => {
-      map.delete(key);
-      return new Map(map);
-    });
-  }
+
 
   const schema = yup.object().shape({});
   const [CreatePollutionReport, { loading }] = useMutation(CREATE_POLLUTION_REPORT);
@@ -62,16 +60,26 @@ const PollutionForm = ({ openTab }) => {
   useEffect(() =>{
     if(map) {
       map.on('pm:create', (e) => {
-        e.layer.showMeasurements();
-        const northEast = e.layer._bounds._northEast;
-        const southWest = e.layer._bounds._southWest;
-        map.setView({lat: (southWest.lat + northEast.lat) / 2 ,
-          lng: (southWest.lng + northEast.lng) / 2}, map.getZoom());
+
+        e.layer.setStyle({ pmIgnore: false });
+        L.PM.reInitLayer(e.layer);
+        if (e.shape !== 'Circle') {
+          e.layer.showMeasurements();
+          const northEast = e.layer._bounds._northEast;
+          const southWest = e.layer._bounds._southWest;
+          map.setView({lat: (southWest.lat + northEast.lat) / 2 ,
+            lng: (southWest.lng + northEast.lng) / 2}, map.getZoom());
+        }
+        else {
+          map.setView(e.layer._latlng, map.getZoom());
+        }
         e.layer.on('pm:edit', (e) =>{
           const featureGroup = L.featureGroup().addLayer(e.layer);
+          featureGroup.options.pmIgnore = false;
+          L.PM.reInitLayer(featureGroup);
           const data = featureGroup.toGeoJSON();
           const polygon = polygonReports.get(e.layer._leaflet_id);
-          polygon.geometry = data.features[0].geometry
+          polygon.geometry = data.features[0]?.geometry
           updateItemInMap(e.layer._leaflet_id, polygon);
         });
         setTimeout(() => {
@@ -124,7 +132,7 @@ const PollutionForm = ({ openTab }) => {
               block: 'center',
             });
           }
-          setPolygonReports(new Map());
+          polygonReports = new Map();
           map.eachLayer(function(layer) {
             if (!!layer.toGeoJSON) {
               const geojson = layer.toGeoJSON();
