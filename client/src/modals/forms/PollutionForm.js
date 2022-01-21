@@ -1,6 +1,4 @@
 import React, {useEffect, useRef, useState} from "react";
-import * as formik from "formik";
-import * as yup from "yup";
 import L from 'leaflet';
 import {useMutation, useReactiveVar} from "@apollo/client";
 import {CREATE_POLLUTION_REPORT} from "../../GraphQL/Mutations";
@@ -10,13 +8,17 @@ import MyLocationMap from "../../MyLocationMap.js";
 import * as firebase from "firebase/app";
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
-import {locationMapVar, mainMapVar} from "../../cache";
+import {gvulotVar, locationMapVar, mainMapVar} from "../../cache";
 import 'firebase/auth';
 import {sideBarOpenTabVar} from "../../cache";
 import PollutionReportPickerModal  from "../PollutionReportPickerModal";
 import {polygonColors} from "../../PolygonColors";
 import '../../leaflet-measure-path.js';
 import '../../leaflet-measure-path.css';
+import MenuItem from "@mui/material/MenuItem";
+import {InputLabel, Paper, Select} from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import * as turf from "@turf/turf";
 
 let polygonReports = new Map();
 const updateItemInMap = (key, value) => {
@@ -26,16 +28,20 @@ const deleteItemInMap = (key) => {
   polygonReports.delete(key);
 }
 
+let beachSegmentsLayer = null;
+let isBeachSegmentSelected = false;
+
 const PollutionForm = ({ openTab }) => {
-  const { Formik } = formik;
   const map = useReactiveVar(locationMapVar);
-  const formRef = useRef(null);
+  const gvulot = useReactiveVar(gvulotVar);
+
   const imageUploaderRef = useRef(null);
   const [locationFound, setLocationFound] = useState(false);
   const [openTypePickerWindow, setOpenTypePickerWindow] = useState(false);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
-  const [location, setLocation] = useState();
-
+  const [location, setLocation] = useState(null);
+  const [selectedBeachSegment, setSelectedBeachSegment] = useState(null);
+  const [gvulName, setGvulName] = useState('');
 
 
   const handlePollutionReportPickerClose = (value) => {
@@ -52,9 +58,6 @@ const PollutionForm = ({ openTab }) => {
     setOpenTypePickerWindow(false);
   };
 
-
-
-  const schema = yup.object().shape({});
   const [CreatePollutionReport, { loading }] = useMutation(CREATE_POLLUTION_REPORT);
 
   useEffect(() =>{
@@ -153,43 +156,105 @@ const PollutionForm = ({ openTab }) => {
     setLocationFound(true);
     setLocation({lat: lat, lng: lng})
   }
+  const handleBeachSegmentClick = (event, layer) =>{
+    if (!isBeachSegmentSelected) {
+      if (beachSegmentsLayer) {
+        beachSegmentsLayer.removeFrom(map);
+      }
+      setSelectedBeachSegment(layer);
+      layer.addTo(map);
+      isBeachSegmentSelected = true;
+    }
+    else {
+      layer.removeFrom(map);
+      beachSegmentsLayer.addTo(map);
+      isBeachSegmentSelected = false;
+    }
 
+  }
+
+  const onBeachSegmentLayer = (feature, layer) => {
+    //bind click
+    layer.on({
+      click: (e) => {
+        handleBeachSegmentClick(e, layer);
+      }
+    });
+  }
+
+  const handleChange = (event) => {
+    isBeachSegmentSelected = false;
+    setGvulName(event.target.value);
+    if (beachSegmentsLayer) {
+      beachSegmentsLayer.removeFrom(map);
+      if (selectedBeachSegment) {
+        selectedBeachSegment.removeFrom(map);
+      }
+    }
+    const gvul = gvulot.find(g => g.muniHeb === event.target.value);
+    const pub_sens = gvul.gvulSensIntersectsByGvulId.nodes.map(({sens}, i) => {
+      var myStyle = {
+        "color": "#0074d9",
+        "weight": 5,
+        "opacity": 0.65
+      };
+      return L.geoJSON(sens.geom.geojson, {
+        style: myStyle,
+        pmIgnore: true,
+        onEachFeature: onBeachSegmentLayer
+      });
+    });
+
+    const sensGroup = L.layerGroup(pub_sens);
+    beachSegmentsLayer = sensGroup;
+    //make the layer active.
+    sensGroup.addTo(map);
+  };
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 450,
+      },
+    },
+  };
   return (
       <div>
-            <Formik
-                innerRef={formRef}
-                validateOnBlur={true}
-                validateOnChange={true}
-                validationSchema={schema}
-                onSubmit={AddPollutionReport}
-                initialValues={{}}
-            >
-              {({
-                  handleSubmit,
-                  handleChange,
-                  handleBlur,
-                  values,
-                  touched,
-                  isValid,
-                  errors,
-                }) => (
-                  <div>
-                      <MyLocationMap onLocationFound={onLocationFound}/>
-                      <ImageUploaderComp ref={imageUploaderRef}/>
-                      <LoadingButton
-                          onClick={AddPollutionReport}
-                          loading={loading}
-                          disabled={loading || !locationFound}
-                          loadingPosition="start"
-                          startIcon={<SaveIcon />}
-                          variant="outlined"
-                      >
-                        Save
-                      </LoadingButton>
+          <div>
+              <MyLocationMap onLocationFound={onLocationFound}/>
+            <FormControl sx={{ m: 1, minWidth: 250 }}>
+              <InputLabel id="demo-controlled-open-select-label">Municipal</InputLabel>
+                <Select
+                    labelId="demo-controlled-open-select-label"
+                    id="demo-controlled-open-select"
+                    value={gvulName}
+                    label="Municipal"
+                    onChange={handleChange}
+                    MenuProps={MenuProps}
+                >
+                  {
+                    gvulot?.map((gvul) => {
+                      return <MenuItem key={gvul.id} value={gvul.muniHeb}>{gvul.muniHeb}</MenuItem>
+                    })
+                  }
+                </Select>
+            </FormControl>
+              <ImageUploaderComp ref={imageUploaderRef}/>
+              <LoadingButton
+                  onClick={AddPollutionReport}
+                  loading={loading}
+                  disabled={loading || !locationFound}
+                  loadingPosition="start"
+                  startIcon={<SaveIcon />}
+                  variant="outlined"
+              >
+                Save
+              </LoadingButton>
 
-                  </div>
-              )}
-            </Formik>
+          </div>
         <PollutionReportPickerModal
             show={openTypePickerWindow}
             handleClose={handlePollutionReportPickerClose}

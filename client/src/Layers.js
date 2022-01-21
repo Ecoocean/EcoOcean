@@ -1,22 +1,18 @@
-import React from 'react'
-import {useQuery} from "@apollo/client";
-import {GET_GVULOTS_GEOJSON, GET_SENS_GEOJSON } from "./GraphQL/Queries";
+import React, {useState} from 'react'
+import {useQuery, useReactiveVar} from "@apollo/client";
+import {GET_GVULOTS, GET_SENS } from "./GraphQL/Queries";
 import {useEffect} from "react";
 import L from "leaflet";
 import {useMap} from "react-leaflet";
 import * as turf from '@turf/turf';
+import {gvulotVar, sensVar} from "./cache";
 
 
 const Layers = () => {
 
     const map = useMap();
-    const { data: dataGvulot } = useQuery(GET_GVULOTS_GEOJSON, {
-        fetchPolicy: "network-only",
-    });
-    const { data: dataSens } = useQuery(GET_SENS_GEOJSON, {
-        fetchPolicy: "network-only",
-    });
-
+    const gvulot = useReactiveVar(gvulotVar);
+    const sens = useReactiveVar(sensVar);
     const whenClicked = (e) => {
         // e = event
         console.log(e);
@@ -31,14 +27,10 @@ const Layers = () => {
         });
     }
 
-    useEffect(() => {
-
-    }, [map])
     
     useEffect(() => {
-        if(dataGvulot && dataSens) {
-
-            const gvulots = dataGvulot.gvulots.nodes.map((gvul, i) => {
+        if (gvulot && sens) {
+            const gvulots = gvulot.map((gvul, i) => {
                 var myStyle = {
                     "color": i % 3 === 0 ? "#EE4B2B" : i % 3 === 1 ? "#ff8c00" : "#0BDA51",
                     "weight": 5,
@@ -49,14 +41,14 @@ const Layers = () => {
                     onEachFeature: onEachFeature
                 });
             });
+            const pub_sens = sens.map((sens, i) => {
 
-            const pub_sens = dataSens.pubSens.nodes.map((sens, i) => {
                 var myStyle = {
                     "color": i % 3 === 0 ? "#EE4B2B" : i % 3 === 1 ? "#ff8c00" : "#0BDA51",
                     "weight": 5,
                     "opacity": 0.65
                 };
-                const layer =  L.geoJSON(sens.geom.geojson, {
+                const layer = L.geoJSON(sens.geom.geojson, {
                     style: myStyle,
                     onEachFeature: onEachFeature
                 });
@@ -64,24 +56,24 @@ const Layers = () => {
                 return layer;
             });
 
-            const googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+            const googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
                 maxZoom: 20,
-                subdomains:['mt0','mt1','mt2','mt3']
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             });
 
-            const googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+            const googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
                 maxZoom: 20,
-                subdomains:['mt0','mt1','mt2','mt3']
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             });
 
-            const googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+            const googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
                 maxZoom: 20,
-                subdomains:['mt0','mt1','mt2','mt3']
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             });
 
-            const googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
+            const googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', {
                 maxZoom: 20,
-                subdomains:['mt0','mt1','mt2','mt3']
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             });
 
             const basicLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -104,7 +96,7 @@ const Layers = () => {
             };
             const gvulGroup = L.layerGroup(gvulots);
             const sensGroup = L.layerGroup(pub_sens);
-            const  overlayMaps = {
+            const overlayMaps = {
                 "Municipal": gvulGroup,
                 "Beach Segments": sensGroup
             };
@@ -112,14 +104,11 @@ const Layers = () => {
             //make the layer active.
             basicLayer.addTo(map);
             gvulGroup.addTo(map);
-
-           
         }
-    }, [dataGvulot, dataSens, map])
+    }, [sens, gvulot])
 
     return (
         <div>
-
         </div>
     )
 }

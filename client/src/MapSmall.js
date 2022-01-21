@@ -1,6 +1,5 @@
 import React, {useMemo} from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
-import LayersSmall from "./LayersSmall";
 
 
 const MapSmall = props => {
@@ -20,7 +19,6 @@ const MapSmall = props => {
                 maxNativeZoom={19}
                 maxZoom={22}
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-            <LayersSmall />
              {props.children}
          </MapContainer>
       )

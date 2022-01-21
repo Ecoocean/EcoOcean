@@ -1,19 +1,30 @@
 import { gql } from "@apollo/client";
 //from server
 
-export const GET_GVULOTS_GEOJSON = gql`
+export const GET_GVULOTS = gql`
   query getGvulotsGeoJson {
     gvulots {
       nodes {
+        id
         muniHeb
         geom {
           geojson
+        }
+        gvulSensIntersectsByGvulId {
+          nodes {
+            sens {
+              id
+              geom {
+                geojson
+              }
+            }
+          }
         }
       }
     }
   }
 `;
-export const GET_SENS_GEOJSON = gql`
+export const GET_SENS = gql`
   query getSensGeoJson {
     pubSens {
       nodes {
