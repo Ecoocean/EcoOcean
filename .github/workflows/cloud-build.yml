@@ -43,7 +43,8 @@ jobs:
           --region ${{ env.REGION }} \
           --image gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} \
           --platform "managed" \
+          --cpu 1 \
+          --memory 128Mi \
+          --max-instances 1 \
           --quiet
-          --cpu 1
-          --memory 128Mi
-          --max-instances 1
+
