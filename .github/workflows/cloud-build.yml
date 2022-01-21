@@ -39,12 +39,12 @@ jobs:
     - name: Deploy to Cloud Run
       run: |-
         gcloud run deploy ${{ env.SERVICE }} \
-          --vpc-connector default \
           --region ${{ env.REGION }} \
           --image gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} \
           --platform "managed" \
           --cpu 1 \
           --memory 128Mi \
           --max-instances 1 \
+          --clear-vpc-connector \
           --quiet
 
