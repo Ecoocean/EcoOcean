@@ -1,5 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import L from 'leaflet';
+import PollutionTypePicker from "./PollutionTypePicker";
+import PollutionProporties from "./PollutionProporties";
 import {useMutation, useReactiveVar} from "@apollo/client";
 import {CREATE_POLLUTION_REPORT} from "../../GraphQL/Mutations";
 import {setSnackBar} from "../../SnackBarUtils"
@@ -34,7 +36,8 @@ let isBeachSegmentSelected = false;
 const PollutionForm = ({ openTab }) => {
   const map = useReactiveVar(locationMapVar);
   const gvulot = useReactiveVar(gvulotVar);
-
+  const pollutionTypePickerRef = useRef(null);
+  const pollutionProportiesRef = useRef(null);
   const imageUploaderRef = useRef(null);
   const [locationFound, setLocationFound] = useState(false);
   const [openTypePickerWindow, setOpenTypePickerWindow] = useState(false);
@@ -116,7 +119,13 @@ const PollutionForm = ({ openTab }) => {
                 reporterImageUrl: firebase.auth().currentUser? firebase.auth().currentUser.photoURL: null,
                 isRelevant: true,
                 photoUrls: [],
-                geom: { "type": "Point", "coordinates": [ location.lng, location.lat ] }
+                // type: pollutionTypePickerRef.current.state.image.value,
+                geom: { "type": "Point", "coordinates": [ location.lng, location.lat ] },
+                length: parseInt(pollutionProportiesRef.current.state.length),
+                width : parseInt(pollutionProportiesRef.current.state.width),
+                depth : parseInt(pollutionProportiesRef.current.state.depth),
+                coverage : parseInt(pollutionProportiesRef.current.state.coverage),
+                cleaningStatus : pollutionProportiesRef.current.state.cleaningStatus,
               }
             }
           },
@@ -243,6 +252,7 @@ const PollutionForm = ({ openTab }) => {
                 </Select>
             </FormControl>
               <ImageUploaderComp ref={imageUploaderRef}/>
+              <PollutionProporties ref={pollutionProportiesRef}/>
               <LoadingButton
                   onClick={AddPollutionReport}
                   loading={loading}

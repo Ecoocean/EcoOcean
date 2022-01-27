@@ -2,16 +2,21 @@ import React, { Component } from 'react'
 import ImagePicker from 'react-image-picker'
 import 'react-image-picker/dist/index.css'
 
-import trashImg from './images/trash.jpg'
-import oilImg from './images/oil.jpg'
-import tarImg from './images/tar.jpg'
+import sandImg from './images/Sand.JPG'
+import rocksImg from './images/Rocks.JPG'
+import pebblesAndShellsImg from './images/PebblesAndShells.JPG'
+import pebblesImg from './images/Pebbles.JPG'
+import gravelImg from './images/Gravel.JPG'
+import clayImg from './images/Clay.JPG'
 
-
-
-const imageList = [{image: trashImg, value: 'TRASH'},
-                   {image: oilImg, value: 'OIL'},
-                   {image: tarImg, value: 'TAR' }
-                ];
+const imageList = [                   
+  {image: sandImg, value: 'SAND'},
+  {image: rocksImg, value: 'ROCKS' },
+  {image: pebblesAndShellsImg, value: 'PEBBLESANDSHELLS'},
+  {image: pebblesImg, value: 'PEBBLES'},
+  {image: gravelImg, value: 'GRAVEL'},
+  {image: clayImg, value: 'CLAY'},
+];
 
 class PollutionTypePicker extends Component {
   constructor(props) {
@@ -54,5 +59,7 @@ class PollutionTypePicker extends Component {
     )
   }
 }
+
+
 
 export default PollutionTypePicker;
