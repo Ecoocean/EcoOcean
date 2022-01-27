@@ -119,7 +119,7 @@ const PollutionForm = ({ openTab }) => {
                 reporterImageUrl: firebase.auth().currentUser? firebase.auth().currentUser.photoURL: null,
                 isRelevant: true,
                 photoUrls: [],
-                type: pollutionTypePickerRef.current.state.image.value,
+                // type: pollutionTypePickerRef.current.state.image.value,
                 geom: { "type": "Point", "coordinates": [ location.lng, location.lat ] },
                 length: parseInt(pollutionProportiesRef.current.state.length),
                 width : parseInt(pollutionProportiesRef.current.state.width),
