@@ -3,6 +3,7 @@ import * as formik from "formik";
 import * as yup from "yup";
 import L from 'leaflet';
 import PollutionTypePicker from "./PollutionTypePicker";
+import PollutionProporties from "./PollutionProporties";
 import {useMutation, useReactiveVar} from "@apollo/client";
 import {CREATE_POLLUTION_REPORT} from "../../GraphQL/Mutations";
 import {setSnackBar} from "../../SnackBarUtils"
@@ -22,11 +23,11 @@ const PollutionForm = ({ openTab }) => {
   const map = useReactiveVar(locationMapVar);
   const formRef = useRef(null);
   const pollutionTypePickerRef = useRef(null);
+  const pollutionProportiesRef = useRef(null);
   const imageUploaderRef = useRef(null);
   const [locationFound, setLocationFound] = useState(false);
   const [location, setLocation] = useState();
   const [polygonReports, setPolygonReports] = useState(new Map());
-
   const updateItemInMap = (key, value) => {
     setPolygonReports(map => new Map(map.set(key, value)));
   }
@@ -93,7 +94,12 @@ const PollutionForm = ({ openTab }) => {
                 isRelevant: true,
                 photoUrls: [],
                 type: pollutionTypePickerRef.current.state.image.value,
-                geom: { "type": "Point", "coordinates": [ location.lng, location.lat ] }
+                geom: { "type": "Point", "coordinates": [ location.lng, location.lat ] },
+                length: parseInt(pollutionProportiesRef.current.state.length),
+                width : parseInt(pollutionProportiesRef.current.state.width),
+                depth : parseInt(pollutionProportiesRef.current.state.depth),
+                coverage : parseInt(pollutionProportiesRef.current.state.coverage),
+                cleaningStatus : pollutionProportiesRef.current.state.cleaningStatus,
               }
             }
           },
@@ -148,6 +154,7 @@ const PollutionForm = ({ openTab }) => {
                       <MyLocationMap onLocationFound={onLocationFound}/>
                       <PollutionTypePicker ref={pollutionTypePickerRef}/>
                       <ImageUploaderComp ref={imageUploaderRef}/>
+                      <PollutionProporties ref={pollutionProportiesRef}/>
                       <LoadingButton
                           onClick={AddPollutionReport}
                           loading={loading}
