@@ -5,7 +5,8 @@ import ReportList from "./ReportList";
 import SettingsTab from "./tabs/SettingsTab";
 import PollutionForm from "./modals/forms/PollutionForm";
 import {
-   sideBarCollapsedVar,
+    gvulotVar,
+    sideBarCollapsedVar,
     sideBarOpenTabVar
 } from "./cache";
 import {useReactiveVar} from "@apollo/client";
@@ -14,8 +15,6 @@ import BackToTop from "./ScrollToTop";
 import { FaDrawPolygon } from "react-icons/fa";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import {useQuery} from "@apollo/client";
-import {GET_GVULOTS_GEOJSON} from "./GraphQL/Queries";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import { TransitionGroup } from 'react-transition-group';
@@ -25,9 +24,6 @@ const SidebarComponent = ({ map }) => {
 
    const openTab = useReactiveVar(sideBarOpenTabVar);
    const sideBarCollapsed = useReactiveVar(sideBarCollapsedVar);
-   const { data } = useQuery(GET_GVULOTS_GEOJSON, {
-      fetchPolicy: "network-only",
-  });
 
    const onClose = () => {
       sideBarOpenTabVar('');
@@ -60,10 +56,10 @@ const SidebarComponent = ({ map }) => {
                   <ReportList/>
                </BackToTop>
             </Tab>
-            <Tab id="beach-segments" header="Beach Segments" icon={<FaDrawPolygon />}>
+            <Tab id="municipals" header="Municipals" icon={<FaDrawPolygon />}>
                <List sx={{ display: "list-item", width: "100%" }} >
                   <TransitionGroup>
-                     { data && data.gvulots.nodes.map((gvul, i) => {
+                     { gvulotVar() && gvulotVar().map((gvul, i) => {
                      return <Collapse key={i}><ListItem divider component="div"><Alert severity={ i % 3 === 0 ? "error" : i % 3 === 1 ? "warning" : "success"}>
                         <AlertTitle>{gvul.muniHeb}</AlertTitle>
                         information regarding pollution status <strong>check it out!</strong>

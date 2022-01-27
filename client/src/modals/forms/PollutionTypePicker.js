@@ -51,7 +51,6 @@ class PollutionTypePicker extends Component {
   render() {
     return (
       <div>
-        <h3>Pollution Type</h3>
         <ImagePicker
           images={imageList.map((imageData) => ({src: imageData.image, value: imageData.value}))}
           onPick={this.onPickImage.bind(this)}

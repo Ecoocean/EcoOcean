@@ -78,7 +78,7 @@ export const PostgresPlugin = makeExtendSchemaPlugin(build => {
             await pgClient.query("ROLLBACK TO SAVEPOINT mutation_wrapper");
             return errors[0];
           }
-          await Promise.all( args.geometries?.map(async (geometry) => {
+          await Promise.all( args.polygons?.map(async (polygon) => {
             const {data: dataPoly, errors: errorsPoly} = await graphql(
                 info.schema,
                 createPolyDocument,
@@ -87,7 +87,8 @@ export const PostgresPlugin = makeExtendSchemaPlugin(build => {
                 {
                   input: {
                     polygonReport: {
-                      geom: geometry,
+                      type: polygon.type,
+                      geom: polygon.geometry,
                       pollutionReportId: data.createPollutionReport.pollutionReport.id
                     }
                   }

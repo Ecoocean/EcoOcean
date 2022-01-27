@@ -176,19 +176,11 @@ function ShowReports() {
         <div>
             <MarkerClusterGroup>
                 {filteredPollutionReports && filteredPollutionReports.map((report) => {
-                    let markerColor = null;
-                    const reportType = report.type;
-                    if (reportType === "TRASH") {
-                        markerColor = greenMarker;
-                    } else if (reportType === "OIL") {
-                        markerColor = yellowMarker;
-                    } else if (reportType === "TAR") {
-                        markerColor = redMarker;
-                    }
+
                     return <Marker
                         key={report.id}
                         position={[report.geom.y, report.geom.x]}
-                        icon={markerColor}
+                        icon={redMarker}
                         eventHandlers={{
                             click: (e) => {
                                 selectedReportVar(report);
@@ -209,11 +201,6 @@ function ShowReports() {
                                         <b>{"Reporter:"}</b>
                                     </u>{" "}
                                     {report.reporter}
-                                    <br />
-                                    <u>
-                                        <b>{"Report Type:"}</b>
-                                    </u>{" "}
-                                    {report.type}
                                     <br />
                                     <u>
                                         <b>{"Date:"}</b>

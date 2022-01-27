@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Button from '@mui/material/Button';
 import Avatar from "@mui/material/Avatar";
 import ImageGallery from 'react-image-gallery';
@@ -16,8 +16,10 @@ import FormControl from '@mui/material/FormControl';
 import CustomChip from '../CustomChip';
 
 import './PollutionReportModal.scss';
-
-
+import {mainMapVar, reportPolyLayersVar} from "../cache";
+import L from "leaflet";
+import {useReactiveVar} from "@apollo/client";
+import {polygonColors} from "../PolygonColors";
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
@@ -95,6 +97,7 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export const PollutionReportModal = ({ report, show, handleClose }) => {
+
   return (
     report && (
         <BootstrapDialog
@@ -129,6 +132,7 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
                             : `lat: ${report.geom.y}, lng: ${report.geom.x}`} id="bootstrap-input2" />
                      </FormControl>
                 </Box>
+
                 {report.photoUrls?.length > 0 &&
                     <ImageGallery
                     showBullets= {report.photoUrls?.length > 1}

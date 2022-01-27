@@ -1,26 +1,22 @@
 import { gql } from "@apollo/client";
 //from server
 
-export const GET_GVULOTS_GEOJSON = gql`
+export const GET_GVULOTS = gql`
   query getGvulotsGeoJson {
     gvulots {
       nodes {
+        id
         muniHeb
         geom {
           geojson
         }
-      }
-    }
-  }
-`;
-export const GET_REPORTS_POLY_GEOJSON = gql`
-  query allPolyReports {
-    pollutionReports {
-      nodes {
-        polygonReports {
+        gvulSensIntersectsByGvulId {
           nodes {
-            geom {
-              geojson
+            sens {
+              id
+              geom {
+                geojson
+              }
             }
           }
         }
@@ -28,6 +24,19 @@ export const GET_REPORTS_POLY_GEOJSON = gql`
     }
   }
 `;
+export const GET_SENS = gql`
+  query getSensGeoJson {
+    pubSens {
+      nodes {
+        id
+        geom {
+          geojson
+        }
+      }
+    }
+  }
+`;
+
 
 export const GET_LOCATION_REPORTS = gql`
   query getLocationPollutionReports($xmax: Float!, $xmin: Float!, $ymax: Float!, $ymin: Float!) {
@@ -45,7 +54,14 @@ export const GET_LOCATION_REPORTS = gql`
         photoUrls
         reporter
         reporterImageUrl
-        type
+        polygonReports {
+          nodes {
+            type
+            geom {
+              geojson
+            }
+          }
+        }
       }
     }
   }

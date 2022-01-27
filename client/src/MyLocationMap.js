@@ -19,9 +19,9 @@ export default function MyLocationMap({onLocationFound}) {
 
 
     const mapReady = (map) =>{
-
-        //map.addControl(search);
+        L.PM.setOptIn(true);
         map.addControl(L.control.zoom({ position: 'bottomright' }));
+
         const lc = L.control.locate({
             position: 'topright',
             locateOptions: {
@@ -37,7 +37,7 @@ export default function MyLocationMap({onLocationFound}) {
             position: 'bottomleft',
             drawPolyline: false,
             drawMarker: false,
-            drawCircle: false,
+            drawCircle: true,
             cutPolygon: false,
             drawCircleMarker: false,
 
@@ -67,10 +67,12 @@ export default function MyLocationMap({onLocationFound}) {
         locationMapVar(map);
     }
     if (openTab === 'add-report' && mapInstance && !loaded){
-        mapInstance._onResize();
-        // request location update and set location
-        lc.start();
         setLoaded(true);
+        setTimeout(() => {
+            mapInstance._onResize();
+            // request location update and set location
+            lc.start();
+        }, 500);
     }
 
     return (

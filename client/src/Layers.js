@@ -1,21 +1,18 @@
-import React from 'react'
-import {useQuery} from "@apollo/client";
-import {GET_GVULOTS_GEOJSON, GET_REPORTS_POLY_GEOJSON} from "./GraphQL/Queries";
+import React, {useState} from 'react'
+import {useQuery, useReactiveVar} from "@apollo/client";
+import {GET_GVULOTS, GET_SENS } from "./GraphQL/Queries";
 import {useEffect} from "react";
 import L from "leaflet";
 import {useMap} from "react-leaflet";
+import * as turf from '@turf/turf';
+import {gvulotVar, sensVar} from "./cache";
 
 
 const Layers = () => {
 
     const map = useMap();
-    const { data: dataGvulot } = useQuery(GET_GVULOTS_GEOJSON, {
-        fetchPolicy: "network-only",
-    });
-    const { data: dataPoly } = useQuery(GET_REPORTS_POLY_GEOJSON, {
-        fetchPolicy: "network-only",
-    });
-
+    const gvulot = useReactiveVar(gvulotVar);
+    const sens = useReactiveVar(sensVar);
     const whenClicked = (e) => {
         // e = event
         console.log(e);
@@ -30,14 +27,10 @@ const Layers = () => {
         });
     }
 
-    useEffect(() => {
-
-    }, [map])
     
     useEffect(() => {
-        if(dataPoly && dataGvulot) {
-
-            const gvulots = dataGvulot.gvulots.nodes.map((gvul, i) => {
+        if (gvulot && sens) {
+            const gvulots = gvulot.map((gvul, i) => {
                 var myStyle = {
                     "color": i % 3 === 0 ? "#EE4B2B" : i % 3 === 1 ? "#ff8c00" : "#0BDA51",
                     "weight": 5,
@@ -48,32 +41,39 @@ const Layers = () => {
                     onEachFeature: onEachFeature
                 });
             });
-            const polys = dataPoly.pollutionReports.nodes.map((pollutionReport) => {
-                return pollutionReport.polygonReports.nodes.map((polyReport) => {
-                    return L.geoJSON(polyReport.geom.geojson, {
-                        onEachFeature: onEachFeature
-                    });
-                })
-            })
+            const pub_sens = sens.map((sens, i) => {
 
-            const googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
-                maxZoom: 20,
-                subdomains:['mt0','mt1','mt2','mt3']
+                var myStyle = {
+                    "color": i % 3 === 0 ? "#EE4B2B" : i % 3 === 1 ? "#ff8c00" : "#0BDA51",
+                    "weight": 5,
+                    "opacity": 0.65
+                };
+                const layer = L.geoJSON(sens.geom.geojson, {
+                    style: myStyle,
+                    onEachFeature: onEachFeature
+                });
+                layer.bindPopup(`<p>ID ${sens.id}<br />area: ${turf.area(layer.toGeoJSON())}</p>`);
+                return layer;
             });
 
-            const googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+            const googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
                 maxZoom: 20,
-                subdomains:['mt0','mt1','mt2','mt3']
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             });
 
-            const googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+            const googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
                 maxZoom: 20,
-                subdomains:['mt0','mt1','mt2','mt3']
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             });
 
-            const googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
+            const googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
                 maxZoom: 20,
-                subdomains:['mt0','mt1','mt2','mt3']
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+            });
+
+            const googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             });
 
             const basicLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -95,24 +95,20 @@ const Layers = () => {
                 "Another Satellite": estriSat,
             };
             const gvulGroup = L.layerGroup(gvulots);
-            const polyGroup =  L.layerGroup(polys.flat());
-            const  overlayMaps = {
+            const sensGroup = L.layerGroup(pub_sens);
+            const overlayMaps = {
                 "Municipal": gvulGroup,
-                "Reports Polygons": polyGroup
+                "Beach Segments": sensGroup
             };
             L.control.layers(baseMaps, overlayMaps, {position: 'topright'}).addTo(map);
             //make the layer active.
             basicLayer.addTo(map);
             gvulGroup.addTo(map);
-            polyGroup.addTo(map);
-
-           
         }
-    }, [dataGvulot, dataPoly, map])
+    }, [sens, gvulot])
 
     return (
         <div>
-
         </div>
     )
 }

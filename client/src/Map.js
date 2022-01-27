@@ -4,10 +4,11 @@ import Layers from './Layers';
 
 
 const Map = props => {
-
+   const options = { pmIgnore: false};
    const map = useMemo( () => {
       return  (
-         <MapContainer 
+         <MapContainer
+            options={options}
             doubleClickZoom={true}
             zoomControl={false}
             id="mapId"

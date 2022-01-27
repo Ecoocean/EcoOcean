@@ -94,12 +94,12 @@ function SignInScreen() {
       isSignedIn && !userAuthenticated? 
       <div> 
         <h4 style={{color: "white"}}>User is not authorized</h4>
-        <Button variant="contained"> onClick={() => {
+        <Button variant="contained" onClick={() => {
           setUserAuthenticated(false);
           setIsSignedIn(null);
           setCheckingAuth(false);
           firebase.auth().signOut();
-        }} >
+        }}>
           Try with a different account
         </Button>
       </div>:
