@@ -43,7 +43,7 @@
     "node-open-geocoder": "^4.0.1",
     "node-pg-migrate": "6.2.1",
     "pg": "^8.7.1",
-    "postgraphile": "^4.12.5",
+    "postgraphile": "4.12.9",
     "postgraphile-apollo-server": "^0.1.1",
     "react-firebaseui": "^5.0.2",
     "react-geocode": "^0.2.3",
