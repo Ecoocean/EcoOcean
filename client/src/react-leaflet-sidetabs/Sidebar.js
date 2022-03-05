@@ -21,13 +21,12 @@ const TabType = PropTypes.shape({
   type: PropTypes.oneOf([Tab])
 })
 
-
 class Sidebar extends React.Component {
+
 
   componentDidMount(){
 
     if (this.props.rehomeControls){
-
       const { position } = this.props
       const selector = `.leaflet-${position}`
       const controls = document.querySelectorAll(selector)

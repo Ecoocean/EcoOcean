@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import ImagePicker from 'react-image-picker'
+import React from 'react'
+
 import 'react-image-picker/dist/index.css'
 
 class PollutionProporties extends React.Component {
@@ -9,7 +9,7 @@ class PollutionProporties extends React.Component {
     width:0,
   depth:0,
 coverage:0,
-cleaningStatus:null};
+cleaningStatus:0};
 
     this.handleChangeLength = this.handleChangeLength.bind(this);
     this.handleChangeWidth = this.handleChangeWidth.bind(this);
@@ -60,9 +60,9 @@ cleaningStatus:null};
           <select value={this.state.cleaningStatus} onChange={this.handleChangeCleaningStatus}>
             <option value="clean">Clean</option>
             <option value="finalCleaningSteps">Final Cleaning Steps</option>
-            <option selected value="cleaningRightNow">Cleaning right now</option>
-            <option selected value="noCleaning">No cleaning is perfoemed</option>
-            <option selected value="null">Please choose an option</option>
+            <option  value="cleaningRightNow">Cleaning right now</option>
+            <option  value="noCleaning">No cleaning is perfoemed</option>
+            <option  value="selection">Please choose an option</option>
           </select>
         </label>
       </form>
