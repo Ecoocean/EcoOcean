@@ -1,28 +1,31 @@
 // Import FirebaseAuth and firebase.
 import React, { useEffect, useState } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import * as firebase from "firebase/app";
+import { initializeApp } from "firebase/app";
+import { getAuth, EmailAuthProvider, GoogleAuthProvider, FacebookAuthProvider, connectAuthEmulator } from 'firebase/auth';
 import { Helmet } from 'react-helmet';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Navigate  } from 'react-router-dom'
 import { useMutation } from '@apollo/client';
-import 'firebase/auth';
 import './SignInPage.css'
 import Button from '@mui/material/Button';
 import {SIGN_IN_CLIENT} from "../GraphQL/Mutations";
 
 // Configure Firebase.
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || '',
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || '',
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL || '',
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || '',
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET || '',
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || '',
+  appId: process.env.REACT_APP_FIREBASE_APP_ID || '',
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || ''
 };
-firebase.initializeApp(firebaseConfig);
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth();
 
 // Configure FirebaseUI.
 const uiConfig = {
@@ -30,9 +33,9 @@ const uiConfig = {
   signInFlow: "popup",
   // We will display Google and Facebook as auth providers.
   signInOptions: [
-    firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+    EmailAuthProvider.PROVIDER_ID,
+    GoogleAuthProvider.PROVIDER_ID,
+    FacebookAuthProvider.PROVIDER_ID,
   ],
   signInSuccessUrl: '/',
   callbacks: {
@@ -40,6 +43,10 @@ const uiConfig = {
     signInSuccessWithAuthResult: () => false,
   },
 };
+
+if (process.env.REACT_APP_ENVIRONMENT === "dev") {
+  connectAuthEmulator(auth,'http://localhost:9099/');
+}
 
 function SignInScreen() {
   const [checkingAuth, setCheckingAuth] = useState(false);
@@ -59,8 +66,7 @@ function SignInScreen() {
   // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {
     localStorage.clear();
-    const unregisterAuthObserver = firebase
-      .auth()
+    const unregisterAuthObserver = auth
       .onAuthStateChanged((user) => {
         if(user){
           setCheckingAuth(true);
@@ -98,7 +104,7 @@ function SignInScreen() {
           setUserAuthenticated(false);
           setIsSignedIn(null);
           setCheckingAuth(false);
-          firebase.auth().signOut();
+          auth.signOut();
         }}>
           Try with a different account
         </Button>
@@ -106,7 +112,7 @@ function SignInScreen() {
       <div> 
           <StyledFirebaseAuth
             uiConfig={uiConfig}
-            firebaseAuth={firebase.auth()}
+            firebaseAuth={auth}
           />
       </div>
     }

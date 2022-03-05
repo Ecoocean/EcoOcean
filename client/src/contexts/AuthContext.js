@@ -1,9 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
-import * as firebase from "firebase/app";
-import "firebase/auth";
+import {connectAuthEmulator, getAuth} from 'firebase/auth';
 import {useMutation} from "@apollo/client";
 import {SIGN_IN_CLIENT} from "../GraphQL/Mutations";
 const AuthContext = React.createContext(null);
+
+let auth = getAuth();
+if (process.env.REACT_APP_ENVIRONMENT === "dev") {
+  connectAuthEmulator(auth,'http://localhost:9099/');
+}
 
 export function useAuth() {
   return useContext(AuthContext);
@@ -25,15 +29,18 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    return firebase.auth().onAuthStateChanged((user) => {
+    return auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
-      signInClient({
-        variables:{
-          input: {
-            userId: user.uid
+      if(user) {
+        signInClient({
+          variables:{
+            input: {
+              userId: user?.uid
+            }
           }
-        }
-      })
+        })
+      }
+
     });
 
   }, []);
