@@ -10,6 +10,7 @@ import {useQuery, useReactiveVar} from "@apollo/client";
 import {gvulotVar, mainMapVar, sensVar} from "./cache";
 import {GET_GVULOTS, GET_SENS} from "./GraphQL/Queries";
 
+
 export default function Home() {
 
     const map = useReactiveVar(mainMapVar);

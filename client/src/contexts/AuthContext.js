@@ -45,8 +45,9 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    return auth.onAuthStateChanged((user) => {
+    const unregisterAuthObserver = auth.onAuthStateChanged((user) => {
       if(user) {
+        localStorage.removeItem('token')
         signInClient({
           variables:{
             input: {
@@ -60,6 +61,7 @@ export function AuthProvider({ children }) {
       }
 
     });
+    return () => unregisterAuthObserver();
 
   }, []);
 

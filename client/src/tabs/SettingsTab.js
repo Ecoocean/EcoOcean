@@ -7,6 +7,7 @@ import {Logout} from "@mui/icons-material";
 import {Button} from "@mui/material";
 import { styled } from '@mui/material/styles';
 import './SettingsTab.scss';
+import {sideBarOpenTabVar} from "../cache";
 
 export default function SettingsTab() {
 
@@ -20,6 +21,11 @@ export default function SettingsTab() {
         height: 130px;
       }
     `;
+
+    const onSignOut = () => {
+        getAuth().signOut();
+        sideBarOpenTabVar('home');
+    }
 
     return (
         <Box sx={{ display: "flex", paddingTop: "10px", flexDirection: "column", alignItems: "center", pl: 1, pb: 1 }}>
@@ -38,7 +44,7 @@ export default function SettingsTab() {
                 <p>Username: {getAuth().currentUser.displayName}</p>
             </Grid>
             <Grid item xs={6}>
-                <Button variant="contained" onClick={() => getAuth().signOut()} endIcon={<Logout />}>
+                <Button variant="contained" onClick={onSignOut} endIcon={<Logout />}>
                     Logout
                 </Button>
             </Grid>

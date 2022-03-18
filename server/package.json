@@ -2,7 +2,8 @@
   "name": "functions",
   "scripts": {
     "start": "env-cmd -f .env.production node src/index.js",
-    "startLocalContainer": "docker run --name postgis -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgis/postgis",
+    "startContainersLocal": "docker-compose up -d",
+    "stopContainersLocal": "docker-compose --volumes --remove-orphans --rmi local",
     "gcp-build": "tsc -p .",
     "migrate": "node-pg-migrate --verbose false",
     "migrateLocal": "env-cmd -f .env.development node-pg-migrate",

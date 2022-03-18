@@ -1,0 +1,28 @@
+version: '3.1'
+services:
+  postgis:
+    image: postgis/postgis
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+  #######################################################
+  #  Firebase
+  #######################################################
+  firebase:
+    image: goatlab/firebase-emulator:latest
+    ports:
+      - 5002:5001 # Cloud Functions
+      - 8085:8085 # Cloud Pub/Sub
+      - 9000:9000 # Realtime Database
+      - 9099:9099 # Auth
+      - 4001:3000 # UI
+      - 4000:4000 # UI
+    command: 'firebase emulators:start --project ecoocean'
+    tty: true
+    restart: unless-stopped
+    networks:
+      - fire-network
+networks:
+  fire-network:
+    driver: bridge

@@ -25,18 +25,18 @@ export const bucket = admin.storage().bucket();
       process.env.DATABASE_URL || `postgres://${dbUserName}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`,
       "public"
   );
-
-  const email = 'admin@gmail.com';
-  const displayName = 'admin';
-  const user = await auth.createUser({
-    email,
-    emailVerified: true,
-    password: '123456',
-    displayName,
-    disabled: false,
-  });
-  const result = await runner.query(
-      `
+  try {
+    const email = 'admin@gmail.com';
+    const displayName = 'admin';
+    const user = await auth.createUser({
+      email,
+      emailVerified: true,
+      password: '123456',
+      displayName,
+      disabled: false,
+    });
+    const result = await runner.query(
+        `
             mutation createUser($input: CreateUserInput!) {
               createUser(input: $input) {
                 user {
@@ -45,20 +45,27 @@ export const bucket = admin.storage().bucket();
               }
             }
        `,
-      {
-        input: {
-          user:{
-            uid: user.uid,
-            displayName,
-            email,
-            emailVerified: true,
-            isOnboarded: true,
-          }
-        },
-      }
-  );
+        {
+          input: {
+            user:{
+              uid: user.uid,
+              displayName,
+              email,
+              emailVerified: true,
+              isOnboarded: true,
+            }
+          },
+        }
+    );
 
-  console.log(JSON.stringify(result, null, 2));
-  await runner.release();
+    console.log(JSON.stringify(result, null, 2));
+
+  }
+  catch (e) {
+    console.log(e);
+  }
+  finally {
+    await runner.release();
+  }
 
 })();

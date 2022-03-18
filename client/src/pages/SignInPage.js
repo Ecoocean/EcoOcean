@@ -1,7 +1,6 @@
-// Import FirebaseAuth and firebase.
-import React, { useEffect, useState } from "react";
+
+import React, { useState } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { initializeApp } from "firebase/app";
 import { getAuth, EmailAuthProvider, GoogleAuthProvider, FacebookAuthProvider, connectAuthEmulator } from 'firebase/auth';
 import { Helmet } from 'react-helmet';
 import CircularProgress from '@mui/material/CircularProgress';
