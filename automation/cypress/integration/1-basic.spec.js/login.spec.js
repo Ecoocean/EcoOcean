@@ -4,8 +4,9 @@ describe('login to ecoocean', () => {
     cy.visit('http://localhost:3000')
   })
 
-  it('can filter for uncompleted tasks', () => {
+  it('login as admin to ecoocean', () => {
 
+    cy.percySnapshot('login screen');
     cy.contains('Sign in with email').click();
 
     cy.get('input[id="ui-sign-in-email-input"]')

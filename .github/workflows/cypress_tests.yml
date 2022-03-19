@@ -43,7 +43,9 @@ jobs:
           browser: chrome
           record: true
           working-directory: ./automation
+          command: percy exec -- cypress run
         env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
           # pass the Dashboard record key as an environment variable
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # pass GitHub token to allow accurately detecting a build vs a re-run build
