@@ -1,6 +1,6 @@
 export const admin = require("firebase-admin");
 const serviceAccount = require("./keys/ecoOcean_firebase_key.json");
-const { makeQueryRunner } = require("./QueryRunner.js");
+const { makeQueryRunner } = require("./queryRunner");
 
 const dbUserName = process.env.DB_USERNAME;
 const dbPassword = process.env.DB_PASSWORD;
