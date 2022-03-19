@@ -3,7 +3,7 @@
   "scripts": {
     "start": "env-cmd -f .env.production node src/index.js",
     "startContainersLocal": "docker-compose up -d",
-    "stopContainersLocal": "docker-compose --volumes --remove-orphans --rmi local",
+    "stopContainersLocal": "docker-compose down --volumes --remove-orphans --rmi local",
     "gcp-build": "tsc -p .",
     "migrate": "node-pg-migrate --verbose false",
     "migrateLocal": "env-cmd -f .env.development node-pg-migrate",
