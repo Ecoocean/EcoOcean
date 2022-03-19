@@ -5,7 +5,7 @@
     "startContainersLocal": "docker-compose up -d",
     "stopContainersLocal": "docker-compose down --volumes --remove-orphans --rmi local",
     "gcp-build": "tsc -p .",
-    "migrate": "node-pg-migrate --verbose false",
+    "migrate": "node-pg-migrate --no-verbose",
     "migrateLocal": "env-cmd -f .env.development node-pg-migrate",
     "start:dev": "env-cmd -f .env.development ts-node-dev --respawn src/index.ts",
     "migrateUpLocal": "npm run migrateLocal up",
