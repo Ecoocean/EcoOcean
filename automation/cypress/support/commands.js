@@ -37,7 +37,6 @@ Cypress.Commands.add('login', (email, password) => {
     cy.get('img[id="bgu-home-logo"]', { timeout: 10000 }).should('be.visible');
     cy.get('img[id="ecoocean-home-logo"]', { timeout: 10000 }).should('be.visible');
     cy.waitForNetworkIdle(5000);
-    cy.wait(2000);
 });
 
 Cypress.Commands.add('logout', () => {
