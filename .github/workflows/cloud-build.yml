@@ -6,9 +6,6 @@ on:
     branches: [ master ]
     types:
       - completed
-  push:
-    branches:
-      - master
 
 env:
   PROJECT_ID: ecoocean
