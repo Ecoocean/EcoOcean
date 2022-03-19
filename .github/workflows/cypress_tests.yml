@@ -16,6 +16,9 @@ jobs:
       - name: Start Containers
         run: npm run startContainersLocal
         working-directory: ./server
+      - name: Build Server Moudles
+        run: npm ci
+        working-directory: ./server
       - name: Migrate Postgis DB
         run: npm run migrateUpLocal
         working-directory: ./server
