@@ -13,10 +13,19 @@ jobs:
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
 
-      - name: Build the stack
-        run: docker-compose up -d
+      - name: Start Containers
+        run: npm run startContainersLocal
+        working-directory: ./server
+      - name: Migrate Postgis DB
+        run: npm run migrateUpLocal
         working-directory: ./server
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
+          browser: chrome
           working-directory: ./automation
+
+      - name: Stop Containers
+        if: always()
+        run: npm run stopContainersLocal
+        working-directory: ./server
