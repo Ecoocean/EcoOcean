@@ -8,6 +8,7 @@
     "@apollo/client": "^3.4.15",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
+    "@firebase/messaging-interop-types": "^0.1.0",
     "@geoman-io/leaflet-geoman-free": "^2.11.3",
     "@mui/icons-material": "^5.0.4",
     "@mui/lab": "^5.0.0-alpha.60",
