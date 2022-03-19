@@ -20,5 +20,3 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           working-directory: ./automation
-          build: npm run build
-          start: npm start
