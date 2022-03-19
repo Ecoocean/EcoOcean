@@ -27,8 +27,7 @@ function SignInScreen() {
     // We will display Google and Facebook as auth providers.
     signInOptions: [
       EmailAuthProvider.PROVIDER_ID,
-      GoogleAuthProvider.PROVIDER_ID,
-      FacebookAuthProvider.PROVIDER_ID,
+      GoogleAuthProvider.PROVIDER_ID
     ],
     signInSuccessUrl: '/',
     callbacks: {
