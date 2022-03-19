@@ -43,7 +43,7 @@ jobs:
           browser: chrome
           record: true
           working-directory: ./automation
-          command: percy exec -- cypress run
+          command: npm run percy
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
           # pass the Dashboard record key as an environment variable
