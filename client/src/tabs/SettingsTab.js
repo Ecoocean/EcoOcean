@@ -33,18 +33,18 @@ export default function SettingsTab() {
                 <CustomizedAvatar
                     variant="circular"
                     src={
-                        getAuth().currentUser.photoURL
+                        getAuth().currentUser?.photoURL
                             ? getAuth().currentUser.photoURL
                             : "/"
                     }
-                    alt={getAuth().currentUser.displayName}
+                    alt={getAuth().currentUser?.displayName}
                 />
             </Grid>
             <Grid item xs={6}>
-                <p>Username: {getAuth().currentUser.displayName}</p>
+                <p>Username: {getAuth().currentUser?.displayName}</p>
             </Grid>
             <Grid item xs={6}>
-                <Button variant="contained" onClick={onSignOut} endIcon={<Logout />}>
+                <Button id={'logout-button'} variant="contained" onClick={onSignOut} endIcon={<Logout />}>
                     Logout
                 </Button>
             </Grid>
