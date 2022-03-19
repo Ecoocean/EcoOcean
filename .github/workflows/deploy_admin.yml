@@ -2,10 +2,13 @@ name: Firebase Continous Deployment Admin
 
 on:
   workflow_run:
-    workflows: ["Build and Deploy to Cloud Run"]
-    branches: [master]
+    workflows: [ "Build and Deploy to Cloud Run" ]
+    branches: [ master ]
     types:
       - completed
+  push:
+    branches:
+      - master
 
 jobs:
   deploy:

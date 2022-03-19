@@ -2,10 +2,13 @@ name: Build and Deploy to Cloud Run
 
 on:
   workflow_run:
-    workflows: ["Migration Upgrade DB"]
-    branches: [master]
+    workflows: [ "Migration Upgrade DB" ]
+    branches: [ master ]
     types:
       - completed
+  push:
+    branches:
+      - master
 
 env:
   PROJECT_ID: ecoocean
