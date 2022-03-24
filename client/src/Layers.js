@@ -13,6 +13,7 @@ const Layers = () => {
     const map = useMap();
     const gvulot = useReactiveVar(gvulotVar);
     const sens = useReactiveVar(sensVar);
+    const [layersLoaded, setLayersLoaded] = useState(false);
     const whenClicked = (e) => {
         // e = event
         console.log(e);
@@ -29,7 +30,8 @@ const Layers = () => {
 
     
     useEffect(() => {
-        if (gvulot && sens) {
+        if (gvulot && sens && !layersLoaded) {
+            setLayersLoaded(true);
             const gvulots = gvulot.map((gvul, i) => {
                 var myStyle = {
                     "color": i % 3 === 0 ? "#EE4B2B" : i % 3 === 1 ? "#ff8c00" : "#0BDA51",

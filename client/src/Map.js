@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react'
-import { MapContainer, TileLayer } from 'react-leaflet'
-import Layers from './Layers';
+import { MapContainer } from 'react-leaflet'
+import Layers from "./Layers";
 
 
 const Map = props => {
@@ -16,9 +16,8 @@ const Map = props => {
             zoom={7}
             maxZoom={19}
             whenCreated={props.setMap}>
-
              {props.children}
-             <Layers/>
+            <Layers/>
          </MapContainer>
       )
    }, [])

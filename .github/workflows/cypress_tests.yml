@@ -1,0 +1,59 @@
+name: Cypress Tests
+
+on:
+  pull_request:
+    branches: [ master ]
+  push:
+    branches:
+      - master
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.16
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+
+      - name: Start Containers
+        run: npm run startContainersLocal
+        working-directory: ./server
+      - name: Build Server Moudles
+        run: npm ci
+        working-directory: ./server
+      - name: Build Client Moudles
+        run: npm ci
+        working-directory: ./client
+      - name: Run Client in Dev Mode
+        run: npm run start &
+        working-directory: ./client
+      - name: Migrate Postgis DB
+        run: npm run migrateUpLocal
+        working-directory: ./server
+      - name: Run Server in Dev Mode
+        run: npm run start:dev &
+        working-directory: ./server
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          browser: chrome
+          record: true
+          working-directory: ./automation
+          command-prefix: 'percy exec -- npx'
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+          # pass the Dashboard record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass GitHub token to allow accurately detecting a build vs a re-run build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # pass the project ID from the secrets through environment variable
+          CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
+
+      - name: Stop Containers
+        if: always()
+        run: npm run stopContainersLocal
+        working-directory: ./server

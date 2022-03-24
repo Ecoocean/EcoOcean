@@ -2,13 +2,14 @@ name: Firebase Continous Deployment Admin
 
 on:
   workflow_run:
-    workflows: ["Build and Deploy to Cloud Run"]
-    branches: [master]
+    workflows: [ "Build and Deploy to Cloud Run" ]
+    branches: [ master ]
     types:
       - completed
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     defaults:
       run:

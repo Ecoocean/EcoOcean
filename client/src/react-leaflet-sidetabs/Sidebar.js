@@ -21,21 +21,23 @@ const TabType = PropTypes.shape({
   type: PropTypes.oneOf([Tab])
 })
 
-
 class Sidebar extends React.Component {
+
 
   componentDidMount(){
 
     if (this.props.rehomeControls){
-
       const { position } = this.props
       const selector = `.leaflet-${position}`
       const controls = document.querySelectorAll(selector)
       const topControl = document.querySelector(`.leaflet-top${selector}`)
       const bottomControl = document.querySelector(`.leaflet-bottom${selector}`)
-
-      topControl.classList.add(`rehomed-top-${position}`)
-      bottomControl.classList.add(`rehomed-bottom-${position}`)
+      if(topControl){
+        topControl.classList.add(`rehomed-top-${position}`)
+      }
+      if(bottomControl) {
+        bottomControl.classList.add(`rehomed-bottom-${position}`)
+      }
 
       // Exception: Attribution control should not ever be rehomed (in my opinion):
       const attributionControl = document.querySelector(`${selector} .leaflet-control-attribution`)

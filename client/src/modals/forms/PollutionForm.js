@@ -7,7 +7,7 @@ import {CREATE_POLLUTION_REPORT} from "../../GraphQL/Mutations";
 import {setSnackBar} from "../../SnackBarUtils"
 import ImageUploaderComp from "../../ImageUploaderComp";
 import MyLocationMap from "../../MyLocationMap.js";
-import * as firebase from "firebase/app";
+import { getAuth } from 'firebase/auth';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
 import {gvulotVar, locationMapVar, mainMapVar} from "../../cache";
@@ -115,8 +115,8 @@ const PollutionForm = ({ openTab }) => {
             files: imageUploaderRef.current.state.pictures,
             input: {
               pollutionReport:{
-                reporter: firebase.auth().currentUser ? firebase.auth().currentUser.displayName: "Test",
-                reporterImageUrl: firebase.auth().currentUser? firebase.auth().currentUser.photoURL: null,
+                reporter: getAuth().currentUser ? getAuth().currentUser.displayName: "Test",
+                reporterImageUrl: getAuth().currentUser? getAuth().currentUser.photoURL: null,
                 isRelevant: true,
                 photoUrls: [],
                 // type: pollutionTypePickerRef.current.state.image.value,

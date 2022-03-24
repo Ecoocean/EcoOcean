@@ -11,6 +11,7 @@ export default function EcooceanHome() {
             <Grid item xs={6}>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     <img
+                        id={'ecoocean-home-logo'}
                         src="/images/ecoOcenLogoNavPainted.png"
                         alt="logo"
                         style={{ width: "12rem" }}
@@ -20,6 +21,7 @@ export default function EcooceanHome() {
             <Grid item xs={6}>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     <img
+                        id={'bgu-home-logo'}
                         src="/images/bgu.png"
                         alt="logo"
                         style={{ width: "12rem" }}

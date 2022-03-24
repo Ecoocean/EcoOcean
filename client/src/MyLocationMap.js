@@ -33,6 +33,7 @@ export default function MyLocationMap({onLocationFound}) {
         });
 
         // add Leaflet-Geoman controls with some options to the map
+        map.pm = new L.PM.Map(map);
         map.pm.addControls({
             position: 'bottomleft',
             drawPolyline: false,
@@ -42,6 +43,7 @@ export default function MyLocationMap({onLocationFound}) {
             drawCircleMarker: false,
 
         });
+
 
         const searchLayer = new L.Control.Search({
             position: 'topleft',

@@ -1,12 +1,13 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
-import firebase from "firebase";
+import { getAuth } from 'firebase/auth';
 import Grid from "@mui/material/Grid";
 import {Logout} from "@mui/icons-material";
 import {Button} from "@mui/material";
 import { styled } from '@mui/material/styles';
 import './SettingsTab.scss';
+import {sideBarOpenTabVar} from "../cache";
 
 export default function SettingsTab() {
 
@@ -21,24 +22,29 @@ export default function SettingsTab() {
       }
     `;
 
+    const onSignOut = () => {
+        getAuth().signOut();
+        sideBarOpenTabVar('home');
+    }
+
     return (
         <Box sx={{ display: "flex", paddingTop: "10px", flexDirection: "column", alignItems: "center", pl: 1, pb: 1 }}>
             <Grid item xs={6}>
                 <CustomizedAvatar
                     variant="circular"
                     src={
-                        firebase.auth().currentUser.photoURL
-                            ? firebase.auth().currentUser.photoURL
+                        getAuth().currentUser?.photoURL
+                            ? getAuth().currentUser.photoURL
                             : "/"
                     }
-                    alt={firebase.auth().currentUser.displayName}
+                    alt={getAuth().currentUser?.displayName}
                 />
             </Grid>
             <Grid item xs={6}>
-                <p>Username: {firebase.auth().currentUser.displayName}</p>
+                <p>Username: {getAuth().currentUser?.displayName}</p>
             </Grid>
             <Grid item xs={6}>
-                <Button variant="contained" onClick={() => firebase.auth().signOut()} endIcon={<Logout />}>
+                <Button id={'logout-button'} variant="contained" onClick={onSignOut} endIcon={<Logout />}>
                     Logout
                 </Button>
             </Grid>

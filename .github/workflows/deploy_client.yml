@@ -2,14 +2,15 @@ name: Firebase Continous Deployment Client
 
 on:
   workflow_run:
-    workflows: ["Build and Deploy to Cloud Run"]
-    branches: [master]
+    workflows: [ "Build and Deploy to Cloud Run" ]
+    branches: [ master ]
     types:
       - completed
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     defaults:
       run:
         working-directory: ./client
