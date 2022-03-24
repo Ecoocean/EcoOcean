@@ -16,7 +16,7 @@
     "@turf/turf": "^6.5.0",
     "apollo-upload-client": "^16.0.0",
     "env-cmd": "^10.1.0",
-    "firebase": "^9.6.8",
+    "firebase": "^9.6.9",
     "formik": "^2.2.9",
     "graphql": "^15.6.0",
     "leaflet": "1.7.1",

@@ -3,6 +3,9 @@ name: Node Continuous Integration - Admin
 on:
   pull_request:
     branches: [ master ]
+  push:
+    branches:
+      - master
 
 jobs:
   continuous_integration_client:

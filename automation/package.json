@@ -4,12 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "percy": "percy exec -- cypress run"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^9.5.1"
+    "@percy/cli": "^1.0.0-beta.76",
+    "@percy/cypress": "^3.1.1",
+    "cypress": "^9.5.1",
+    "cypress-network-idle": "^1.4.0"
   }
 }
