@@ -2214,10 +2214,10 @@
   dependencies:
     "@types/unist" "*"
 
-"@types/history@*", "@types/history@^4.7.9":
-  version "4.7.9"
-  resolved "https://artifactory6.grabcad.net:443/artifactory/api/npm/npm-repo/@types/history/-/history-4.7.9.tgz"
-  integrity sha1-HPttYO84IsWJ8Y5w+LEvmijOhyQ=
+"@types/history@*", "@types/history@^4.7.11", "@types/history@^4.7.9":
+  version "4.7.11"
+  resolved "https://registry.npmjs.org/@types/history/-/history-4.7.11.tgz"
+  integrity sha512-qjDJRrmvBMiTx+jyLxvLfJU7UznFuokDv4f3WRuriHKERccVpFU+8XMQUAbDzoiJCsmexxRExQeMwwCdamSKDA==
 
 "@types/hoist-non-react-statics@*", "@types/hoist-non-react-statics@^3.3.0", "@types/hoist-non-react-statics@^3.3.1":
   version "3.3.1"
@@ -2357,12 +2357,12 @@
     "@types/react" "*"
     "@types/react-router" "*"
 
-"@types/react-router@*", "@types/react-router@^5.1.17":
-  version "5.1.17"
-  resolved "https://artifactory6.grabcad.net:443/artifactory/api/npm/npm-repo/@types/react-router/-/react-router-5.1.17.tgz"
-  integrity sha1-CHCRAGITsRBC85Vw5c1BSGNpOWg=
+"@types/react-router@*", "@types/react-router@5.1.18":
+  version "5.1.18"
+  resolved "https://registry.npmjs.org/@types/react-router/-/react-router-5.1.18.tgz"
+  integrity sha512-YYknwy0D0iOwKQgz9v8nOzt2J6l4gouBmDnWqUUznltOTaon+r8US8ky8HvN0tXvc38U9m6z/t2RsVsnd1zM0g==
   dependencies:
-    "@types/history" "*"
+    "@types/history" "^4.7.11"
     "@types/react" "*"
 
 "@types/react-transition-group@^4.4.0":
