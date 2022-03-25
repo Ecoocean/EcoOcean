@@ -8,6 +8,7 @@ import { Navigate  } from 'react-router-dom'
 import './SignInPage.css'
 import Button from '@mui/material/Button';
 import { useAuth } from "../contexts/AuthContext";
+import {Alert, AlertTitle} from "@mui/lab";
 
 const auth = getAuth();
 
@@ -16,9 +17,6 @@ if (process.env.REACT_APP_ENVIRONMENT === "dev") {
 }
 
 function SignInScreen() {
-  const [checkingAuth, setCheckingAuth] = useState(false);
-  const [userAuthenticated, setUserAuthenticated] = useState(false);
-  const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
 
   // Configure FirebaseUI.
   const uiConfig = {
@@ -36,7 +34,7 @@ function SignInScreen() {
       signInSuccessWithAuthResult: () => false,
     },
   };
-  const { currentUser } = useAuth();
+  const { currentUser, isLoading, notAuth, setNotAuth } = useAuth();
 
   if (!currentUser) {
     return (
@@ -45,19 +43,25 @@ function SignInScreen() {
             <title>Login</title>
           </Helmet>
           <img className="LoginLogo" src={'/images/Ecoocean_new_logo_filtered.jpg'} alt="" />
-          {!isSignedIn && checkingAuth && !userAuthenticated ? <CircularProgress color="inherit" /> :
-              isSignedIn && !userAuthenticated?
-                  <div>
-                    <h4 style={{color: "white"}}>User is not authorized</h4>
+          {isLoading ? <CircularProgress color="inherit" /> :
+              notAuth ?
+                  <div style={{alignItems: 'center',
+                    justifyContent: 'center',
+                    display: 'flex',
+                    gap: '10px',
+                    flexDirection: 'column'}}>
+                    <Alert variant="filled" severity="info">
+                      <AlertTitle>Error</AlertTitle>
+                      User is not authorized — <strong>Please ask an admin to get access</strong>
+                    </Alert>
                     <Button variant="contained" onClick={() => {
-                      setUserAuthenticated(false);
-                      setIsSignedIn(null);
-                      setCheckingAuth(false);
+                      setNotAuth(false);
                       auth.signOut();
                     }}>
                       Try with a different account
                     </Button>
-                  </div>:
+                  </div>
+                  :
                   <div>
                     <StyledFirebaseAuth
                         uiConfig={uiConfig}

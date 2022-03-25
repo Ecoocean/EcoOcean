@@ -21,22 +21,23 @@ export const db = admin.firestore();
 export const bucket = admin.storage().bucket();
 
 (async function (){
-  const runner = await makeQueryRunner(
-      process.env.DATABASE_URL || `postgres://${dbUserName}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`,
-      "public"
-  );
-  try {
-    const email = 'admin@gmail.com';
-    const displayName = 'admin';
-    const user = await auth.createUser({
-      email,
-      emailVerified: true,
-      password: '123456',
-      displayName,
-      disabled: false,
-    });
-    const result = await runner.query(
-        `
+  if ( process.env.ENVIRONMENT === 'prod') {
+    const runner = await makeQueryRunner(
+        process.env.DATABASE_URL || `postgres://${dbUserName}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`,
+        "public"
+    );
+    try {
+      const email = 'admin@gmail.com';
+      const displayName = 'admin';
+      const user = await auth.createUser({
+        email,
+        emailVerified: true,
+        password: '123456',
+        displayName,
+        disabled: false,
+      });
+      const result = await runner.query(
+          `
             mutation createUser($input: CreateUserInput!) {
               createUser(input: $input) {
                 user {
@@ -45,27 +46,27 @@ export const bucket = admin.storage().bucket();
               }
             }
        `,
-        {
-          input: {
-            user:{
-              uid: user.uid,
-              displayName,
-              email,
-              emailVerified: true,
-              isOnboarded: true,
-            }
-          },
-        }
-    );
+          {
+            input: {
+              user:{
+                uid: user.uid,
+                displayName,
+                email,
+                emailVerified: true,
+                isOnboarded: true,
+              }
+            },
+          }
+      );
 
-    console.log(JSON.stringify(result, null, 2));
+      console.log(JSON.stringify(result, null, 2));
 
+    }
+    catch (e) {
+      console.log(e);
+    }
+    finally {
+      await runner.release();
+    }
   }
-  catch (e) {
-    console.log(e);
-  }
-  finally {
-    await runner.release();
-  }
-
 })();

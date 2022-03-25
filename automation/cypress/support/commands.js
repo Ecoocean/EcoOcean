@@ -23,9 +23,11 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+
 const mapSelector = '#map';
 
-Cypress.Commands.add('login', (email, password) => {
+Cypress.Commands.add('loginExistUser', (email, password) => {
     cy.contains('Sign in with email').click();
     cy.get('input[id="ui-sign-in-email-input"]')
         .type(email).should('have.value', email);
@@ -33,10 +35,30 @@ Cypress.Commands.add('login', (email, password) => {
     cy.get('input[id="ui-sign-in-password-input"]')
         .type(password).should('have.value', password);
     cy.contains('Sign In').click();
+});
+
+Cypress.Commands.add('loginNewUser', (email, name, password) => {
+    cy.contains('Sign in with email').click();
+    cy.get('input[id="ui-sign-in-email-input"]')
+        .type(email).should('have.value', email);
+    cy.contains('Next').click();
+    cy.get('input[id="ui-sign-in-name-input"]')
+        .type(name).should('have.value', name);
+    cy.get('input[id="ui-sign-in-new-password-input"]')
+        .type(password).should('have.value', password);
+    cy.contains('Save').click();
+});
+
+Cypress.Commands.add('validateHomeScreen', () => {
     cy.url().should('eq', 'http://localhost:3000/');
     cy.get('img[id="bgu-home-logo"]', { timeout: 10000 }).should('be.visible');
     cy.get('img[id="ecoocean-home-logo"]', { timeout: 10000 }).should('be.visible');
     cy.waitForNetworkIdle(5000);
+});
+
+Cypress.Commands.add('validateLoginScreen', () => {
+    cy.url().should('include', '/login');
+    cy.get('img[class="LoginLogo"]', { timeout: 10000 }).should('be.visible');
 });
 
 Cypress.Commands.add('logout', () => {
@@ -44,6 +66,4 @@ Cypress.Commands.add('logout', () => {
     cy.get('button')
         .contains('Logout')
         .parent().click();
-    cy.url().should('include', '/login');
-    cy.get('img[class="LoginLogo"]', { timeout: 10000 }).should('be.visible');
 })
