@@ -22,7 +22,7 @@
     "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
     "@graphile/pg-pubsub": "^4.12.2",
     "@graphile/postgis": "^0.1.0",
-    "@graphql-tools/schema": "^8.3.0",
+    "@graphql-tools/schema": "8.3.5",
     "@types/firebase": "^3.2.1",
     "apollo-datasource-firestore": "^3.0.0",
     "apollo-log": "^1.1.0",
