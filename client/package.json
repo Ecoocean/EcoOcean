@@ -23,7 +23,6 @@
     "leaflet-easyprint": "^2.1.9",
     "leaflet-search": "^3.0.2",
     "leaflet.locatecontrol": "^0.76.0",
-    "node-sass": "^4.0.0",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "react-firebaseui": "^6.0.0",
@@ -37,13 +36,15 @@
     "react-leaflet-sidebarv2": "0.6.0",
     "react-router": "^6.2.2",
     "react-router-dom": "^6.2.2",
-    "react-scripts": "3.0.1",
+    "react-scripts": "^5.0.0",
     "react-transition-group": "^4.4.2",
     "subscriptions-transport-ws": "^0.9.19",
     "yup": "^0.32.9"
   },
   "devDependencies": {
     "react-app-rewired": "^2.1.8",
+    "sass": "^1.49.9",
+    "sass-loader": "^12.6.0",
     "typescript": "3.8.3"
   },
   "scripts": {
