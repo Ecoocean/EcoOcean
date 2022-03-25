@@ -6,8 +6,8 @@
   "scripts": {
     "cypress:open": "env-cmd -f .env cypress open",
     "waitForServices": "node ./cypress/support/waitForServices.js",
-    "cypress:run": "env-cmd -f .env cypress run",
-    "percy": "env-cmd -f .env percy exec -- cypress run"
+    "cypress:run": "npm run waitForServices && env-cmd -f .env cypress run --browser chrome",
+    "percy": "npm run waitForServices && env-cmd -f .env percy exec -- cypress run"
   },
   "keywords": [],
   "author": "",
