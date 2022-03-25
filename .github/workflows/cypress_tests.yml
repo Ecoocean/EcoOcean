@@ -43,8 +43,9 @@ jobs:
           browser: chrome
           record: true
           working-directory: ./automation
-          command-prefix: 'env-cmd -f .env percy exec -- npx'
+          command-prefix: 'percy exec -- npx'
         env:
+          FIREBASE_AUTH_EMULATOR_HOST: localhost:9099
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
           # pass the Dashboard record key as an environment variable
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
