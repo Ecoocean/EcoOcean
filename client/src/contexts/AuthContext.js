@@ -21,7 +21,7 @@ initializeApp(firebaseConfig);
 
 let auth = getAuth();
 if (process.env.REACT_APP_ENVIRONMENT === "dev") {
-  connectAuthEmulator(auth,'http://localhost:9099/');
+  connectAuthEmulator(auth,'http://localhost:9099/', { disableWarnings: true });
 }
 
 export function useAuth() {
