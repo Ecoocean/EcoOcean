@@ -11318,10 +11318,10 @@ react-dotenv@^0.1.3:
     lodash "^4.17.20"
     prettier "^2.1.2"
 
-react-draft-wysiwyg@^1.14.5:
-  version "1.14.5"
-  resolved "https://artifactory6.grabcad.net:443/artifactory/api/npm/npm-repo/react-draft-wysiwyg/-/react-draft-wysiwyg-1.14.5.tgz"
-  integrity sha1-guNK40crgVtdn3BhX0DhOvy8IFU=
+react-draft-wysiwyg@1.14.7:
+  version "1.14.7"
+  resolved "https://registry.npmjs.org/react-draft-wysiwyg/-/react-draft-wysiwyg-1.14.7.tgz"
+  integrity sha512-D4X8F/ourvQZuqHzCQ6Vs6Tnt6TbGH58kvHQxC+aZGq+45ko2EyatL6G5C/paMaNKDZq2JRe7yAzykneMLpNOg==
   dependencies:
     classnames "^2.2.6"
     draftjs-utils "^0.10.2"
