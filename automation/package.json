@@ -18,7 +18,7 @@
     "cypress": "^9.5.2",
     "cypress-network-idle": "^1.4.0",
     "env-cmd": "^10.1.0",
-    "firebase-admin": "^9.0.0",
+    "firebase-admin": "10.0.2",
     "graphql": "^15.6.1",
     "pg": "^8.7.3",
     "postgraphile": "4.12.9",
