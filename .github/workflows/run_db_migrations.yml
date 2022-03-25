@@ -5,7 +5,7 @@ on:
       - master
 
 env:
-  node-version: 14
+  node-version: 16
   PROJECT_ID: ecoocean
   gcp-cloud-sql-instance: ecoocean-db1
 
