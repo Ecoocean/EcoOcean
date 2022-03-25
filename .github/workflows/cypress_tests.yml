@@ -43,7 +43,7 @@ jobs:
           browser: chrome
           record: true
           working-directory: ./automation
-          command-prefix: 'percy exec -- npx'
+          command-prefix: 'env-cmd -f .env percy exec -- npx'
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
           # pass the Dashboard record key as an environment variable
