@@ -11,7 +11,7 @@ describe('login to ecoocean - positive scenario', () => {
       }}).then((result) => {
       expect(result.code).to.eq(0)
     });
-    cy.visit('http://localhost:3000', { timeout: 1200000 });
+    cy.visit('http://localhost:3000', { timeout: 120000 });
   })
 
   it('login as admin to ecoocean', () => {
@@ -40,7 +40,7 @@ describe('login to ecoocean - negative scenario', () => {
     cy.exec('node ./cypress/support/cleanupFirebase.js').then((result) => {
       expect(result.code).to.eq(0)
     })
-    cy.visit('http://localhost:3000', { timeout: 1200000 });
+    cy.visit('http://localhost:3000', { timeout: 120000 });
   });
 
   it('assert failed login of a new user', () => {
