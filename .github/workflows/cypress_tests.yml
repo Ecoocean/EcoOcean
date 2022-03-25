@@ -28,22 +28,25 @@ jobs:
       - name: Build Client Moudles
         run: npm ci
         working-directory: ./client
-      - name: Run Client in Dev Mode
-        run: npm run start &
-        working-directory: ./client
       - name: Migrate Postgis DB
         run: npm run migrateUpLocal
         working-directory: ./server
       - name: Run Server in Dev Mode
         run: npm run start:dev &
         working-directory: ./server
+      - name: Run Client in Dev Mode
+        run: npm run start &
+        working-directory: ./client
+      - name: Wait For Services
+        run: npm ci && npm run waitForServices
+        working-directory: ./automation
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
           browser: chrome
           record: true
           working-directory: ./automation
-          command-prefix: 'npm run waitForServices && percy exec -- npx'
+          command-prefix: 'percy exec -- npx'
         env:
           FIREBASE_AUTH_EMULATOR_HOST: localhost:9099
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
