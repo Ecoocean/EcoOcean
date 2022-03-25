@@ -43,7 +43,7 @@ jobs:
           browser: chrome
           record: true
           working-directory: ./automation
-          command-prefix: 'percy exec -- npx'
+          command-prefix: 'npm run waitForServices && percy exec -- npx'
         env:
           FIREBASE_AUTH_EMULATOR_HOST: localhost:9099
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}

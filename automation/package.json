@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "cypress:open": "env-cmd -f .env cypress open",
-    "clear": "node ./cypress/support/cleanupFirebase.js",
-    "add": "node ./cypress/support/addUserFirebase.js",
+    "waitForServices": "node ./cypress/support/waitForServices.js",
     "cypress:run": "env-cmd -f .env cypress run",
     "percy": "env-cmd -f .env percy exec -- cypress run"
   },
@@ -20,8 +19,9 @@
     "cypress-network-idle": "^1.4.0",
     "env-cmd": "^10.1.0",
     "firebase-admin": "^9.0.0",
-    "pg": "^8.7.3",
     "graphql": "^15.6.1",
-    "postgraphile": "4.12.9"
+    "pg": "^8.7.3",
+    "postgraphile": "4.12.9",
+    "wait-on": "^6.0.1"
   }
 }
