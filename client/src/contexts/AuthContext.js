@@ -29,6 +29,8 @@ export function useAuth() {
 }
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [notAuth, setNotAuth] = useState(false);
   const [signInClient, {client, loading, error, data }] = useMutation(SIGN_IN_CLIENT);
 
   // listen for db user result
@@ -37,31 +39,44 @@ export function AuthProvider({ children }) {
       localStorage.setItem('token', data?.signinClient.jwtToken);
       client.resetStore();
       setCurrentUser(data?.signinClient);
+      setNotAuth(false);
     }
-  }, [data])
+    else if (data || error) {
+      setNotAuth(true);
+    }
+    setIsLoading(false);
+  }, [data, error])
 
   const value = {
+    isLoading,
     currentUser,
+    notAuth,
+    setNotAuth
   };
 
   useEffect(() => {
     const unregisterAuthObserver = auth.onAuthStateChanged((user) => {
       if(user) {
-        localStorage.removeItem('token')
-        signInClient({
-          variables:{
-            input: {
-              userId: user?.uid
+        localStorage.removeItem('token');
+        setIsLoading(true);
+        setTimeout(() => {
+          signInClient({
+            variables:{
+              input: {
+                userId: user?.uid
+              }
             }
-          }
-        })
+          })
+        }, 1000);
       }
       else{
         setCurrentUser(null);
       }
 
     });
-    return () => unregisterAuthObserver();
+    return () => {
+      unregisterAuthObserver();
+    }
 
   }, []);
 

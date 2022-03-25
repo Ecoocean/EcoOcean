@@ -1,2 +1,2 @@
-# react-leaflet-sidebar
+# react-leaflet-sidebar 2
 Created with CodeSandbox
