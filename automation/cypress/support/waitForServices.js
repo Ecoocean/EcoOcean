@@ -6,14 +6,14 @@ const opts = {
     ],
     log: true,
     timeout: 120000
-}
+};
 
-(async () =>{
+(async function () {
     try {
         await waitOn(opts);
         // once here, all resources are available
     } catch (err) {
         console.log('failed to wait for services');
-        throw new Error('failed to wait for services')
+        throw new Error('failed to wait for services');
     }
-})()
+})();
