@@ -1,5 +1,5 @@
 
-describe('login to ecoocean - positive scenario', () => {
+describe('login to ecoocean client - positive scenario', () => {
   const email = 'random@gmail.com';
   const displayName = 'random';
   const password = '123456';
@@ -37,7 +37,7 @@ describe('login to ecoocean - positive scenario', () => {
   })
 });
 
-describe('login to ecoocean - negative scenario', () => {
+describe('login to ecoocean client - negative scenario', () => {
   beforeEach(() =>{
     cy.clearLocalStorage();
     indexedDB.deleteDatabase('firebaseLocalStorageDb');

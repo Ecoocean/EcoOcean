@@ -53,7 +53,6 @@ describe('login to ecoocean - negative scenario', () => {
   });
 
   it('assert failed login of a new user', () => {
-
     cy.loginNewUser('automation@gmail.com', 'automation', '123456');
     cy.validateLoginScreen();
     cy.contains('User is not authorized — Please ask an admin to get access', { timeout: 10000 }).should('be.visible');
@@ -62,12 +61,10 @@ describe('login to ecoocean - negative scenario', () => {
   });
 
   it('assert failed login of a normal user', () => {
-
     cy.loginExistUser(normalUser.email, normalUser.password);
     cy.validateLoginScreen();
     cy.contains('User is not authorized — Please ask an admin to get access', { timeout: 10000 }).should('be.visible');
     cy.contains('Try with a different account', { timeout: 10000 }).should('be.visible');
-    cy.percySnapshot('login page admin - unauthorized user');
   });
 })
 
