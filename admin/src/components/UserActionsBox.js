@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import IconButton from "@mui/material/IconButton";
-import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 import { Grid } from "@mui/material";
 import { useMutation } from "@apollo/client";
 import { CREATE_USER } from "../GraphQL/Mutations";
 import { setSnackBar } from "../SnackBarUtils";
-import { userInfo } from "os";
 import { lastOnboardUserUIDVar } from "../cache";
 
-const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
+const BootstrapTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.arrow}`]: {

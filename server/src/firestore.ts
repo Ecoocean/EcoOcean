@@ -21,7 +21,7 @@ export const db = admin.firestore();
 export const bucket = admin.storage().bucket();
 
 (async function (){
-  if ( process.env.ENVIRONMENT === 'prod') {
+  if ( process.env.ENVIRONMENT === 'dev') {
     const runner = await makeQueryRunner(
         process.env.DATABASE_URL || `postgres://${dbUserName}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`,
         "public"
@@ -52,6 +52,7 @@ export const bucket = admin.storage().bucket();
                 uid: user.uid,
                 displayName,
                 email,
+                isAdmin: true,
                 emailVerified: true,
                 isOnboarded: true,
               }
