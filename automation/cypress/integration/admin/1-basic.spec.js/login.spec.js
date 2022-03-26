@@ -23,6 +23,7 @@ describe('login to ecoocean admin - positive scenario', () => {
     cy.percySnapshot('login screen - admin');
     cy.loginExistUser(adminUser.email, adminUser.password);
     cy.validateHomeScreenAdmin();
+    cy.percySnapshot('home page admin');
   })
 
   it('logout from ecoocean admin', () => {
