@@ -1,5 +1,5 @@
 .LoginRoot {
-  background-image: url(/images/ocean_background_login.png);
+  background-image: url(../../public/images/ocean_background_login.png);
   background-repeat: no-repeat;
   height: 100vh;
   display: flex;

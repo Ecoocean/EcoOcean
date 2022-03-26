@@ -10,23 +10,24 @@ import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import firebase from "firebase";
 import { useNavigate } from "react-router";
+import {useAuth} from "../contexts/AuthContext";
 
 export default function AccountMenu() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-  return firebase.auth().currentUser ? (
+  const { firebaseAuth } = useAuth();
+  return firebaseAuth.currentUser ? (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-        {firebase.auth().currentUser.displayName}
+        {firebaseAuth.currentUser.displayName}
         <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
           <Tooltip title="Account settings" arrow>
             <Avatar
@@ -35,11 +36,11 @@ export default function AccountMenu() {
               }}
               variant="circular"
               src={
-                firebase.auth().currentUser.photoURL
-                  ? firebase.auth().currentUser.photoURL
+                firebaseAuth.currentUser.photoURL
+                  ? firebaseAuth.currentUser.photoURL
                   : "/"
               }
-              alt={firebase.auth().currentUser.displayName}
+              alt={firebaseAuth.currentUser.displayName}
             />
           </Tooltip>
         </IconButton>
@@ -99,7 +100,7 @@ export default function AccountMenu() {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            firebase.auth().signOut();
+            firebaseAuth.signOut();
             navigate("/login");
           }}
         >

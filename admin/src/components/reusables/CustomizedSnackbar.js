@@ -8,7 +8,7 @@ import {
 } from "../../cache";
 import { useReactiveVar } from "@apollo/client";
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+const Alert = React.forwardRef(function Alert(
   props,
   ref
 ) {
@@ -20,7 +20,7 @@ const CustomizedSnackbar = () => {
   const severity = useReactiveVar(severitySnackBarVar);
   const msg = useReactiveVar(msgSnackBarVar);
 
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+  const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
@@ -36,7 +36,7 @@ const CustomizedSnackbar = () => {
     >
       <Alert
         onClose={handleClose}
-        severity={severity as AlertColor}
+        severity={severity}
         sx={{ width: "100%" }}
       >
         {msg}

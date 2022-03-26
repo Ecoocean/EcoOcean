@@ -17,7 +17,6 @@
     "apollo-upload-client": "^16.0.0",
     "env-cmd": "^10.1.0",
     "firebase": "^9.6.9",
-    "formik": "^2.2.9",
     "graphql": "^15.6.0",
     "leaflet": "1.7.1",
     "leaflet-easyprint": "^2.1.9",
@@ -44,8 +43,7 @@
   "devDependencies": {
     "react-app-rewired": "^2.1.8",
     "sass": "^1.49.9",
-    "sass-loader": "^12.6.0",
-    "typescript": "3.8.3"
+    "sass-loader": "^12.6.0"
   },
   "scripts": {
     "start": "env-cmd -f .env.development react-app-rewired start",

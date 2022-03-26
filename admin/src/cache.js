@@ -23,7 +23,7 @@ export const showSnackBarVar = makeVar(false);
 export const msgSnackBarVar = makeVar("");
 export const severitySnackBarVar = makeVar("");
 
-export const cache: InMemoryCache = new InMemoryCache({
+export const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {

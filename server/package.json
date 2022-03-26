@@ -8,6 +8,7 @@
     "migrate": "node-pg-migrate",
     "migrateLocal": "env-cmd -f .env.development node-pg-migrate --no-verbose",
     "start:dev": "env-cmd -f .env.development ts-node-dev --respawn src/index.ts",
+    "start:test": "env-cmd -f .env.test ts-node-dev --respawn src/index.ts",
     "migrateUpLocal": "npm run migrateLocal up",
     "migrateUp": "npm run migrate up",
     "test": "jest --passWithNoTests",
