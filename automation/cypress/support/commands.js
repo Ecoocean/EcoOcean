@@ -49,11 +49,16 @@ Cypress.Commands.add('loginNewUser', (email, name, password) => {
     cy.contains('Save').click();
 });
 
-Cypress.Commands.add('validateHomeScreen', () => {
+Cypress.Commands.add('validateHomeScreenClient', () => {
     cy.url().should('eq', 'http://localhost:3000/');
     cy.get('img[id="bgu-home-logo"]', { timeout: 10000 }).should('be.visible');
     cy.get('img[id="ecoocean-home-logo"]', { timeout: 10000 }).should('be.visible');
     cy.waitForNetworkIdle(5000);
+});
+
+Cypress.Commands.add('validateHomeScreenAdmin', () => {
+    cy.url().should('eq', 'http://localhost:3001/');
+    cy.contains('Admin EcoOcean', { timeout: 10000 }).should('be.visible');
 });
 
 Cypress.Commands.add('validateLoginScreen', () => {
@@ -61,9 +66,15 @@ Cypress.Commands.add('validateLoginScreen', () => {
     cy.get('img[class="LoginLogo"]', { timeout: 10000 }).should('be.visible');
 });
 
-Cypress.Commands.add('logout', () => {
+Cypress.Commands.add('logoutClient', () => {
     cy.get('button[id="settings"]').click();
     cy.get('button')
         .contains('Logout')
         .parent().click();
+})
+
+Cypress.Commands.add('logoutAdmin', () => {
+    cy.get('div[class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-yykqe9-MuiAvatar-root"]').click();
+    cy.contains('Logout').click();
+
 })

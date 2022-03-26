@@ -2,7 +2,9 @@ const waitOn = require('wait-on');
 
 const opts = {
     resources: [
+        'http://localhost:8080',
         'http://localhost:3000',
+        'http://localhost:3001',
     ],
     log: true,
     timeout: 120000

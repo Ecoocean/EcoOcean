@@ -28,6 +28,9 @@ jobs:
       - name: Build Client Moudles
         run: npm ci
         working-directory: ./client
+      - name: Build Admin Moudles
+        run: npm ci
+        working-directory: ./admin
       - name: Migrate Postgis DB
         run: npm run migrateUpLocal
         working-directory: ./server
@@ -37,6 +40,9 @@ jobs:
       - name: Run Client in Dev Mode
         run: npm run start &
         working-directory: ./client
+      - name: Run Admin in Dev Mode
+        run: npm run start &
+        working-directory: ./admin
       - name: Wait For Services
         run: npm ci && npm run waitForServices
         working-directory: ./automation

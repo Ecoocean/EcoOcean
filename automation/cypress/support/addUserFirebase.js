@@ -9,6 +9,7 @@ const { makeQueryRunner } = require("./queryRunner");
     const email = process.env.email;
     const password = process.env.password;
     const displayName = process.env.displayName;
+    const isAdmin = process.env.isAdmin;
     const user = await auth.createUser({
         email,
         emailVerified: true,
@@ -33,6 +34,7 @@ const { makeQueryRunner } = require("./queryRunner");
                     uid: user.uid,
                     displayName,
                     email,
+                    isAdmin: isAdmin === 'true',
                     emailVerified: true,
                     isOnboarded: true,
                 }
