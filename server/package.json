@@ -43,7 +43,7 @@
     "jest": "27.5.1",
     "middie": "^6.0.0",
     "node-fetch": "^3.0.0",
-    "node-geocoder": "^3.27.0",
+    "node-geocoder": "3.29.0",
     "node-open-geocoder": "^4.0.1",
     "node-pg-migrate": "6.2.1",
     "pg": "8.7.3",
