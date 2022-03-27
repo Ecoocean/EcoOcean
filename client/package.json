@@ -41,7 +41,7 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
-    "react-app-rewired": "^2.1.8",
+    "react-app-rewired": "2.2.1",
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0"
   },
