@@ -476,7 +476,6 @@ type Query implements Node {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
   ): PollutionReportsConnection
-  pollutionScoreFunction(length: Int, width: Int, depth: Int): Int
 
   """Reads a single `Gvulot` using its globally unique `ID`."""
   gvulotByNodeId(
@@ -858,12 +857,6 @@ type PollutionReport implements Node {
   address: String
   photoUrls: [String]
   createdAt: Datetime!
-  length: Int
-  width: Int
-  depth: Int
-  coverage: Int
-  cleaningStatus: String
-  pollutionScore: Int
 
   """Reads and enables pagination through a set of `PolygonReport`."""
   polygonReports(
@@ -986,18 +979,6 @@ enum PollutionReportsOrderBy {
   PHOTO_URLS_DESC
   CREATED_AT_ASC
   CREATED_AT_DESC
-  LENGTH_ASC
-  LENGTH_DESC
-  WIDTH_ASC
-  WIDTH_DESC
-  DEPTH_ASC
-  DEPTH_DESC
-  COVERAGE_ASC
-  COVERAGE_DESC
-  CLEANING_STATUS_ASC
-  CLEANING_STATUS_DESC
-  POLLUTION_SCORE_ASC
-  POLLUTION_SCORE_DESC
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
 }
@@ -1030,24 +1011,6 @@ input PollutionReportCondition {
 
   """Checks for equality with the object’s `createdAt` field."""
   createdAt: Datetime
-
-  """Checks for equality with the object’s `length` field."""
-  length: Int
-
-  """Checks for equality with the object’s `width` field."""
-  width: Int
-
-  """Checks for equality with the object’s `depth` field."""
-  depth: Int
-
-  """Checks for equality with the object’s `coverage` field."""
-  coverage: Int
-
-  """Checks for equality with the object’s `cleaningStatus` field."""
-  cleaningStatus: String
-
-  """Checks for equality with the object’s `pollutionScore` field."""
-  pollutionScore: Int
 }
 
 """A connection to a list of `PubSen` values."""
@@ -1633,12 +1596,6 @@ input PollutionReportInput {
   address: String
   photoUrls: [String]
   createdAt: Datetime
-  length: Int
-  width: Int
-  depth: Int
-  coverage: Int
-  cleaningStatus: String
-  pollutionScore: Int
 }
 
 """The output of our create `PolygonReport` mutation."""
@@ -1964,12 +1921,6 @@ input PollutionReportPatch {
   address: String
   photoUrls: [String]
   createdAt: Datetime
-  length: Int
-  width: Int
-  depth: Int
-  coverage: Int
-  cleaningStatus: String
-  pollutionScore: Int
 }
 
 """All input for the `updatePollutionReport` mutation."""

@@ -68,13 +68,17 @@ export default function MyLocationMap({onLocationFound}) {
 
         locationMapVar(map);
     }
+    if(mapInstance) {
+        mapInstance._onResize();
+    }
+
     if (openTab === 'add-report' && mapInstance && !loaded){
         setLoaded(true);
         setTimeout(() => {
-            mapInstance._onResize();
+
             // request location update and set location
             lc.start();
-        }, 500);
+        }, 800);
     }
 
     return (

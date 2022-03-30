@@ -1,6 +1,39 @@
+@import "../variables";
 .MuiDialogTitle-root {
   color: #fff;
   background-color: #0074d9;
+}
+.report-dialog {
+  width: 250px;
+}
+@media (max-width: $screen-very-small ) {
+  .report-dialog {
+    width: 300px;
+  }
+}
+
+@media (min-width: $screen-very-small ) and (max-width: $screen-small ) {
+  .report-dialog {
+    width: 375px;
+  }
+}
+
+@media (min-width: $screen-small ) and (max-width: $screen-medium ) {
+  .report-dialog {
+    width: 375px;
+  }
+}
+
+@media (min-width: $screen-medium ) and (max-width: $screen-large ) {
+  .report-dialog {
+    width: 450px;
+  }
+}
+
+@media (min-width: $screen-large) {
+  .report-dialog{
+    width: 450px;
+  }
 }
 // .image-gallery {
 //   width: 100%;
