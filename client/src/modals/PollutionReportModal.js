@@ -16,10 +16,6 @@ import FormControl from '@mui/material/FormControl';
 import CustomChip from '../CustomChip';
 
 import './PollutionReportModal.scss';
-import {mainMapVar, reportPolyLayersVar} from "../cache";
-import L from "leaflet";
-import {useReactiveVar} from "@apollo/client";
-import {polygonColors} from "../PolygonColors";
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
@@ -96,12 +92,15 @@ BootstrapDialogTitle.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
+
 export const PollutionReportModal = ({ report, show, handleClose }) => {
 
   return (
     report && (
         <BootstrapDialog
-            sx={{height: "700px",  display: "absolute"}}
+            className="report-dialog"
+            sx={{ height: '500px', position: 'fixed', top: '50%', left: '50%',  marginTop: '-250px',
+                marginLeft: '-150px'}}
             onClose={handleClose}
             aria-labelledby="customized-dialog-title"
             open={show}
@@ -109,12 +108,12 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
             <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
                 Pollution Report
             </BootstrapDialogTitle>
-            <DialogContent dividers sx={{height: "700px"}}>
+            <DialogContent className="report-box" dividers sx={{height: "500px"}}>
                 <Box
                     sx={{
                         display: 'flex',
                         flexDirection: 'column',
-                        '& .MuiFormControl-root': { m: 1, width: '25ch' },
+                        '& .MuiFormControl-root': { m: 1, width: '350px' },
                     }}
                 >
                     <FormControl variant="standard">
@@ -134,22 +133,25 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
                 </Box>
 
                 {report.photoUrls?.length > 0 &&
-                    <ImageGallery
-                    showBullets= {report.photoUrls?.length > 1}
-                    showThumbnails= {report.photoUrls?.length > 1}
-                    showPlayButton={false}
-                    items={report.photoUrls?.map((photoUrl) => {
-                            return {
-                                original: photoUrl,
-                                thumbnail: photoUrl,
-                            }})
-                    }/>
+                        <ImageGallery
+                            className="report-image-gallery"
+                            showBullets= {report.photoUrls?.length > 1}
+                            showThumbnails= {report.photoUrls?.length > 1}
+                            showPlayButton={false}
+                            items={report.photoUrls?.map((photoUrl) => {
+                                return {
+                                    original: photoUrl,
+                                    thumbnail: photoUrl,
+                                }})
+                            }/>
+
                 }
 
             </DialogContent>
             <DialogActions sx={{alignItems: 'end'}}>
                 <div></div>
-                <CustomChip  variant="outlined" size={1.3} avatar={ <Avatar
+                <CustomChip
+                        variant="outlined" size={1.1} avatar={ <Avatar
                         alt={report.reporter}
                         src={!!report.reporterImageUrl ? report.reporterImageUrl : "/"}
                     />} label={'Reporter: ' + report.reporter} />

@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
 import L from 'leaflet';
-import PollutionTypePicker from "./PollutionTypePicker";
 import PollutionProporties from "./PollutionProporties";
 import {useMutation, useReactiveVar} from "@apollo/client";
 import {CREATE_POLLUTION_REPORT} from "../../GraphQL/Mutations";
@@ -18,9 +17,8 @@ import {polygonColors} from "../../PolygonColors";
 import '../../leaflet-measure-path.js';
 import '../../leaflet-measure-path.css';
 import MenuItem from "@mui/material/MenuItem";
-import {InputLabel, Paper, Select} from "@mui/material";
+import {InputLabel, Select} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
-import * as turf from "@turf/turf";
 
 let polygonReports = new Map();
 const updateItemInMap = (key, value) => {
@@ -36,8 +34,7 @@ let isBeachSegmentSelected = false;
 const PollutionForm = ({ openTab }) => {
   const map = useReactiveVar(locationMapVar);
   const gvulot = useReactiveVar(gvulotVar);
-  const pollutionTypePickerRef = useRef(null);
-  const pollutionProportiesRef = useRef(null);
+  //const pollutionProportiesRef = useRef(null);
   const imageUploaderRef = useRef(null);
   const [locationFound, setLocationFound] = useState(false);
   const [openTypePickerWindow, setOpenTypePickerWindow] = useState(false);
@@ -121,16 +118,18 @@ const PollutionForm = ({ openTab }) => {
                 photoUrls: [],
                 // type: pollutionTypePickerRef.current.state.image.value,
                 geom: { "type": "Point", "coordinates": [ location.lng, location.lat ] },
-                length: parseInt(pollutionProportiesRef.current.state.length),
-                width : parseInt(pollutionProportiesRef.current.state.width),
-                depth : parseInt(pollutionProportiesRef.current.state.depth),
-                coverage : parseInt(pollutionProportiesRef.current.state.coverage),
-                cleaningStatus : pollutionProportiesRef.current.state.cleaningStatus,
+                // length: parseInt(pollutionProportiesRef.current.state.length),
+                // width : parseInt(pollutionProportiesRef.current.state.width),
+                // depth : parseInt(pollutionProportiesRef.current.state.depth),
+                // coverage : parseInt(pollutionProportiesRef.current.state.coverage),
+                // cleaningStatus : pollutionProportiesRef.current.state.cleaningStatus,
               }
             }
           },
         });
         if(!errors) {
+          imageUploaderRef.current.reset();
+          setGvulName('');
           sideBarOpenTabVar('pollution-reports');
           setSnackBar('Pollution report successfully submitted', 'success');
 
@@ -232,7 +231,7 @@ const PollutionForm = ({ openTab }) => {
   };
   return (
       <div>
-          <div>
+          <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
               <MyLocationMap onLocationFound={onLocationFound}/>
             <FormControl sx={{ m: 1, minWidth: 250 }}>
               <InputLabel id="demo-controlled-open-select-label">Municipal</InputLabel>
@@ -252,7 +251,6 @@ const PollutionForm = ({ openTab }) => {
                 </Select>
             </FormControl>
               <ImageUploaderComp ref={imageUploaderRef}/>
-              <PollutionProporties ref={pollutionProportiesRef}/>
               <LoadingButton
                   onClick={AddPollutionReport}
                   loading={loading}
