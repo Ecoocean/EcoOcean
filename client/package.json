@@ -42,8 +42,8 @@
   },
   "devDependencies": {
     "react-app-rewired": "2.2.1",
-    "sass": "^1.49.9",
-    "sass-loader": "^12.6.0"
+    "sass": "1.49.9",
+    "sass-loader": "12.6.0"
   },
   "scripts": {
     "start": "env-cmd -f .env.development react-app-rewired start",
