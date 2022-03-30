@@ -41,8 +41,8 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
-    "sass": "^1.49.9",
-    "sass-loader": "^12.6.0"
+    "sass": "1.49.9",
+    "sass-loader": "12.6.0"
   },
   "scripts": {
     "start": "env-cmd -f .env.development react-scripts start",
