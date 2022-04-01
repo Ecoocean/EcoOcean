@@ -47,7 +47,6 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           wait-on: 'http://localhost:8080/graphiql, http://localhost:3000, http://localhost:3001'
-          # wait for 2 minutes for the server to respond
           wait-on-timeout: 120
           headless: false
           browser: chrome
