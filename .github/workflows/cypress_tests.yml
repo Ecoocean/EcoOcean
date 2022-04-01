@@ -48,7 +48,7 @@ jobs:
         with:
           wait-on: 'http://localhost:8080/graphiql, http://localhost:3000, http://localhost:3001'
           wait-on-timeout: 120
-          headless: false
+          headed: true
           browser: chrome
           record: true
           working-directory: ./automation
