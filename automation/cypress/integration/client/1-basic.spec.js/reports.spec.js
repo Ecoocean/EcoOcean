@@ -38,6 +38,11 @@ describe('reports in ecoocean client', () => {
         cy.loginExistUser('random@gmail.com', '123456');
         cy.validateHomeScreenClient();
         cy.get('div[class="sidebar-pane active"]', { timeout: 10000 }).should('be.visible');
+
+    })
+
+    it('create empty report and verify', () => {
+        cy.clickSection('add-report');
         cy.window()
             .then(win => {
                 const expectedLogMessage = `new position lat: ${position.latitude}, lng: ${position.longitude}`;
@@ -46,11 +51,6 @@ describe('reports in ecoocean client', () => {
             .then(() => {
                 setFakePosition(position);
             });
-
-    })
-
-    it('create empty report and verify', () => {
-        cy.clickSection('add-report');
         cy.wait(5000);
         cy.get('button')
             .contains('Save').click();
