@@ -1,21 +1,4 @@
-export const setFakePosition = position => {
-    // https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setGeolocationOverride
-    console.debug(`cypress::setGeolocationOverride with position ${JSON.stringify(position)}`);
-    cy.log("**setGeolocationOverride**").then(() =>
-        Cypress.automation("remote:debugger:protocol", {
-            command: "Emulation.setGeolocationOverride",
-            params: {
-                latitude: position.latitude,
-                longitude: position.longitude,
-                accuracy: 50
-            }
-        })
-    );
-};
-const position = {
-    latitude: 32.970595,
-    longitude: 35.077334
-}
+
 
 describe('reports in ecoocean client', () => {
     const email = 'random@gmail.com';
@@ -23,6 +6,24 @@ describe('reports in ecoocean client', () => {
     const password = '123456';
     const isAdmin = false;
     let positionLogSpy;
+    const setFakePosition = position => {
+        // https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setGeolocationOverride
+        console.debug(`cypress::setGeolocationOverride with position ${JSON.stringify(position)}`);
+        cy.log("**setGeolocationOverride**").then(() =>
+            Cypress.automation("remote:debugger:protocol", {
+                command: "Emulation.setGeolocationOverride",
+                params: {
+                    latitude: position.latitude,
+                    longitude: position.longitude,
+                    accuracy: 50
+                }
+            })
+        );
+    };
+    const position = {
+        latitude: 32.970595,
+        longitude: 35.077334
+    }
     beforeEach(() => {
         cy.clearLocalStorage();
         indexedDB.deleteDatabase('firebaseLocalStorageDb');
