@@ -66,15 +66,21 @@ Cypress.Commands.add('validateLoginScreen', () => {
     cy.get('img[class="LoginLogo"]', { timeout: 10000 }).should('be.visible');
 });
 
+Cypress.Commands.add('clickSection', (sectionName) => {
+    cy.get(`button[id="${sectionName}"]`).click();
+
+});
+
 Cypress.Commands.add('logoutClient', () => {
-    cy.get('button[id="settings"]').click();
+    cy.clickSection('settings');
     cy.get('button')
         .contains('Logout')
         .parent().click();
-})
+});
 
 Cypress.Commands.add('logoutAdmin', () => {
     cy.get('div[class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-yykqe9-MuiAvatar-root"]').click();
     cy.contains('Logout').click();
 
-})
+});
+
