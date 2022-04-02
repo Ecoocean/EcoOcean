@@ -50,14 +50,13 @@ Cypress.Commands.add('loginNewUser', (email, name, password) => {
 });
 
 Cypress.Commands.add('validateHomeScreenClient', () => {
-    cy.url().should('eq', 'http://localhost:3000/');
+    cy.url({ timeout: 10000 }).should('eq', 'http://localhost:3000/');
     cy.get('img[id="bgu-home-logo"]', { timeout: 10000 }).should('be.visible');
     cy.get('img[id="ecoocean-home-logo"]', { timeout: 10000 }).should('be.visible');
-    cy.waitForNetworkIdle(5000);
 });
 
 Cypress.Commands.add('validateHomeScreenAdmin', () => {
-    cy.url().should('eq', 'http://localhost:3001/');
+    cy.url({ timeout: 10000 }).should('eq', 'http://localhost:3001/');
     cy.contains('Admin EcoOcean', { timeout: 10000 }).should('be.visible');
 });
 
@@ -78,9 +77,32 @@ Cypress.Commands.add('logoutClient', () => {
         .parent().click();
 });
 
+Cypress.Commands.add('setFakeLoaction', (position) => {
+    cy.log("**allowGeolocation**").then(() =>
+        Cypress.automation("remote:debugger:protocol", {
+            command: "Browser.grantPermissions",
+            params: {
+                origin: "http://localhost:3000",
+                permissions: ["geolocation"],
+            }
+        })
+    );
+    // https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setGeolocationOverride
+    console.debug(`cypress::setGeolocationOverride with position ${JSON.stringify(position)}`);
+    cy.log("**setGeolocationOverride**").then(() =>
+        Cypress.automation("remote:debugger:protocol", {
+            command: "Emulation.setGeolocationOverride",
+            params: {
+                latitude: position.latitude,
+                longitude: position.longitude,
+                accuracy: 50
+            }
+        })
+    );
+});
+
 Cypress.Commands.add('logoutAdmin', () => {
     cy.get('div[class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-yykqe9-MuiAvatar-root"]').click();
     cy.contains('Logout').click();
-
 });
 

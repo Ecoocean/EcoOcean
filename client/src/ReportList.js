@@ -59,11 +59,12 @@ export default function ReportList() {
         }
         <List id="report-list" sx={{ display: "list-item", width: "100%" }} >
         <TransitionGroup>
-        {filteredPollutionReports && filteredPollutionReports.map((report) => {
+        {filteredPollutionReports && filteredPollutionReports.map((report, index) => {
             return (
-                <Collapse key={report.id}>
-                  <ReportItemList report={report}/>
-                </Collapse>)
+                    <Collapse key={report.id}>
+                        <ReportItemList id={`report-item-${index}`} report={report} index={index}/>
+                    </Collapse>
+                )
           })
         }
           </TransitionGroup>
