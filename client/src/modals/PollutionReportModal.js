@@ -98,9 +98,7 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
   return (
     report && (
         <BootstrapDialog
-            className="report-dialog"
-            sx={{ height: '500px', position: 'fixed', top: '50%', left: '50%',  marginTop: '-250px',
-                marginLeft: '-150px'}}
+            sx={{ height: '600px', position: 'fixed', top: '50%', left: '0%',  marginTop: '-300px'}}
             onClose={handleClose}
             aria-labelledby="customized-dialog-title"
             open={show}
@@ -108,12 +106,14 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
             <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
                 Pollution Report
             </BootstrapDialogTitle>
-            <DialogContent className="report-box" dividers sx={{height: "500px"}}>
+            <DialogContent className="report-box" dividers sx={{height: "500px", width: "500px"}}>
                 <Box
+                    className="report-dialog"
                     sx={{
+
                         display: 'flex',
                         flexDirection: 'column',
-                        '& .MuiFormControl-root': { m: 1, width: '350px' },
+                        '& .MuiFormControl-root': { m: 1 },
                     }}
                 >
                     <FormControl variant="standard">
