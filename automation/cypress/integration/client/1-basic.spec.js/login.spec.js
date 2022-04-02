@@ -23,6 +23,7 @@ describe('login to ecoocean client - positive scenario', () => {
     cy.loginExistUser('random@gmail.com', '123456');
     cy.validateHomeScreenClient();
     cy.get('div[class="sidebar-pane active"]', { timeout: 10000 }).should('be.visible');
+    cy.waitForNetworkIdle(5000);
     cy.percySnapshot('home page client - side panel open');
     cy.get('div[class="sidebar-close"]').click({multiple: true, force: true});
     cy.get('div[class="sidebar-pane active"]').should('not.exist');

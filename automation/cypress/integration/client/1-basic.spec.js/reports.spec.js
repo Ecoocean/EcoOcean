@@ -6,29 +6,6 @@ describe('reports in ecoocean client', () => {
     const password = '123456';
     const isAdmin = false;
     let positionLogSpy;
-    const setFakePosition = position => {
-        cy.log("**allowGeolocation**").then(() =>
-            Cypress.automation("remote:debugger:protocol", {
-                command: "Browser.grantPermissions",
-                params: {
-                    origin: "http://localhost:3000",
-                    permissions: ["geolocation"],
-                }
-            })
-        );
-        // https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setGeolocationOverride
-        console.debug(`cypress::setGeolocationOverride with position ${JSON.stringify(position)}`);
-        cy.log("**setGeolocationOverride**").then(() =>
-            Cypress.automation("remote:debugger:protocol", {
-                command: "Emulation.setGeolocationOverride",
-                params: {
-                    latitude: position.latitude,
-                    longitude: position.longitude,
-                    accuracy: 50
-                }
-            })
-        );
-    };
     const position = {
         latitude: 32.970595,
         longitude: 35.077334
@@ -59,14 +36,53 @@ describe('reports in ecoocean client', () => {
                 positionLogSpy = cy.spy(win.console, "log").withArgs(expectedLogMessage);
             })
             .then(() => {
-                setFakePosition(position);
+                cy.setFakeLoaction(position);
             });
-        cy.wait(5000);
         cy.get('button')
-            .contains('Save').click();
+            .contains('Save').click({ timeout: 10000 });
         cy.contains('Pollution Reports', { timeout: 10000 }).should('be.visible');
         cy.contains('Pollution report successfully submitted', { timeout: 10000 }).should('be.visible');
-        cy.get('ul[id="report-list"]').should('have.length', 1);
+        cy.get('ul[id="report-list"]').first().first().should('have.length', 1);
+    });
+
+    it('remove a report and verify', () => {
+        cy.clickSection('add-report');
+        cy.window()
+            .then(win => {
+                const expectedLogMessage = `new position lat: ${position.latitude}, lng: ${position.longitude}`;
+                positionLogSpy = cy.spy(win.console, "log").withArgs(expectedLogMessage);
+            })
+            .then(() => {
+                cy.setFakeLoaction(position);
+            });
+        cy.get('button')
+            .contains('Save').click({ timeout: 10000 });
+        cy.contains('Pollution Reports', { timeout: 10000 }).should('be.visible');
+        cy.contains('Pollution report successfully submitted', { timeout: 10000 }).should('be.visible');
+        cy.get('ul[id="report-list"]').first().first().should('have.length', 1);
+        cy.get('button[id="delete-report-0"]').click({ timeout: 10000 });
+        cy.contains('Pollution report successfully deleted', { timeout: 10000 }).should('be.visible');
+        cy.get('button[id="delete-report-0"]', { timeout: 10000 }).should('not.exist');
+        cy.get('ul[id="report-list"]').first().children().children().should('not.exist');
+    })
+
+    it('click on report in the report list should open report modal', () => {
+        cy.clickSection('add-report');
+        cy.window()
+            .then(win => {
+                const expectedLogMessage = `new position lat: ${position.latitude}, lng: ${position.longitude}`;
+                positionLogSpy = cy.spy(win.console, "log").withArgs(expectedLogMessage);
+            })
+            .then(() => {
+                cy.setFakeLoaction(position);
+            });
+        cy.get('button')
+            .contains('Save').click({ timeout: 10000 });
+        cy.contains('Pollution Reports', { timeout: 10000 }).should('be.visible');
+        cy.contains('Pollution report successfully submitted', { timeout: 10000 }).should('be.visible');
+        cy.get('ul[id="report-list"]').first().first().should('have.length', 1);
+        cy.get('div[id="report-item-clickable-0"]').click({ timeout: 10000 });
+        cy.contains('Pollution report', { timeout: 10000 }).should('be.visible');
     })
 });
 

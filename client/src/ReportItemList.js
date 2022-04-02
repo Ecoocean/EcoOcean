@@ -16,7 +16,7 @@ import './leaflet-measure-path.js';
 import './leaflet-measure-path.css';
 
 
-const ReportItemList = ({report}) => {
+const ReportItemList = ({report, index}) => {
     const [openInfoWindow, setOpenInfoWindow] = useState(false);
     const [polygons, setPolygons] = useState(null);
     const [showHide, setShowHide] = useState(false);
@@ -101,6 +101,7 @@ const ReportItemList = ({report}) => {
                                 (reportPolygonsLayers.get(report.id) && polygons && showHide) ?
                                     <Tooltip title="Hide Report Polygons" placement="top" arrow>
                                         <IconButton
+                                            id={`hide-report-polygons-${index}`}
                                             aria-label="delete"
                                             onClick={hidePolygonsOnMap}
                                         >
@@ -109,6 +110,7 @@ const ReportItemList = ({report}) => {
                                     </Tooltip> :
                                     <Tooltip title="Show Report Polygons" placement="top" arrow>
                                         <IconButton
+                                            id={`show/-report-polygons-${index}`}
                                             aria-label="delete"
                                             onClick={showPolygonsOnMap}
                                         >
@@ -118,6 +120,7 @@ const ReportItemList = ({report}) => {
                             }
                             <Tooltip title="Show Report On Map" placement="top" arrow>
                                 <IconButton
+                                    id={`show-map-report-${index}`}
                                     aria-label="delete"
                                     onClick={() => selectedMapReportVar(report)}
                                 >
@@ -126,6 +129,7 @@ const ReportItemList = ({report}) => {
                             </Tooltip>
                             <Tooltip title="Delete Report" placement="top" arrow>
                                 <IconButton
+                                    id={`delete-report-${index}`}
                                     aria-label="delete"
                                     onClick={() => handleSetReportUnrelevant(report.id)}
                                 >
@@ -135,6 +139,7 @@ const ReportItemList = ({report}) => {
                         </Grid>
                         <Grid item>
                             <ListItemButton
+                                id={`report-item-clickable-${index}`}
                                 onClick={() => {
                                     selectedReportVar(report);
                                     setOpenInfoWindow(true);
