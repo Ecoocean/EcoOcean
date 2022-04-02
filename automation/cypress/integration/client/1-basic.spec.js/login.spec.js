@@ -7,7 +7,7 @@ describe('login to ecoocean client - positive scenario', () => {
   beforeEach(() => {
     cy.clearLocalStorage();
     indexedDB.deleteDatabase('firebaseLocalStorageDb');
-    cy.exec('node ./cypress/support/cleanupFirebase.js').then((result) => {
+    cy.exec('node ./cypress/support/cleanup.js').then((result) => {
       expect(result.code).to.eq(0)
     });
     cy.exec('node ./cypress/support/addUserFirebase.js', {env: {
@@ -41,7 +41,7 @@ describe('login to ecoocean client - negative scenario', () => {
   beforeEach(() =>{
     cy.clearLocalStorage();
     indexedDB.deleteDatabase('firebaseLocalStorageDb');
-    cy.exec('node ./cypress/support/cleanupFirebase.js').then((result) => {
+    cy.exec('node ./cypress/support/cleanup.js').then((result) => {
       expect(result.code).to.eq(0)
     })
     cy.visit('http://localhost:3000');

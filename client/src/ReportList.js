@@ -57,7 +57,7 @@ export default function ReportList() {
                 No Reports in this area ...
         </Typography>
         }
-        <List sx={{ display: "list-item", width: "100%" }} >
+        <List id="report-list" sx={{ display: "list-item", width: "100%" }} >
         <TransitionGroup>
         {filteredPollutionReports && filteredPollutionReports.map((report) => {
             return (

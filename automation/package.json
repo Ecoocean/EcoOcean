@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "cypress:open": "env-cmd -f .env cypress open",
-    "waitForServices": "node ./cypress/support/waitForServices.js",
-    "cypress:run": "npm run waitForServices && env-cmd -f .env cypress run --browser chrome",
-    "percy": "npm run waitForServices && env-cmd -f .env percy exec -- cypress run"
+    "cypress:run": "env-cmd -f .env cypress run --browser chrome",
+    "percy": "npm run waitForServices && env-cmd -f .env percy exec -- cypress run",
+    "clean": "env-cmd -f .env node ./cypress/support/cleanup.js"
   },
   "keywords": [],
   "author": "",
@@ -16,12 +16,12 @@
     "@percy/cli": "^1.0.0-beta.76",
     "@percy/cypress": "^3.1.1",
     "cypress": "^9.5.2",
+    "cypress-browser-permissions": "^1.1.0",
     "cypress-network-idle": "^1.4.0",
     "env-cmd": "^10.1.0",
     "firebase-admin": "10.0.2",
     "graphql": "^15.6.1",
     "pg": "^8.7.3",
-    "postgraphile": "4.12.9",
-    "wait-on": "^6.0.1"
+    "postgraphile": "4.12.9"
   }
 }

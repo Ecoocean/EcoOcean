@@ -1,3 +1,16 @@
 {
-  "projectId": "4efjkg"
+  "projectId": "4efjkg",
+  "env": {
+    "browserPermissions": {
+      "notifications": "allow",
+      "geolocation": "allow",
+      "camera": "allow",
+      "microphone": "block",
+      "images": "allow",
+      "javascript": "allow",
+      "popups": "allow",
+      "plugins": "allow",
+      "cookies": "allow"
+    }
+  }
 }
