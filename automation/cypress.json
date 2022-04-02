@@ -4,12 +4,12 @@
     "browserPermissions": {
       "notifications": "allow",
       "geolocation": "allow",
-      "camera": "block",
+      "camera": "allow",
       "microphone": "block",
       "images": "allow",
       "javascript": "allow",
-      "popups": "ask",
-      "plugins": "ask",
+      "popups": "allow",
+      "plugins": "allow",
       "cookies": "allow"
     }
   }

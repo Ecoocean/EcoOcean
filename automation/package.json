@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "cypress:open": "env-cmd -f .env cypress open",
-    "cypress:run": "npm run waitForServices && env-cmd -f .env cypress run --headed --browser chrome",
+    "cypress:run": "env-cmd -f .env cypress run --browser chrome",
     "percy": "npm run waitForServices && env-cmd -f .env percy exec -- cypress run",
     "clean": "env-cmd -f .env node ./cypress/support/cleanup.js"
   },

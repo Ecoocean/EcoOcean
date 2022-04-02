@@ -7,6 +7,15 @@ describe('reports in ecoocean client', () => {
     const isAdmin = false;
     let positionLogSpy;
     const setFakePosition = position => {
+        cy.log("**allowGeolocation**").then(() =>
+            Cypress.automation("remote:debugger:protocol", {
+                command: "Browser.grantPermissions",
+                params: {
+                    origin: "http://localhost:3000",
+                    permissions: ["geolocation"],
+                }
+            })
+        );
         // https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setGeolocationOverride
         console.debug(`cypress::setGeolocationOverride with position ${JSON.stringify(position)}`);
         cy.log("**setGeolocationOverride**").then(() =>
