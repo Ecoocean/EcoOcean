@@ -57,13 +57,17 @@ const SidebarComponent = ({ map }) => {
                </BackToTop>
             </Tab>
             <Tab id="municipals" header="Municipals" icon={<FaDrawPolygon />}>
-               <List sx={{ display: "list-item", width: "100%" }} >
+               <List sx={{ width: "100%" }} >
                   <TransitionGroup>
                      { gvulotVar() && gvulotVar().map((gvul, i) => {
-                     return <Collapse key={i}><ListItem divider component="div"><Alert severity={ i % 3 === 0 ? "error" : i % 3 === 1 ? "warning" : "success"}>
-                        <AlertTitle>{gvul.muniHeb}</AlertTitle>
-                        information regarding pollution status <strong>check it out!</strong>
-                     </Alert></ListItem></Collapse>
+                     return <Collapse key={i}>
+                        <ListItem divider sx={{display: "inherit"}}>
+                           <Alert severity={ i % 3 === 0 ? "error" : i % 3 === 1 ? "warning" : "success"}>
+                              <AlertTitle>{gvul.muniHeb}</AlertTitle>
+                              information regarding pollution status <strong>check it out!</strong>
+                           </Alert>
+                        </ListItem>
+                     </Collapse>
                   })
                }
                   </TransitionGroup>
