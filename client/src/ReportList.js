@@ -1,17 +1,15 @@
-import React, {useState} from "react";
+import React from "react";
 import { TransitionGroup } from 'react-transition-group';
 import List from "@mui/material/List";
 import { useReactiveVar } from "@apollo/client";
 import {
   loadingPollutionReportsVar,
-  selectedReportVar,
 } from "./cache";
 import {
   Backdrop,
   CircularProgress, Collapse,
   Grid,
 } from "@mui/material";
-import { PollutionReportModal } from "./modals/PollutionReportModal";
 import {
   filteredPollutionReportsVar
 } from "./cache";

@@ -28,6 +28,16 @@ export default function EcooceanHome() {
                     />
                 </Typography>
             </Grid>
+            <Grid item xs={6}>
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    <img
+                        id={'bgu-home-logo'}
+                        src="/images/ecoocean_people.jpeg"
+                        alt="logo"
+                        style={{ width: "30rem" }}
+                    />
+                </Typography>
+            </Grid>
         </Box>
     );
 

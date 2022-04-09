@@ -38,7 +38,8 @@ describe('reports in ecoocean client', () => {
 
     it('create empty report and verify', () => {
         cy.clickSection('add-report');
-
+        cy.get('div[id="select-municipal"]').click({ timeout: 10000 });
+        cy.contains('אילת').click({ timeout: 10000 });
         cy.get('button')
             .contains('Save').click({ timeout: 10000 });
         cy.contains('Pollution Reports', { timeout: 10000 }).should('be.visible');
@@ -48,6 +49,8 @@ describe('reports in ecoocean client', () => {
 
     it('remove a report and verify', () => {
         cy.clickSection('add-report');
+        cy.get('div[id="select-municipal"]').click({ timeout: 10000 });
+        cy.contains('אילת').click({ timeout: 10000 });
         cy.get('button')
             .contains('Save').click({ timeout: 10000 });
         cy.contains('Pollution Reports', { timeout: 10000 }).should('be.visible');
@@ -61,6 +64,8 @@ describe('reports in ecoocean client', () => {
 
     it('click on report in the report list should open report modal', () => {
         cy.clickSection('add-report');
+        cy.get('div[id="select-municipal"]').click({ timeout: 10000 });
+        cy.contains('אילת').click({ timeout: 10000 });
         cy.get('button')
             .contains('Save').click({ timeout: 10000 });
         cy.contains('Pollution Reports', { timeout: 10000 }).should('be.visible');
