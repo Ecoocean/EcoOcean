@@ -59,7 +59,7 @@ const SidebarComponent = ({ map }) => {
                {openTab === 'beach-segments' && <BeachSegmentList />}
             </Tab>
             <Tab id="add-report" header="Add Pollution Report" icon={<FaPlusCircle/>}>
-               {openTab === 'add-report' && <PollutionForm />}
+               <PollutionForm />
             </Tab>
             <Tab id="settings" header="Settings" icon={<FaCog />} anchor="bottom">
                { openTab === 'settings' && <SettingsTab/>}
