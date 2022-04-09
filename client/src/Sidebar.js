@@ -44,24 +44,25 @@ const SidebarComponent = ({ map }) => {
             rehomeControls>
 
             <Tab id="home" header="Ecoocean" icon={<FaHome />} active>
-               <EcooceanHome />
+               {openTab === 'home' && <EcooceanHome />}
             </Tab>
             <Tab id="pollution-reports" header="Pollution Reports" icon={<FaListUl />}>
-               <BackToTop>
+               {openTab === 'pollution-reports' && <BackToTop>
                   <ReportList/>
-               </BackToTop>
+               </BackToTop> }
+
             </Tab>
             <Tab id="municipals" header="Municipals" icon={<FaHotel />}>
-               <MunicipalList />
+               {openTab === 'municipals' && <MunicipalList /> }
             </Tab>
             <Tab id="beach-segments" header="Beach Segments" icon={<FaUmbrellaBeach />}>
-               <BeachSegmentList />
+               {openTab === 'beach-segments' && <BeachSegmentList />}
             </Tab>
             <Tab id="add-report" header="Add Pollution Report" icon={<FaPlusCircle/>}>
-                <PollutionForm />
+               {openTab === 'add-report' && <PollutionForm />}
             </Tab>
             <Tab id="settings" header="Settings" icon={<FaCog />} anchor="bottom">
-               <SettingsTab/>
+               { openTab === 'settings' && <SettingsTab/>}
             </Tab>
 
          </Sidebar>
