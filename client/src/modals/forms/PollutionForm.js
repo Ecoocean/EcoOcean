@@ -244,7 +244,7 @@ const PollutionForm = ({ openTab }) => {
               <InputLabel id="demo-controlled-open-select-label">Municipal</InputLabel>
                 <Select
                     labelId="demo-controlled-open-select-label"
-                    id="demo-controlled-open-select"
+                    id="select-municipal"
                     value={gvulName}
                     label="Municipal"
                     onChange={handleChange}
