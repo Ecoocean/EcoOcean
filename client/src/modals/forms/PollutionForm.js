@@ -17,7 +17,7 @@ import {polygonColors} from "../../PolygonColors";
 import '../../leaflet-measure-path.js';
 import '../../leaflet-measure-path.css';
 import MenuItem from "@mui/material/MenuItem";
-import {InputLabel, Select} from "@mui/material";
+import {FormHelperText, InputLabel, Select} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 
 let polygonReports = new Map();
@@ -42,6 +42,7 @@ const PollutionForm = ({ openTab }) => {
   const [location, setLocation] = useState(null);
   const [selectedBeachSegment, setSelectedBeachSegment] = useState(null);
   const [gvulName, setGvulName] = useState('');
+  const [emptyMunicipal, setEmptyMunicipal] = useState(false);
 
 
   const handlePollutionReportPickerClose = (value) => {
@@ -100,6 +101,11 @@ const PollutionForm = ({ openTab }) => {
     }
   }, [map])
   const AddPollutionReport = async () => {
+
+    if (gvulName === ''){
+      setEmptyMunicipal(true);
+      return;
+    }
     try {
       if (
         imageUploaderRef.current
@@ -193,6 +199,7 @@ const PollutionForm = ({ openTab }) => {
   const handleChange = (event) => {
     isBeachSegmentSelected = false;
     setGvulName(event.target.value);
+    setEmptyMunicipal(false);
     if (beachSegmentsLayer) {
       beachSegmentsLayer.removeFrom(map);
       if (selectedBeachSegment) {
@@ -249,6 +256,7 @@ const PollutionForm = ({ openTab }) => {
                     })
                   }
                 </Select>
+              {emptyMunicipal && <FormHelperText>This is required!</FormHelperText>}
             </FormControl>
               <ImageUploaderComp ref={imageUploaderRef}/>
               <LoadingButton

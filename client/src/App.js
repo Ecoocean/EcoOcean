@@ -1,5 +1,5 @@
 import React from "react";
-import {BrowserRouter as Router, Routes, Route, useLocation} from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Home from "./Home";
 import SignInPage from "./pages/SignInPage.js";
 import CustomizedSnackbar from "./CustomizedSnackbar";
@@ -24,8 +24,9 @@ function App() {
                     <Routes>
                         <Route
                             path="/"
-                            element={
-                                <HomeWithParams/>
+                            element={<PrivateRoute>
+                                <Home/>
+                             </PrivateRoute>
                             }
                         />
                         <Route exact path="/login" element={<SignInPage />} />
@@ -34,17 +35,6 @@ function App() {
                 </AuthProvider>
             </Router>
         </ThemeProvider>
-    );
-}
-
-function HomeWithParams() {
-    let location = useLocation();
-    console.log(location);
-
-    return (
-        <PrivateRoute>
-            <Home key={location.key}/>
-        </PrivateRoute>
     );
 }
 

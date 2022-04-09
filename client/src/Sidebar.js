@@ -1,24 +1,19 @@
 import React from 'react'
-import { FiHome, FiChevronLeft, FiPlusCircle, FiList, FiSettings } from "react-icons/fi";
+import { FiChevronLeft } from "react-icons/fi";
 import { Sidebar, Tab } from './react-leaflet-sidetabs'
 import ReportList from "./ReportList";
 import SettingsTab from "./tabs/SettingsTab";
 import PollutionForm from "./modals/forms/PollutionForm";
 import {
-    gvulotVar,
     sideBarCollapsedVar,
     sideBarOpenTabVar
 } from "./cache";
 import {useReactiveVar} from "@apollo/client";
 import EcooceanHome from "./tabs/EcooceanHome";
 import BackToTop from "./ScrollToTop";
-import { FaDrawPolygon } from "react-icons/fa";
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import { TransitionGroup } from 'react-transition-group';
-import Collapse from '@mui/material/Collapse';
+import { FaHotel, FaUmbrellaBeach, FaPlusCircle, FaListUl, FaCog, FaHome } from "react-icons/fa";
+import MunicipalList from "./MunicipalList";
+import BeachSegmentList from "./BeachSegmentList";
 
 const SidebarComponent = ({ map }) => {
 
@@ -48,35 +43,24 @@ const SidebarComponent = ({ map }) => {
             panMapOnChange
             rehomeControls>
 
-            <Tab id="home" header="Ecoocean" icon={<FiHome />} active>
+            <Tab id="home" header="Ecoocean" icon={<FaHome />} active>
                <EcooceanHome />
             </Tab>
-            <Tab id="pollution-reports" header="Pollution Reports" icon={<FiList />}>
+            <Tab id="pollution-reports" header="Pollution Reports" icon={<FaListUl />}>
                <BackToTop>
                   <ReportList/>
                </BackToTop>
             </Tab>
-            <Tab id="municipals" header="Municipals" icon={<FaDrawPolygon />}>
-               <List sx={{ width: "100%" }} >
-                  <TransitionGroup>
-                     { gvulotVar() && gvulotVar().map((gvul, i) => {
-                     return <Collapse key={i}>
-                        <ListItem divider sx={{display: "inherit"}}>
-                           <Alert severity={ i % 3 === 0 ? "error" : i % 3 === 1 ? "warning" : "success"}>
-                              <AlertTitle>{gvul.muniHeb}</AlertTitle>
-                              information regarding pollution status <strong>check it out!</strong>
-                           </Alert>
-                        </ListItem>
-                     </Collapse>
-                  })
-               }
-                  </TransitionGroup>
-               </List>
+            <Tab id="municipals" header="Municipals" icon={<FaHotel />}>
+               <MunicipalList />
             </Tab>
-            <Tab id="add-report" header="Add Pollution Report" icon={<FiPlusCircle/>}>
+            <Tab id="beach-segments" header="Beach Segments" icon={<FaUmbrellaBeach />}>
+               <BeachSegmentList />
+            </Tab>
+            <Tab id="add-report" header="Add Pollution Report" icon={<FaPlusCircle/>}>
                 <PollutionForm />
             </Tab>
-            <Tab id="settings" header="Settings" icon={<FiSettings />} anchor="bottom">
+            <Tab id="settings" header="Settings" icon={<FaCog />} anchor="bottom">
                <SettingsTab/>
             </Tab>
 
