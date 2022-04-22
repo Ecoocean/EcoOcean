@@ -9,7 +9,7 @@ import MyLocationMap from "../../MyLocationMap.js";
 import { getAuth } from 'firebase/auth';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
-import {gvulotVar, locationMapVar, mainMapVar} from "../../cache";
+import {gvulotVar, locationMapVar, mainMapVar, reportPolyLayersVar, selectedBeachSegmentVar} from "../../cache";
 import 'firebase/auth';
 import {sideBarOpenTabVar} from "../../cache";
 import PollutionReportPickerModal  from "../PollutionReportPickerModal";
@@ -19,20 +19,25 @@ import '../../leaflet-measure-path.css';
 import MenuItem from "@mui/material/MenuItem";
 import {FormHelperText, InputLabel, Select} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
-
-let polygonReports = new Map();
-const updateItemInMap = (key, value) => {
-  polygonReports.set(key, value);
-}
-const deleteItemInMap = (key) => {
-  polygonReports.delete(key);
-}
+import * as turf from '@turf/turf';
 
 let beachSegmentsLayer = null;
 let isBeachSegmentSelected = false;
 
+const myRedStyle = {
+  "color": 'red',
+  "weight": 5,
+  "opacity": 0.65
+};
+const myGreenStyle = {
+  "color": 'green',
+  "weight": 5,
+  "opacity": 0.65
+};
+
 const PollutionForm = ({ openTab }) => {
   const map = useReactiveVar(locationMapVar);
+  const polygonReports = useReactiveVar(reportPolyLayersVar)
   const gvulot = useReactiveVar(gvulotVar);
   //const pollutionProportiesRef = useRef(null);
   const imageUploaderRef = useRef(null);
@@ -40,22 +45,15 @@ const PollutionForm = ({ openTab }) => {
   const [openTypePickerWindow, setOpenTypePickerWindow] = useState(false);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [location, setLocation] = useState(null);
-  const [selectedBeachSegment, setSelectedBeachSegment] = useState(null);
   const [gvulName, setGvulName] = useState('');
   const [emptyMunicipal, setEmptyMunicipal] = useState(false);
 
 
   const handlePollutionReportPickerClose = (value) => {
-    const myStyle = {
-      "color": polygonColors[value],
-      "weight": 5,
-      "opacity": 0.65
-    };
     selectedPolygon.bindPopup(value).openPopup();
-    selectedPolygon.setStyle(myStyle);
     const polygon = polygonReports.get(selectedPolygon._leaflet_id);
     polygon.type = value;
-    updateItemInMap(selectedPolygon._leaflet_id, polygon);
+    polygonReports.set(selectedPolygon._leaflet_id, polygon);
     setOpenTypePickerWindow(false);
   };
 
@@ -68,6 +66,7 @@ const PollutionForm = ({ openTab }) => {
         e.layer.setStyle({ pmIgnore: false });
         L.PM.reInitLayer(e.layer);
         if (e.shape !== 'Circle') {
+
           e.layer.showMeasurements();
           const northEast = e.layer._bounds._northEast;
           const southWest = e.layer._bounds._southWest;
@@ -78,32 +77,67 @@ const PollutionForm = ({ openTab }) => {
           map.setView(e.layer._latlng, map.getZoom());
         }
         e.layer.on('pm:edit', (e) =>{
-          const featureGroup = L.featureGroup().addLayer(e.layer);
-          featureGroup.options.pmIgnore = false;
-          L.PM.reInitLayer(featureGroup);
-          const data = featureGroup.toGeoJSON();
+          const featureGroup1 = L.featureGroup().addLayer(e.layer);
+          featureGroup1.options.pmIgnore = false;
+          L.PM.reInitLayer(featureGroup1);
+          const data1 = featureGroup1.toGeoJSON();
           const polygon = polygonReports.get(e.layer._leaflet_id);
-          polygon.geometry = data.features[0]?.geometry
-          updateItemInMap(e.layer._leaflet_id, polygon);
+          polygon.geometry = data1.features[0]?.geometry
+          polygonReports.set(e.layer._leaflet_id, polygon);
+          const featureGroup2 = L.featureGroup().addLayer(selectedBeachSegmentVar());
+          const data2 = featureGroup2.toGeoJSON();
+          if(selectedBeachSegmentVar() && turf.intersect(data1.features[0], data2.features[0].geometry)){
+            e.layer.setStyle(myGreenStyle);
+          }
+          else{
+            e.layer.setStyle(myRedStyle);
+          }
         });
         setTimeout(() => {
-              const featureGroup = L.featureGroup().addLayer(e.layer);
-              const data = featureGroup.toGeoJSON();
-              updateItemInMap(e.layer._leaflet_id, {geometry: data.features[0].geometry});
+              const featureGroup1 = L.featureGroup().addLayer(e.layer);
+              const data1 = featureGroup1.toGeoJSON();
+              polygonReports.set(e.layer._leaflet_id, {geometry: data1.features[0].geometry});
               setSelectedPolygon(e.layer);
+              const featureGroup2 = L.featureGroup().addLayer(selectedBeachSegmentVar());
+              const data2 = featureGroup2.toGeoJSON();
+              if(selectedBeachSegmentVar() && turf.intersect(data1.features[0].geometry, data2.features[0].geometry)){
+                e.layer.setStyle(myGreenStyle);
+              }
+              else {
+                e.layer.setStyle(myRedStyle);
+              }
               setOpenTypePickerWindow(true);
         }, 800);
       });
 
       map.on('pm:remove', (e) => {
-        deleteItemInMap(e.layer._leaflet_id);
+        polygonReports.delete(e.layer._leaflet_id);
       });
     }
-  }, [map])
+  }, [map]);
+
+  const reportPolygonsWithinSegment = () => {
+    const featureGroup = L.featureGroup().addLayer(selectedBeachSegmentVar());
+    const segmentData = featureGroup.toGeoJSON();
+    for (const polygon of polygonReports.values()){
+      if (!turf.intersect(segmentData.features[0].geometry, polygon.geometry)){
+        return false;
+      }
+    }
+    return true;
+  }
   const AddPollutionReport = async () => {
 
     if (gvulName === ''){
       setEmptyMunicipal(true);
+      return;
+    }
+    if(!isBeachSegmentSelected){
+      setSnackBar('Beach segment must be selected', 'error');
+      return;
+    }
+    if(!reportPolygonsWithinSegment()){
+      setSnackBar('All polygon reports must intersect the selected segment', 'error');
       return;
     }
     try {
@@ -149,7 +183,7 @@ const PollutionForm = ({ openTab }) => {
               block: 'center',
             });
           }
-          polygonReports = new Map();
+          polygonReports.clear();
           map.eachLayer(function(layer) {
             if (!!layer.toGeoJSON) {
               const geojson = layer.toGeoJSON();
@@ -175,7 +209,7 @@ const PollutionForm = ({ openTab }) => {
       if (beachSegmentsLayer) {
         beachSegmentsLayer.removeFrom(map);
       }
-      setSelectedBeachSegment(layer);
+      selectedBeachSegmentVar(layer);
       layer.addTo(map);
       isBeachSegmentSelected = true;
     }
@@ -202,8 +236,8 @@ const PollutionForm = ({ openTab }) => {
     setEmptyMunicipal(false);
     if (beachSegmentsLayer) {
       beachSegmentsLayer.removeFrom(map);
-      if (selectedBeachSegment) {
-        selectedBeachSegment.removeFrom(map);
+      if (selectedBeachSegmentVar()) {
+        selectedBeachSegmentVar().removeFrom(map);
       }
     }
     const gvul = gvulot.find(g => g.muniHeb === event.target.value);
@@ -258,6 +292,9 @@ const PollutionForm = ({ openTab }) => {
                 </Select>
               {emptyMunicipal && <FormHelperText>This is required!</FormHelperText>}
             </FormControl>
+            {Array.from(polygonReports.values()).map((poly) => {
+              return <div>{poly.type}</div>
+            })}
               <ImageUploaderComp ref={imageUploaderRef}/>
               <LoadingButton
                   onClick={AddPollutionReport}
