@@ -9,6 +9,8 @@ export const allPollutionReportsVar = makeVar([]);
 
 export const reportPolyLayersVar = makeVar(new Map());
 
+export const selectedBeachSegmentVar = makeVar(null);
+
 export const gvulotVar = makeVar(null);
 
 export const sensVar = makeVar(null);
