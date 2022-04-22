@@ -7,8 +7,8 @@ describe('reports in ecoocean client', () => {
     const isAdmin = false;
     let positionLogSpy;
     const position = {
-        latitude: 32.970595,
-        longitude: 35.077334
+        latitude: 32.170729,
+        longitude: 34.799383
     }
     beforeEach(() => {
         cy.clearLocalStorage();
@@ -36,10 +36,12 @@ describe('reports in ecoocean client', () => {
 
     })
 
-    it('create empty report and verify', () => {
+    it.only('create empty report and verify', () => {
         cy.clickSection('add-report');
         cy.get('div[id="select-municipal"]').click({ timeout: 10000 });
-        cy.contains('אילת').click({ timeout: 10000 });
+        cy.contains('הרצליה').click({ timeout: 10000 });
+        cy.get('#mapId')
+            .click(150, 150);
         cy.get('button')
             .contains('Save').click({ timeout: 10000 });
         cy.contains('Pollution Reports', { timeout: 10000 }).should('be.visible');
