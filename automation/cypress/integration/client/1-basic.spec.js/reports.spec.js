@@ -40,8 +40,10 @@ describe('reports in ecoocean client', () => {
         cy.clickSection('add-report');
         cy.get('div[id="select-municipal"]').click({ timeout: 10000 });
         cy.contains('הרצליה').click({ timeout: 10000 });
+        cy.wait(1000);
         cy.get('#mapId')
-            .click(150, 150);
+            .click(100, 150);
+        cy.wait(1000);
         cy.get('button')
             .contains('Save').click({ timeout: 10000 });
         cy.contains('Pollution Reports', { timeout: 10000 }).should('be.visible');
@@ -53,8 +55,10 @@ describe('reports in ecoocean client', () => {
         cy.clickSection('add-report');
         cy.get('div[id="select-municipal"]').click({ timeout: 10000 });
         cy.contains('הרצליה').click({ timeout: 10000 });
+        cy.wait(1000);
         cy.get('#mapId')
             .click(150, 150);
+        cy.wait(1000);
         cy.get('button')
             .contains('Save').click({ timeout: 10000 });
         cy.contains('Pollution Reports', { timeout: 10000 }).should('be.visible');
@@ -70,8 +74,10 @@ describe('reports in ecoocean client', () => {
         cy.clickSection('add-report');
         cy.get('div[id="select-municipal"]').click({ timeout: 10000 });
         cy.contains('הרצליה').click({ timeout: 10000 });
+        cy.wait(1000);
         cy.get('#mapId')
             .click(150, 150);
+        cy.wait(1000);
         cy.get('button')
             .contains('Save').click({ timeout: 10000 });
         cy.contains('Pollution Reports', { timeout: 10000 }).should('be.visible');
