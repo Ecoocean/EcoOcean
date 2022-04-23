@@ -86,7 +86,7 @@ const PollutionForm = ({ openTab }) => {
           polygonReports.set(e.layer._leaflet_id, polygon);
           const featureGroup2 = L.featureGroup().addLayer(selectedBeachSegmentVar());
           const data2 = featureGroup2.toGeoJSON();
-          if(selectedBeachSegmentVar() && turf.intersect(data1.features[0], data2.features[0].geometry)){
+          if(selectedBeachSegmentVar() && turf.booleanContains(data2.features[0].geometry, data1.features[0].geometry)){
             e.layer.setStyle(myGreenStyle);
           }
           else{
@@ -100,7 +100,7 @@ const PollutionForm = ({ openTab }) => {
               setSelectedPolygon(e.layer);
               const featureGroup2 = L.featureGroup().addLayer(selectedBeachSegmentVar());
               const data2 = featureGroup2.toGeoJSON();
-              if(selectedBeachSegmentVar() && turf.intersect(data1.features[0].geometry, data2.features[0].geometry)){
+              if(selectedBeachSegmentVar() && turf.booleanContains(data2.features[0].geometry, data1.features[0].geometry)){
                 e.layer.setStyle(myGreenStyle);
               }
               else {
@@ -120,7 +120,7 @@ const PollutionForm = ({ openTab }) => {
     const featureGroup = L.featureGroup().addLayer(selectedBeachSegmentVar());
     const segmentData = featureGroup.toGeoJSON();
     for (const polygon of polygonReports.values()){
-      if (!turf.intersect(segmentData.features[0].geometry, polygon.geometry)){
+      if (!turf.booleanContains(segmentData.features[0].geometry, polygon.geometry)){
         return false;
       }
     }
