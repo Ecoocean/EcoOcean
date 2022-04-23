@@ -43,7 +43,7 @@ describe('reports in ecoocean client', () => {
         cy.wait(3000);
         cy.get('#mapId')
             .click(100, 150);
-        cy.wait(3000);
+        cy.wait(5000);
         cy.get('button')
             .contains('Save').click({ timeout: 10000 });
         cy.contains('Pollution Reports', { timeout: 10000 }).should('be.visible');
@@ -58,7 +58,7 @@ describe('reports in ecoocean client', () => {
         cy.wait(3000);
         cy.get('#mapId')
             .click(150, 150);
-        cy.wait(3000);
+        cy.wait(5000);
         cy.get('button')
             .contains('Save').click({ timeout: 10000 });
         cy.contains('Pollution Reports', { timeout: 10000 }).should('be.visible');
@@ -77,7 +77,7 @@ describe('reports in ecoocean client', () => {
         cy.wait(3000);
         cy.get('#mapId')
             .click(150, 150);
-        cy.wait(3000);
+        cy.wait(5000);
         cy.get('button')
             .contains('Save').click({ timeout: 10000 });
         cy.contains('Pollution Reports', { timeout: 10000 }).should('be.visible');
