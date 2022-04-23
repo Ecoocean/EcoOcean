@@ -42,7 +42,7 @@ describe('reports in ecoocean client', () => {
         cy.contains('הרצליה').click({ timeout: 10000 });
         cy.wait(3000);
         cy.get('#mapId')
-            .click(100, 125);
+            .click(50, 50);
         cy.wait(5000);
         cy.get('button')
             .contains('Save').click({ timeout: 10000 });
@@ -57,7 +57,7 @@ describe('reports in ecoocean client', () => {
         cy.contains('הרצליה').click({ timeout: 10000 });
         cy.wait(3000);
         cy.get('#mapId')
-            .click(150, 125);
+            .click(50, 50);
         cy.wait(5000);
         cy.get('button')
             .contains('Save').click({ timeout: 10000 });
@@ -76,7 +76,7 @@ describe('reports in ecoocean client', () => {
         cy.contains('הרצליה').click({ timeout: 10000 });
         cy.wait(3000);
         cy.get('#mapId')
-            .click(150, 125);
+            .click(50, 50);
         cy.wait(5000);
         cy.get('button')
             .contains('Save').click({ timeout: 10000 });
