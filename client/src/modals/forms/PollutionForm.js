@@ -230,6 +230,15 @@ const PollutionForm = ({ openTab }) => {
     });
   }
 
+  const mutiPolygonToPolygon = (multiPolyGeoJson) => {
+    if(multiPolyGeoJson.type === 'MultiPolygon') {
+      const [arr] = multiPolyGeoJson.coordinates[0];
+      multiPolyGeoJson.coordinates[0] = arr;
+      multiPolyGeoJson.type = 'Polygon';
+    }
+    return multiPolyGeoJson;
+  }
+
   const handleChange = (event) => {
     isBeachSegmentSelected = false;
     setGvulName(event.target.value);
@@ -247,7 +256,7 @@ const PollutionForm = ({ openTab }) => {
         "weight": 5,
         "opacity": 0.65
       };
-      return L.geoJSON(sens.geom.geojson, {
+      return L.geoJSON(mutiPolygonToPolygon(sens.geom.geojson), {
         style: myStyle,
         pmIgnore: true,
         onEachFeature: onBeachSegmentLayer
