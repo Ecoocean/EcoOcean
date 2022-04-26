@@ -106,13 +106,12 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
             <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
                 Pollution Report
             </BootstrapDialogTitle>
-            <DialogContent className="report-box" dividers sx={{height: "500px", width: "500px"}}>
+            <DialogContent className="report-box" dividers sx={{ display: 'flex', flexDirection: 'column', height: "500px"}}>
                 <Box
                     className="report-dialog"
                     sx={{
-
-                        display: 'flex',
-                        flexDirection: 'column',
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
                         '& .MuiFormControl-root': { m: 1 },
                     }}
                 >
@@ -123,6 +122,12 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
                         <BootstrapInput readOnly defaultValue={report.id} id="bootstrap-input" />
                     </FormControl>
                     <FormControl variant="standard">
+                        <InputLabel shrink htmlFor="bootstrap-input">
+                            Municipal
+                        </InputLabel>
+                        <BootstrapInput readOnly defaultValue={report.municipalName || ''} id="bootstrap-input" />
+                    </FormControl>
+                    <FormControl variant="standard">
                         <InputLabel shrink htmlFor="bootstrap-input2">
                             Address
                         </InputLabel>
@@ -131,22 +136,26 @@ export const PollutionReportModal = ({ report, show, handleClose }) => {
                             : `lat: ${report.geom.y}, lng: ${report.geom.x}`} id="bootstrap-input2" />
                      </FormControl>
                 </Box>
-
-                {report.photoUrls?.length > 0 &&
-                        <ImageGallery
-                            className="report-image-gallery"
-                            showBullets= {report.photoUrls?.length > 1}
-                            showThumbnails= {report.photoUrls?.length > 1}
-                            showPlayButton={false}
-                            items={report.photoUrls?.map((photoUrl) => {
-                                return {
-                                    original: photoUrl,
-                                    thumbnail: photoUrl,
-                                }})
-                            }/>
-
-                }
-
+                <Box
+                    className="report-dialog"
+                    sx={{
+                        display: 'grid',
+                        '& .MuiFormControl-root': { m: 1 },
+                    }}
+                >
+                    {report.photoUrls?.length > 0 &&
+                    <ImageGallery
+                        className="report-image-gallery"
+                        showBullets= {report.photoUrls?.length > 1}
+                        showThumbnails= {report.photoUrls?.length > 1}
+                        showPlayButton={false}
+                        items={report.photoUrls?.map((photoUrl) => {
+                            return {
+                                original: photoUrl,
+                                thumbnail: photoUrl,
+                            }})
+                        }/> }
+                </Box>
             </DialogContent>
             <DialogActions sx={{alignItems: 'end'}}>
                 <div></div>

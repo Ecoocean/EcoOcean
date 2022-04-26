@@ -857,6 +857,7 @@ type PollutionReport implements Node {
   address: String
   photoUrls: [String]
   createdAt: Datetime!
+  municipalName: String
 
   """Reads and enables pagination through a set of `PolygonReport`."""
   polygonReports(
@@ -979,6 +980,8 @@ enum PollutionReportsOrderBy {
   PHOTO_URLS_DESC
   CREATED_AT_ASC
   CREATED_AT_DESC
+  MUNICIPAL_NAME_ASC
+  MUNICIPAL_NAME_DESC
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
 }
@@ -1011,6 +1014,9 @@ input PollutionReportCondition {
 
   """Checks for equality with the object’s `createdAt` field."""
   createdAt: Datetime
+
+  """Checks for equality with the object’s `municipalName` field."""
+  municipalName: String
 }
 
 """A connection to a list of `PubSen` values."""
@@ -1596,6 +1602,7 @@ input PollutionReportInput {
   address: String
   photoUrls: [String]
   createdAt: Datetime
+  municipalName: String
 }
 
 """The output of our create `PolygonReport` mutation."""
@@ -1921,6 +1928,7 @@ input PollutionReportPatch {
   address: String
   photoUrls: [String]
   createdAt: Datetime
+  municipalName: String
 }
 
 """All input for the `updatePollutionReport` mutation."""
