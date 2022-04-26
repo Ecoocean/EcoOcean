@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
 import L from 'leaflet';
-import PollutionProporties from "./PollutionProporties";
 import {useMutation, useReactiveVar} from "@apollo/client";
 import {CREATE_POLLUTION_REPORT} from "../../GraphQL/Mutations";
 import {setSnackBar} from "../../SnackBarUtils"
@@ -13,13 +12,13 @@ import {gvulotVar, locationMapVar, mainMapVar, reportPolyLayersVar, selectedBeac
 import 'firebase/auth';
 import {sideBarOpenTabVar} from "../../cache";
 import PollutionReportPickerModal  from "../PollutionReportPickerModal";
-import {polygonColors} from "../../PolygonColors";
 import '../../leaflet-measure-path.js';
 import '../../leaflet-measure-path.css';
 import MenuItem from "@mui/material/MenuItem";
 import {FormHelperText, InputLabel, Select} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import * as turf from '@turf/turf';
+import PolygonReportCard from "../../PolygonReportCard";
 
 let beachSegmentsLayer = null;
 let isBeachSegmentSelected = false;
@@ -39,7 +38,6 @@ const PollutionForm = ({ openTab }) => {
   const map = useReactiveVar(locationMapVar);
   const polygonReports = useReactiveVar(reportPolyLayersVar)
   const gvulot = useReactiveVar(gvulotVar);
-  //const pollutionProportiesRef = useRef(null);
   const imageUploaderRef = useRef(null);
   const [locationFound, setLocationFound] = useState(false);
   const [openTypePickerWindow, setOpenTypePickerWindow] = useState(false);
@@ -47,6 +45,7 @@ const PollutionForm = ({ openTab }) => {
   const [location, setLocation] = useState(null);
   const [gvulName, setGvulName] = useState('');
   const [emptyMunicipal, setEmptyMunicipal] = useState(false);
+  const [refresh, setRefresh] = useState(null);
 
 
   const handlePollutionReportPickerClose = (value) => {
@@ -84,26 +83,37 @@ const PollutionForm = ({ openTab }) => {
           const polygon = polygonReports.get(e.layer._leaflet_id);
           polygon.geometry = data1.features[0]?.geometry
           polygonReports.set(e.layer._leaflet_id, polygon);
-          const featureGroup2 = L.featureGroup().addLayer(selectedBeachSegmentVar());
-          const data2 = featureGroup2.toGeoJSON();
-          if(selectedBeachSegmentVar() && turf.booleanContains(data2.features[0].geometry, data1.features[0].geometry)){
-            e.layer.setStyle(myGreenStyle);
+          try{
+            const featureGroup2 = L.featureGroup().addLayer(selectedBeachSegmentVar());
+            const data2 = featureGroup2.toGeoJSON();
+            if(selectedBeachSegmentVar() && turf.booleanContains(data2.features[0].geometry, data1.features[0].geometry)){
+              e.layer.setStyle(myGreenStyle);
+            }
+            else{
+              e.layer.setStyle(myRedStyle);
+            }
           }
-          else{
+          catch (err) {
             e.layer.setStyle(myRedStyle);
           }
+
         });
         setTimeout(() => {
               const featureGroup1 = L.featureGroup().addLayer(e.layer);
               const data1 = featureGroup1.toGeoJSON();
               polygonReports.set(e.layer._leaflet_id, {geometry: data1.features[0].geometry});
               setSelectedPolygon(e.layer);
-              const featureGroup2 = L.featureGroup().addLayer(selectedBeachSegmentVar());
-              const data2 = featureGroup2.toGeoJSON();
-              if(selectedBeachSegmentVar() && turf.booleanContains(data2.features[0].geometry, data1.features[0].geometry)){
-                e.layer.setStyle(myGreenStyle);
+              try{
+                const featureGroup2 = L.featureGroup().addLayer(selectedBeachSegmentVar());
+                const data2 = featureGroup2.toGeoJSON();
+                if(selectedBeachSegmentVar() && turf.booleanContains(data2.features[0].geometry, data1.features[0].geometry)){
+                  e.layer.setStyle(myGreenStyle);
+                }
+                else {
+                  e.layer.setStyle(myRedStyle);
+                }
               }
-              else {
+              catch (err) {
                 e.layer.setStyle(myRedStyle);
               }
               setOpenTypePickerWindow(true);
@@ -303,7 +313,7 @@ const PollutionForm = ({ openTab }) => {
               {emptyMunicipal && <FormHelperText style={{color: 'red'}}>This is required!</FormHelperText>}
             </FormControl>
             {Array.from(polygonReports.values()).map((poly) => {
-              return <div>{poly.type}</div>
+              return <PolygonReportCard poly={poly} />
             })}
               <ImageUploaderComp ref={imageUploaderRef}/>
               <LoadingButton
