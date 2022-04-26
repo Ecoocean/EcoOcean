@@ -49,6 +49,7 @@
     "pg": "8.7.3",
     "postgraphile": "4.12.9",
     "postgraphile-apollo-server": "^0.1.1",
+    "postgraphile-plugin-connection-filter": "^2.3.0",
     "react-firebaseui": "^5.0.2",
     "react-geocode": "^0.2.3",
     "stream": "0.0.2",

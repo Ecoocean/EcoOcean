@@ -18,7 +18,7 @@ import {
     loadingPollutionReportsVar,
     selectedReportVar,
     selectedMapReportVar,
-    sideBarCollapsedVar
+    sideBarCollapsedVar, dateStartFilterVar, dateEndFilterVar
 } from "./cache";
 
 
@@ -77,7 +77,13 @@ function ShowReports() {
             xmin: bounds.getSouthEast().lng,
             ymin: bounds.getSouthEast().lat,
             xmax: bounds.getSouthWest().lng,
-            ymax: bounds.getNorthEast().lat
+            ymax: bounds.getNorthEast().lat,
+            filter: {
+                and: [
+                    {createdAt: {greaterThan: dateStartFilterVar().toISOString().split('T')[0]}},
+                    {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}}
+                ]
+            }
         };
         getLocationReports({variables: variables});
 
@@ -89,7 +95,9 @@ function ShowReports() {
             data.listen.relatedNode.geom.y > bounds.getSouthEast().lat &&
             data.listen.relatedNode.geom.y < bounds.getNorthWest().lat &&
             data.listen.relatedNode.geom.x >bounds.getNorthWest().lng &&
-            data.listen.relatedNode.geom.x < bounds.getSouthEast().lng
+            data.listen.relatedNode.geom.x < bounds.getSouthEast().lng &&
+            dateStartFilterVar() < Date.now() &&
+            dateEndFilterVar() > Date.now()
         ) {
             const minTimeForLoadingSimulation = 700; // in miliseconds
             const currentFilteredReports = filteredPollutionReportsVar();
@@ -139,7 +147,13 @@ function ShowReports() {
                 xmin: bounds.getSouthEast().lng,
                 ymin: bounds.getSouthEast().lat,
                 xmax: bounds.getSouthWest().lng,
-                ymax: bounds.getNorthEast().lat
+                ymax: bounds.getNorthEast().lat,
+                filter: {
+                    and: [
+                        {createdAt: {greaterThan: dateStartFilterVar().toISOString().split('T')[0]}},
+                        {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}}
+                    ]
+                }
             }})
         const endTime = performance.now();
         const TotalTime = endTime - startTime; // in miliseconds

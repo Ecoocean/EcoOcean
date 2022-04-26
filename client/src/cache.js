@@ -37,6 +37,12 @@ export const severitySnackBarVar = makeVar("");
 export const sideBarOpenTabVar = makeVar('home');
 export const sideBarCollapsedVar = makeVar(true);
 
+//Filters vars
+const tomorrowDate = new Date();
+tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+export const dateStartFilterVar = makeVar(new Date(Date.now()));
+export const dateEndFilterVar = makeVar(tomorrowDate);
+
 export const cache = new InMemoryCache({
   typePolicies: {
     Query: {

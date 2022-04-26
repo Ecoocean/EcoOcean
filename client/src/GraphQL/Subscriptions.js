@@ -9,6 +9,7 @@ export const REPORT_ADDED_SUBSCRIPTION = gql`
         ... on PollutionReport {
           id
           address
+          municipalName
           createdAt
           isRelevant
           nodeId

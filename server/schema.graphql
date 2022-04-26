@@ -270,6 +270,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: GvulSensIntersectCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GvulSensIntersectFilter
   ): GvulSensIntersectsConnection
 
   """Reads and enables pagination through a set of `Gvulot`."""
@@ -299,6 +304,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: GvulotCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GvulotFilter
   ): GvulotsConnection
 
   """Reads and enables pagination through a set of `Pgmigration`."""
@@ -328,6 +338,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: PgmigrationCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PgmigrationFilter
   ): PgmigrationsConnection
 
   """Reads and enables pagination through a set of `PollutionReport`."""
@@ -357,6 +372,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: PollutionReportCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PollutionReportFilter
   ): PollutionReportsConnection
 
   """Reads and enables pagination through a set of `PolygonReport`."""
@@ -386,6 +406,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: PolygonReportCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PolygonReportFilter
   ): PolygonReportsConnection
 
   """Reads and enables pagination through a set of `PubSen`."""
@@ -415,6 +440,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: PubSenCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PubSenFilter
   ): PubSensConnection
 
   """Reads and enables pagination through a set of `User`."""
@@ -444,6 +474,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
   ): UsersConnection
   gvulot(id: Int!): Gvulot
   pgmigration(id: Int!): Pgmigration
@@ -475,6 +510,11 @@ type Query implements Node {
 
     """Read all values in the set after (below) this cursor."""
     after: Cursor
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PollutionReportFilter
   ): PollutionReportsConnection
 
   """Reads a single `Gvulot` using its globally unique `ID`."""
@@ -591,6 +631,11 @@ type PubSen implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: GvulSensIntersectCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GvulSensIntersectFilter
   ): GvulSensIntersectsConnection!
 }
 
@@ -633,6 +678,251 @@ input GvulSensIntersectCondition {
   muniEng: String
 }
 
+"""
+A filter to be used against `GvulSensIntersect` object types. All fields are combined with a logical ‘and.’
+"""
+input GvulSensIntersectFilter {
+  """Filter by the object’s `sensId` field."""
+  sensId: IntFilter
+
+  """Filter by the object’s `gvulId` field."""
+  gvulId: IntFilter
+
+  """Filter by the object’s `squareMeters` field."""
+  squareMeters: FloatFilter
+
+  """Filter by the object’s `muniHeb` field."""
+  muniHeb: StringFilter
+
+  """Filter by the object’s `muniEng` field."""
+  muniEng: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [GvulSensIntersectFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GvulSensIntersectFilter!]
+
+  """Negates the expression."""
+  not: GvulSensIntersectFilter
+}
+
+"""
+A filter to be used against Int fields. All fields are combined with a logical ‘and.’
+"""
+input IntFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Int
+
+  """Not equal to the specified value."""
+  notEqualTo: Int
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Int
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Int
+
+  """Included in the specified list."""
+  in: [Int!]
+
+  """Not included in the specified list."""
+  notIn: [Int!]
+
+  """Less than the specified value."""
+  lessThan: Int
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Int
+
+  """Greater than the specified value."""
+  greaterThan: Int
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Int
+}
+
+"""
+A filter to be used against Float fields. All fields are combined with a logical ‘and.’
+"""
+input FloatFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Float
+
+  """Not equal to the specified value."""
+  notEqualTo: Float
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Float
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Float
+
+  """Included in the specified list."""
+  in: [Float!]
+
+  """Not included in the specified list."""
+  notIn: [Float!]
+
+  """Less than the specified value."""
+  lessThan: Float
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Float
+
+  """Greater than the specified value."""
+  greaterThan: Float
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Float
+}
+
+"""
+A filter to be used against String fields. All fields are combined with a logical ‘and.’
+"""
+input StringFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: String
+
+  """Not equal to the specified value."""
+  notEqualTo: String
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: String
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: String
+
+  """Included in the specified list."""
+  in: [String!]
+
+  """Not included in the specified list."""
+  notIn: [String!]
+
+  """Less than the specified value."""
+  lessThan: String
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: String
+
+  """Greater than the specified value."""
+  greaterThan: String
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: String
+
+  """Contains the specified string (case-sensitive)."""
+  includes: String
+
+  """Does not contain the specified string (case-sensitive)."""
+  notIncludes: String
+
+  """Contains the specified string (case-insensitive)."""
+  includesInsensitive: String
+
+  """Does not contain the specified string (case-insensitive)."""
+  notIncludesInsensitive: String
+
+  """Starts with the specified string (case-sensitive)."""
+  startsWith: String
+
+  """Does not start with the specified string (case-sensitive)."""
+  notStartsWith: String
+
+  """Starts with the specified string (case-insensitive)."""
+  startsWithInsensitive: String
+
+  """Does not start with the specified string (case-insensitive)."""
+  notStartsWithInsensitive: String
+
+  """Ends with the specified string (case-sensitive)."""
+  endsWith: String
+
+  """Does not end with the specified string (case-sensitive)."""
+  notEndsWith: String
+
+  """Ends with the specified string (case-insensitive)."""
+  endsWithInsensitive: String
+
+  """Does not end with the specified string (case-insensitive)."""
+  notEndsWithInsensitive: String
+
+  """
+  Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  like: String
+
+  """
+  Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  notLike: String
+
+  """
+  Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  likeInsensitive: String
+
+  """
+  Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  notLikeInsensitive: String
+
+  """Equal to the specified value (case-insensitive)."""
+  equalToInsensitive: String
+
+  """Not equal to the specified value (case-insensitive)."""
+  notEqualToInsensitive: String
+
+  """
+  Not equal to the specified value, treating null like an ordinary value (case-insensitive).
+  """
+  distinctFromInsensitive: String
+
+  """
+  Equal to the specified value, treating null like an ordinary value (case-insensitive).
+  """
+  notDistinctFromInsensitive: String
+
+  """Included in the specified list (case-insensitive)."""
+  inInsensitive: [String!]
+
+  """Not included in the specified list (case-insensitive)."""
+  notInInsensitive: [String!]
+
+  """Less than the specified value (case-insensitive)."""
+  lessThanInsensitive: String
+
+  """Less than or equal to the specified value (case-insensitive)."""
+  lessThanOrEqualToInsensitive: String
+
+  """Greater than the specified value (case-insensitive)."""
+  greaterThanInsensitive: String
+
+  """Greater than or equal to the specified value (case-insensitive)."""
+  greaterThanOrEqualToInsensitive: String
+}
+
 type Gvulot implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
@@ -670,6 +960,11 @@ type Gvulot implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: GvulSensIntersectCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GvulSensIntersectFilter
   ): GvulSensIntersectsConnection!
 }
 
@@ -755,6 +1050,29 @@ input GvulotCondition {
   muniEng: String
 }
 
+"""
+A filter to be used against `Gvulot` object types. All fields are combined with a logical ‘and.’
+"""
+input GvulotFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `muniHeb` field."""
+  muniHeb: StringFilter
+
+  """Filter by the object’s `muniEng` field."""
+  muniEng: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [GvulotFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GvulotFilter!]
+
+  """Negates the expression."""
+  not: GvulotFilter
+}
+
 """A connection to a list of `Pgmigration` values."""
 type PgmigrationsConnection {
   """A list of `Pgmigration` objects."""
@@ -825,6 +1143,71 @@ input PgmigrationCondition {
   runOn: Datetime
 }
 
+"""
+A filter to be used against `Pgmigration` object types. All fields are combined with a logical ‘and.’
+"""
+input PgmigrationFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Filter by the object’s `runOn` field."""
+  runOn: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [PgmigrationFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PgmigrationFilter!]
+
+  """Negates the expression."""
+  not: PgmigrationFilter
+}
+
+"""
+A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’
+"""
+input DatetimeFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Datetime
+
+  """Not equal to the specified value."""
+  notEqualTo: Datetime
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Datetime
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Datetime
+
+  """Included in the specified list."""
+  in: [Datetime!]
+
+  """Not included in the specified list."""
+  notIn: [Datetime!]
+
+  """Less than the specified value."""
+  lessThan: Datetime
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Datetime
+
+  """Greater than the specified value."""
+  greaterThan: Datetime
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Datetime
+}
+
 """A connection to a list of `PollutionReport` values."""
 type PollutionReportsConnection {
   """A list of `PollutionReport` objects."""
@@ -886,6 +1269,11 @@ type PollutionReport implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: PolygonReportCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PolygonReportFilter
   ): PolygonReportsConnection!
 }
 
@@ -950,6 +1338,26 @@ input PolygonReportCondition {
 
   """Checks for equality with the object’s `type` field."""
   type: String
+}
+
+"""
+A filter to be used against `PolygonReport` object types. All fields are combined with a logical ‘and.’
+"""
+input PolygonReportFilter {
+  """Filter by the object’s `pollutionReportId` field."""
+  pollutionReportId: IntFilter
+
+  """Filter by the object’s `type` field."""
+  type: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [PolygonReportFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PolygonReportFilter!]
+
+  """Negates the expression."""
+  not: PolygonReportFilter
 }
 
 """A `PollutionReport` edge in the connection."""
@@ -1019,6 +1427,149 @@ input PollutionReportCondition {
   municipalName: String
 }
 
+"""
+A filter to be used against `PollutionReport` object types. All fields are combined with a logical ‘and.’
+"""
+input PollutionReportFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `reporter` field."""
+  reporter: StringFilter
+
+  """Filter by the object’s `reporterImageUrl` field."""
+  reporterImageUrl: StringFilter
+
+  """Filter by the object’s `isRelevant` field."""
+  isRelevant: BooleanFilter
+
+  """Filter by the object’s `address` field."""
+  address: StringFilter
+
+  """Filter by the object’s `photoUrls` field."""
+  photoUrls: StringListFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Filter by the object’s `municipalName` field."""
+  municipalName: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [PollutionReportFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PollutionReportFilter!]
+
+  """Negates the expression."""
+  not: PollutionReportFilter
+}
+
+"""
+A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
+"""
+input BooleanFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Boolean
+
+  """Not equal to the specified value."""
+  notEqualTo: Boolean
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Boolean
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Boolean
+
+  """Included in the specified list."""
+  in: [Boolean!]
+
+  """Not included in the specified list."""
+  notIn: [Boolean!]
+
+  """Less than the specified value."""
+  lessThan: Boolean
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Boolean
+
+  """Greater than the specified value."""
+  greaterThan: Boolean
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Boolean
+}
+
+"""
+A filter to be used against String List fields. All fields are combined with a logical ‘and.’
+"""
+input StringListFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: [String]
+
+  """Not equal to the specified value."""
+  notEqualTo: [String]
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: [String]
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: [String]
+
+  """Less than the specified value."""
+  lessThan: [String]
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: [String]
+
+  """Greater than the specified value."""
+  greaterThan: [String]
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: [String]
+
+  """Contains the specified list of values."""
+  contains: [String]
+
+  """Contained by the specified list of values."""
+  containedBy: [String]
+
+  """Overlaps the specified list of values."""
+  overlaps: [String]
+
+  """Any array item is equal to the specified value."""
+  anyEqualTo: String
+
+  """Any array item is not equal to the specified value."""
+  anyNotEqualTo: String
+
+  """Any array item is less than the specified value."""
+  anyLessThan: String
+
+  """Any array item is less than or equal to the specified value."""
+  anyLessThanOrEqualTo: String
+
+  """Any array item is greater than the specified value."""
+  anyGreaterThan: String
+
+  """Any array item is greater than or equal to the specified value."""
+  anyGreaterThanOrEqualTo: String
+}
+
 """A connection to a list of `PubSen` values."""
 type PubSensConnection {
   """A list of `PubSen` objects."""
@@ -1065,6 +1616,23 @@ input PubSenCondition {
 
   """Checks for equality with the object’s `geom` field."""
   geom: GeoJSON
+}
+
+"""
+A filter to be used against `PubSen` object types. All fields are combined with a logical ‘and.’
+"""
+input PubSenFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Checks for all expressions in this list."""
+  and: [PubSenFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PubSenFilter!]
+
+  """Negates the expression."""
+  not: PubSenFilter
 }
 
 """A connection to a list of `User` values."""
@@ -1174,6 +1742,47 @@ input UserCondition {
 
   """Checks for equality with the object’s `hasChartAccess` field."""
   hasChartAccess: Boolean
+}
+
+"""
+A filter to be used against `User` object types. All fields are combined with a logical ‘and.’
+"""
+input UserFilter {
+  """Filter by the object’s `uid` field."""
+  uid: StringFilter
+
+  """Filter by the object’s `displayName` field."""
+  displayName: StringFilter
+
+  """Filter by the object’s `email` field."""
+  email: StringFilter
+
+  """Filter by the object’s `emailVerified` field."""
+  emailVerified: BooleanFilter
+
+  """Filter by the object’s `photoUrl` field."""
+  photoUrl: StringFilter
+
+  """Filter by the object’s `isOnboarded` field."""
+  isOnboarded: BooleanFilter
+
+  """Filter by the object’s `isAdmin` field."""
+  isAdmin: BooleanFilter
+
+  """Filter by the object’s `isReporter` field."""
+  isReporter: BooleanFilter
+
+  """Filter by the object’s `hasChartAccess` field."""
+  hasChartAccess: BooleanFilter
+
+  """Checks for all expressions in this list."""
+  and: [UserFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [UserFilter!]
+
+  """Negates the expression."""
+  not: UserFilter
 }
 
 """

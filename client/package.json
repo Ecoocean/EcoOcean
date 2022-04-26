@@ -6,6 +6,7 @@
   "main": "src/index.js",
   "dependencies": {
     "@apollo/client": "^3.4.15",
+    "@date-io/date-fns": "^2.13.1",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "@geoman-io/leaflet-geoman-free": "^2.11.3",
