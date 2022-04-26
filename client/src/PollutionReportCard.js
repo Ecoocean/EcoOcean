@@ -17,6 +17,14 @@ function PollutionReportCard({report}) {
           <div className="card-header">
             {`Report ID: ${report.id}`}
           </div>
+            <Typography
+                variant="subtitle1"
+                className="card-address"
+                color="text.secondary"
+                component="p"
+            >
+                {report.municipalName &&`Municipal: ${report.municipalName}`}
+            </Typography>
           <Typography
             variant="subtitle1"
             className="card-address"

@@ -42,6 +42,7 @@ export const GET_LOCATION_REPORTS = gql`
   query getLocationPollutionReports($xmax: Float!, $xmin: Float!, $ymax: Float!, $ymin: Float!) {
     getLocationPollutionReports(xmax: $xmax, xmin: $xmin, ymax: $ymax, ymin: $ymin) {
       nodes {
+        municipalName
         address
         createdAt
         id

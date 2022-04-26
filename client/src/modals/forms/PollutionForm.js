@@ -155,6 +155,7 @@ const PollutionForm = ({ openTab }) => {
                 reporter: getAuth().currentUser ? getAuth().currentUser.displayName: "Test",
                 reporterImageUrl: getAuth().currentUser? getAuth().currentUser.photoURL: null,
                 isRelevant: true,
+                municipalName: gvulName,
                 photoUrls: [],
                 // type: pollutionTypePickerRef.current.state.image.value,
                 geom: { "type": "Point", "coordinates": [ location.lng, location.lat ] },
@@ -299,7 +300,7 @@ const PollutionForm = ({ openTab }) => {
                     })
                   }
                 </Select>
-              {emptyMunicipal && <FormHelperText>This is required!</FormHelperText>}
+              {emptyMunicipal && <FormHelperText style={{color: 'red'}}>This is required!</FormHelperText>}
             </FormControl>
             {Array.from(polygonReports.values()).map((poly) => {
               return <div>{poly.type}</div>
