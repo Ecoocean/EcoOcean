@@ -3,6 +3,7 @@ import { FiChevronLeft } from "react-icons/fi";
 import { Sidebar, Tab } from './react-leaflet-sidetabs'
 import ReportList from "./ReportList";
 import SettingsTab from "./tabs/SettingsTab";
+import FiltersTab from "./tabs/FiltersTab";
 import PollutionForm from "./modals/forms/PollutionForm";
 import {
     sideBarCollapsedVar,
@@ -11,7 +12,7 @@ import {
 import {useReactiveVar} from "@apollo/client";
 import EcooceanHome from "./tabs/EcooceanHome";
 import BackToTop from "./ScrollToTop";
-import { FaHotel, FaUmbrellaBeach, FaPlusCircle, FaListUl, FaCog, FaHome } from "react-icons/fa";
+import { FaHotel, FaUmbrellaBeach, FaPlusCircle, FaListUl, FaCog, FaHome, FaFilter } from "react-icons/fa";
 import MunicipalList from "./MunicipalList";
 import BeachSegmentList from "./BeachSegmentList";
 
@@ -60,6 +61,9 @@ const SidebarComponent = ({ map }) => {
             </Tab>
             <Tab id="add-report" header="Add Pollution Report" icon={<FaPlusCircle/>}>
                <PollutionForm />
+            </Tab>
+            <Tab id="filters" header="Filters" icon={<FaFilter />} anchor="bottom">
+               { openTab === 'filters' && <FiltersTab/>}
             </Tab>
             <Tab id="settings" header="Settings" icon={<FaCog />} anchor="bottom">
                { openTab === 'settings' && <SettingsTab/>}

@@ -1,6 +1,7 @@
 import express from "express";
 import { graphqlUploadExpress } from "graphql-upload";
 import { postgraphile, PostGraphileOptions, makePluginHook } from "postgraphile";
+import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 import * as PostgisPlugin from "@graphile/postgis";
 import PgPubsub  from "@graphile/pg-pubsub";
 import cors from 'cors';
@@ -26,7 +27,7 @@ async function startServer() {
     extendedErrors: ["hint", "detail", "errcode"],
     appendPlugins: [require("@graphile-contrib/pg-simplify-inflector"),
                     PostgisPlugin.default || PostgisPlugin,
-                    PostgresPlugin],
+                    PostgresPlugin, ConnectionFilterPlugin],
     exportGqlSchemaPath: "schema.graphql",
     graphiql: true,
     enhanceGraphiql: true,

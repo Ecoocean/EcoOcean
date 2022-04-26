@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { dateFilterVar } from "../cache";
 //from server
 
 export const GET_GVULOTS = gql`
@@ -39,8 +40,8 @@ export const GET_SENS = gql`
 
 
 export const GET_LOCATION_REPORTS = gql`
-  query getLocationPollutionReports($xmax: Float!, $xmin: Float!, $ymax: Float!, $ymin: Float!) {
-    getLocationPollutionReports(xmax: $xmax, xmin: $xmin, ymax: $ymax, ymin: $ymin) {
+  query getLocationPollutionReports($xmax: Float!, $xmin: Float!, $ymax: Float!, $ymin: Float!, $filter: PollutionReportFilter) {
+    getLocationPollutionReports(xmax: $xmax, xmin: $xmin, ymax: $ymax, ymin: $ymin, filter: $filter) {
       nodes {
         municipalName
         address
