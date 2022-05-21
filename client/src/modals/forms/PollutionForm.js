@@ -44,8 +44,9 @@ const PollutionForm = ({ openTab }) => {
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [location, setLocation] = useState(null);
   const [gvulName, setGvulName] = useState('');
+  const [gvulId, setGvulId] = useState(null);
+  const [sensId, setSensId] = useState(null);
   const [emptyMunicipal, setEmptyMunicipal] = useState(false);
-  const [refresh, setRefresh] = useState(null);
 
 
   const handlePollutionReportPickerClose = (value) => {
@@ -101,7 +102,8 @@ const PollutionForm = ({ openTab }) => {
         setTimeout(() => {
               const featureGroup1 = L.featureGroup().addLayer(e.layer);
               const data1 = featureGroup1.toGeoJSON();
-              polygonReports.set(e.layer._leaflet_id, {geometry: data1.features[0].geometry});
+              const squareMeters = turf.area(data1.features[0].geometry)
+              polygonReports.set(e.layer._leaflet_id, {geometry: data1.features[0].geometry, squareMeters});
               setSelectedPolygon(e.layer);
               try{
                 const featureGroup2 = L.featureGroup().addLayer(selectedBeachSegmentVar());
@@ -167,6 +169,8 @@ const PollutionForm = ({ openTab }) => {
                 isRelevant: true,
                 municipalName: gvulName,
                 photoUrls: [],
+                gvulId: gvulId,
+                sensId: sensId,
                 // type: pollutionTypePickerRef.current.state.image.value,
                 geom: { "type": "Point", "coordinates": [ location.lng, location.lat ] },
                 // length: parseInt(pollutionProportiesRef.current.state.length),
@@ -176,11 +180,12 @@ const PollutionForm = ({ openTab }) => {
                 // cleaningStatus : pollutionProportiesRef.current.state.cleaningStatus,
               }
             }
-          },
-        });
+          }
+        })
         if(!errors) {
           imageUploaderRef.current.reset();
           setGvulName('');
+          setGvulId(null);
           sideBarOpenTabVar('pollution-reports');
           setSnackBar('Pollution report successfully submitted', 'success');
 
@@ -215,30 +220,33 @@ const PollutionForm = ({ openTab }) => {
     setLocationFound(true);
     setLocation({lat: lat, lng: lng})
   }
-  const handleBeachSegmentClick = (event, layer) =>{
+  const handleBeachSegmentClick = (sensId, event, layer) =>{
     if (!isBeachSegmentSelected) {
       if (beachSegmentsLayer) {
         beachSegmentsLayer.removeFrom(map);
       }
+      setSensId(sensId);
       selectedBeachSegmentVar(layer);
       layer.addTo(map);
       isBeachSegmentSelected = true;
     }
     else {
+      setSensId(null)
       layer.removeFrom(map);
       beachSegmentsLayer.addTo(map);
       isBeachSegmentSelected = false;
     }
 
   }
-
-  const onBeachSegmentLayer = (feature, layer) => {
-    //bind click
-    layer.on({
-      click: (e) => {
-        handleBeachSegmentClick(e, layer);
-      }
-    });
+  function onBeachSegmentLayerClosure(sensId) {
+    return function onEachFeature(feature, layer) {
+      //bind click
+      layer.on({
+        click: (e) => {
+          handleBeachSegmentClick(sensId, e, layer);
+        }
+      });
+    }
   }
 
   const mutiPolygonToPolygon = (multiPolyGeoJson) => {
@@ -261,7 +269,8 @@ const PollutionForm = ({ openTab }) => {
       }
     }
     const gvul = gvulot.find(g => g.muniHeb === event.target.value);
-    const pub_sens = gvul.gvulSensIntersectsByGvulId.nodes.map(({sens}, i) => {
+    setGvulId(gvul.id);
+    const pub_sens = gvul.gvulSensIntersectsByGvulId.map(({sens}, i) => {
       var myStyle = {
         "color": "#0074d9",
         "weight": 5,
@@ -270,7 +279,7 @@ const PollutionForm = ({ openTab }) => {
       return L.geoJSON(mutiPolygonToPolygon(sens.geom.geojson), {
         style: myStyle,
         pmIgnore: true,
-        onEachFeature: onBeachSegmentLayer
+        onEachFeature: onBeachSegmentLayerClosure(sens.id)
       });
     });
 

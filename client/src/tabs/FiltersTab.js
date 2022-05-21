@@ -1,19 +1,42 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from '@mui/material/TextField';
-import {dateStartFilterVar, dateEndFilterVar, filteredPollutionReportsVar, mainMapVar} from "../cache";
+import {
+    dateStartFilterVar,
+    dateEndFilterVar,
+    filteredPollutionReportsVar,
+    mainMapVar,
+    gvulotVar,
+    sensVar
+} from "../cache";
 import {useLazyQuery} from "@apollo/client";
-import {GET_LOCATION_REPORTS} from "../GraphQL/Queries";
+import {GET_GVULOTS, GET_LOCATION_REPORTS} from "../GraphQL/Queries";
 import {useEffect} from "react";
 export default function FiltersTab() {
     const [getLocationReports, { data: dataLocal }] = useLazyQuery(GET_LOCATION_REPORTS, {
+        fetchPolicy: "network-only",
+    });
+
+    const [getGvulot, { data: dataGvulot }] = useLazyQuery(GET_GVULOTS, {
         fetchPolicy: "network-only",
     });
     useEffect(() => {
         if(dataLocal) {
             filteredPollutionReportsVar(dataLocal.getLocationPollutionReports?.nodes);
         }
-    }, [dataLocal])
+    }, [dataLocal]);
+
+    useEffect(() => {
+        if (dataGvulot) {
+            gvulotVar(dataGvulot.getMunicipalsWithScore);
+            const sens = dataGvulot.getMunicipalsWithScore.reduce((accu, curr) => {
+                const sensMapped = curr.gvulSensIntersectsByGvulId.map(({sens}) => sens);
+                return [...accu, ...sensMapped]
+            }, []);
+
+            sensVar(sens);
+        }
+    }, [dataGvulot]);
 
     return (
         <Box sx={{ display: "flex", paddingTop: "10px", gap: '10px', flexDirection: "row", alignItems: "center", justifyContent: 'center' }}>
@@ -37,7 +60,18 @@ export default function FiltersTab() {
                                     {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}}
                                 ]
                             }
-                        }})
+                    }});
+                    getGvulot({
+                        variables: {
+                            filterReports: {
+                                and: [
+                                    {createdAt: {greaterThan: dateStartFilterVar().toISOString().split('T')[0]}},
+                                    {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}}
+                                ]
+                            }
+                        }
+                    })
+
                 }}
                 InputLabelProps={{
                     shrink: true
@@ -63,7 +97,17 @@ export default function FiltersTab() {
                                     {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}}
                                 ]
                             }
-                        }})
+                    }});
+                    getGvulot({
+                        variables: {
+                            filterReports: {
+                                and: [
+                                    {createdAt: {greaterThan: dateStartFilterVar().toISOString().split('T')[0]}},
+                                    {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}}
+                                ]
+                            }
+                        }
+                    })
                 }}
                 InputLabelProps={{
                     shrink: true

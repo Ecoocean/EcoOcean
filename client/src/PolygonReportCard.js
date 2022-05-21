@@ -15,7 +15,7 @@ export default function PolygonReportCard({poly}) {
                        Type: {poly.type}
                     </Typography>
                     <Typography component="div" variant="h6">
-                        Area: {Math.ceil(turf.area(poly.geometry))} m2
+                        Area: {Math.ceil(poly.squareMeters)} m2
                     </Typography>
                 </CardContent>
             </Box>

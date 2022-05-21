@@ -1,39 +1,22 @@
 import { gql } from "@apollo/client";
-import { dateFilterVar } from "../cache";
-//from server
 
 export const GET_GVULOTS = gql`
-  query getGvulotsGeoJson {
-    gvulots {
-      nodes {
+  query getMunicipalsWithScore ($filterReports: PollutionReportFilter) {
+    getMunicipalsWithScore (filterReports: $filterReports) { 
         id
         muniHeb
         geom {
-          geojson
-        }
-        gvulSensIntersectsByGvulId {
-          nodes {
-            sens {
-              id
-              geom {
-                geojson
+              geojson
+         }
+         gvulSensIntersectsByGvulId {
+              sens {
+                geom {
+                    geojson
+                }
+                id
+                score
               }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-export const GET_SENS = gql`
-  query getSensGeoJson {
-    pubSens {
-      nodes {
-        id
-        geom {
-          geojson
-        }
-      }
+         }
     }
   }
 `;
