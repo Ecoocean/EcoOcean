@@ -550,6 +550,7 @@ type Query implements Node {
     """The globally unique `ID` to be used in selecting a single `User`."""
     nodeId: ID!
   ): User
+  getMunicipalsWithScore(filterReports: PollutionReportFilter): [GvulExtended]
   getAllPollutionReports: [PollutionReport]!
   allUsers: [User]!
   getUserByUID(uid: String!): User
@@ -604,6 +605,40 @@ type PubSen implements Node {
   id: Int!
   geom: GeometryMultiPolygon
 
+  """Reads and enables pagination through a set of `PollutionReport`."""
+  pollutionReportsBySensId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PollutionReport`."""
+    orderBy: [PollutionReportsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PollutionReportCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PollutionReportFilter
+  ): PollutionReportsConnection!
+
   """Reads and enables pagination through a set of `GvulSensIntersect`."""
   gvulSensIntersectsBySensId(
     """Only read the first `n` values of the set."""
@@ -639,72 +674,282 @@ type PubSen implements Node {
   ): GvulSensIntersectsConnection!
 }
 
+"""A connection to a list of `PollutionReport` values."""
+type PollutionReportsConnection {
+  """A list of `PollutionReport` objects."""
+  nodes: [PollutionReport!]!
+
+  """
+  A list of edges which contains the `PollutionReport` and cursor to aid in pagination.
+  """
+  edges: [PollutionReportsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `PollutionReport` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type PollutionReport implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  geom: GeometryPoint
+  reporter: String
+  reporterImageUrl: String
+  isRelevant: Boolean
+  address: String
+  photoUrls: [String]
+  createdAt: Datetime!
+  municipalName: String
+  sensId: Int!
+  gvulId: Int!
+
+  """Reads a single `PubSen` that is related to this `PollutionReport`."""
+  sens: PubSen
+
+  """Reads a single `Gvulot` that is related to this `PollutionReport`."""
+  gvul: Gvulot
+
+  """Reads and enables pagination through a set of `PolygonReport`."""
+  polygonReports(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PolygonReport`."""
+    orderBy: [PolygonReportsOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PolygonReportCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PolygonReportFilter
+  ): PolygonReportsConnection!
+}
+
+"""
+A point in time as described by the [ISO
+8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
+"""
+scalar Datetime
+
+type Gvulot implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  geom: GeometryMultiPolygon
+  muniHeb: String
+  muniEng: String
+
+  """Reads and enables pagination through a set of `PollutionReport`."""
+  pollutionReportsByGvulId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PollutionReport`."""
+    orderBy: [PollutionReportsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PollutionReportCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PollutionReportFilter
+  ): PollutionReportsConnection!
+
+  """Reads and enables pagination through a set of `GvulSensIntersect`."""
+  gvulSensIntersectsByGvulId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GvulSensIntersect`."""
+    orderBy: [GvulSensIntersectsOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GvulSensIntersectCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GvulSensIntersectFilter
+  ): GvulSensIntersectsConnection!
+  score: Int
+}
+
 """A location in a connection that can be used for resuming pagination."""
 scalar Cursor
 
-"""Methods to use when ordering `GvulSensIntersect`."""
-enum GvulSensIntersectsOrderBy {
+"""Methods to use when ordering `PollutionReport`."""
+enum PollutionReportsOrderBy {
   NATURAL
+  ID_ASC
+  ID_DESC
+  GEOM_ASC
+  GEOM_DESC
+  REPORTER_ASC
+  REPORTER_DESC
+  REPORTER_IMAGE_URL_ASC
+  REPORTER_IMAGE_URL_DESC
+  IS_RELEVANT_ASC
+  IS_RELEVANT_DESC
+  ADDRESS_ASC
+  ADDRESS_DESC
+  PHOTO_URLS_ASC
+  PHOTO_URLS_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  MUNICIPAL_NAME_ASC
+  MUNICIPAL_NAME_DESC
   SENS_ID_ASC
   SENS_ID_DESC
   GVUL_ID_ASC
   GVUL_ID_DESC
-  SQUARE_METERS_ASC
-  SQUARE_METERS_DESC
-  MUNI_HEB_ASC
-  MUNI_HEB_DESC
-  MUNI_ENG_ASC
-  MUNI_ENG_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
 }
 
 """
-A condition to be used against `GvulSensIntersect` object types. All fields are
+A condition to be used against `PollutionReport` object types. All fields are
 tested for equality and combined with a logical ‘and.’
 """
-input GvulSensIntersectCondition {
+input PollutionReportCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `geom` field."""
+  geom: GeoJSON
+
+  """Checks for equality with the object’s `reporter` field."""
+  reporter: String
+
+  """Checks for equality with the object’s `reporterImageUrl` field."""
+  reporterImageUrl: String
+
+  """Checks for equality with the object’s `isRelevant` field."""
+  isRelevant: Boolean
+
+  """Checks for equality with the object’s `address` field."""
+  address: String
+
+  """Checks for equality with the object’s `photoUrls` field."""
+  photoUrls: [String]
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+
+  """Checks for equality with the object’s `municipalName` field."""
+  municipalName: String
+
   """Checks for equality with the object’s `sensId` field."""
   sensId: Int
 
   """Checks for equality with the object’s `gvulId` field."""
   gvulId: Int
-
-  """Checks for equality with the object’s `squareMeters` field."""
-  squareMeters: Float
-
-  """Checks for equality with the object’s `muniHeb` field."""
-  muniHeb: String
-
-  """Checks for equality with the object’s `muniEng` field."""
-  muniEng: String
 }
 
 """
-A filter to be used against `GvulSensIntersect` object types. All fields are combined with a logical ‘and.’
+A filter to be used against `PollutionReport` object types. All fields are combined with a logical ‘and.’
 """
-input GvulSensIntersectFilter {
+input PollutionReportFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `reporter` field."""
+  reporter: StringFilter
+
+  """Filter by the object’s `reporterImageUrl` field."""
+  reporterImageUrl: StringFilter
+
+  """Filter by the object’s `isRelevant` field."""
+  isRelevant: BooleanFilter
+
+  """Filter by the object’s `address` field."""
+  address: StringFilter
+
+  """Filter by the object’s `photoUrls` field."""
+  photoUrls: StringListFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Filter by the object’s `municipalName` field."""
+  municipalName: StringFilter
+
   """Filter by the object’s `sensId` field."""
   sensId: IntFilter
 
   """Filter by the object’s `gvulId` field."""
   gvulId: IntFilter
 
-  """Filter by the object’s `squareMeters` field."""
-  squareMeters: FloatFilter
-
-  """Filter by the object’s `muniHeb` field."""
-  muniHeb: StringFilter
-
-  """Filter by the object’s `muniEng` field."""
-  muniEng: StringFilter
-
   """Checks for all expressions in this list."""
-  and: [GvulSensIntersectFilter!]
+  and: [PollutionReportFilter!]
 
   """Checks for any expressions in this list."""
-  or: [GvulSensIntersectFilter!]
+  or: [PollutionReportFilter!]
 
   """Negates the expression."""
-  not: GvulSensIntersectFilter
+  not: PollutionReportFilter
 }
 
 """
@@ -747,48 +992,6 @@ input IntFilter {
 
   """Greater than or equal to the specified value."""
   greaterThanOrEqualTo: Int
-}
-
-"""
-A filter to be used against Float fields. All fields are combined with a logical ‘and.’
-"""
-input FloatFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: Float
-
-  """Not equal to the specified value."""
-  notEqualTo: Float
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Float
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: Float
-
-  """Included in the specified list."""
-  in: [Float!]
-
-  """Not included in the specified list."""
-  notIn: [Float!]
-
-  """Less than the specified value."""
-  lessThan: Float
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: Float
-
-  """Greater than the specified value."""
-  greaterThan: Float
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: Float
 }
 
 """
@@ -923,58 +1126,297 @@ input StringFilter {
   greaterThanOrEqualToInsensitive: String
 }
 
-type Gvulot implements Node {
+"""
+A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
+"""
+input BooleanFilter {
   """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  Is null (if `true` is specified) or is not null (if `false` is specified).
   """
-  nodeId: ID!
-  id: Int!
-  geom: GeometryMultiPolygon
-  muniHeb: String
-  muniEng: String
+  isNull: Boolean
 
-  """Reads and enables pagination through a set of `GvulSensIntersect`."""
-  gvulSensIntersectsByGvulId(
-    """Only read the first `n` values of the set."""
-    first: Int
+  """Equal to the specified value."""
+  equalTo: Boolean
 
-    """Only read the last `n` values of the set."""
-    last: Int
+  """Not equal to the specified value."""
+  notEqualTo: Boolean
 
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Boolean
 
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Boolean
 
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
+  """Included in the specified list."""
+  in: [Boolean!]
 
-    """The method to use when ordering `GvulSensIntersect`."""
-    orderBy: [GvulSensIntersectsOrderBy!] = [NATURAL]
+  """Not included in the specified list."""
+  notIn: [Boolean!]
 
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: GvulSensIntersectCondition
+  """Less than the specified value."""
+  lessThan: Boolean
 
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: GvulSensIntersectFilter
-  ): GvulSensIntersectsConnection!
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Boolean
+
+  """Greater than the specified value."""
+  greaterThan: Boolean
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Boolean
 }
 
-"""A `GvulSensIntersect` edge in the connection."""
-type GvulSensIntersectsEdge {
+"""
+A filter to be used against String List fields. All fields are combined with a logical ‘and.’
+"""
+input StringListFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: [String]
+
+  """Not equal to the specified value."""
+  notEqualTo: [String]
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: [String]
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: [String]
+
+  """Less than the specified value."""
+  lessThan: [String]
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: [String]
+
+  """Greater than the specified value."""
+  greaterThan: [String]
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: [String]
+
+  """Contains the specified list of values."""
+  contains: [String]
+
+  """Contained by the specified list of values."""
+  containedBy: [String]
+
+  """Overlaps the specified list of values."""
+  overlaps: [String]
+
+  """Any array item is equal to the specified value."""
+  anyEqualTo: String
+
+  """Any array item is not equal to the specified value."""
+  anyNotEqualTo: String
+
+  """Any array item is less than the specified value."""
+  anyLessThan: String
+
+  """Any array item is less than or equal to the specified value."""
+  anyLessThanOrEqualTo: String
+
+  """Any array item is greater than the specified value."""
+  anyGreaterThan: String
+
+  """Any array item is greater than or equal to the specified value."""
+  anyGreaterThanOrEqualTo: String
+}
+
+"""
+A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’
+"""
+input DatetimeFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Datetime
+
+  """Not equal to the specified value."""
+  notEqualTo: Datetime
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Datetime
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Datetime
+
+  """Included in the specified list."""
+  in: [Datetime!]
+
+  """Not included in the specified list."""
+  notIn: [Datetime!]
+
+  """Less than the specified value."""
+  lessThan: Datetime
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Datetime
+
+  """Greater than the specified value."""
+  greaterThan: Datetime
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Datetime
+}
+
+"""Methods to use when ordering `GvulSensIntersect`."""
+enum GvulSensIntersectsOrderBy {
+  NATURAL
+  SENS_ID_ASC
+  SENS_ID_DESC
+  GVUL_ID_ASC
+  GVUL_ID_DESC
+  SQUARE_METERS_ASC
+  SQUARE_METERS_DESC
+  MUNI_HEB_ASC
+  MUNI_HEB_DESC
+  MUNI_ENG_ASC
+  MUNI_ENG_DESC
+}
+
+"""
+A condition to be used against `GvulSensIntersect` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input GvulSensIntersectCondition {
+  """Checks for equality with the object’s `sensId` field."""
+  sensId: Int
+
+  """Checks for equality with the object’s `gvulId` field."""
+  gvulId: Int
+
+  """Checks for equality with the object’s `squareMeters` field."""
+  squareMeters: Float
+
+  """Checks for equality with the object’s `muniHeb` field."""
+  muniHeb: String
+
+  """Checks for equality with the object’s `muniEng` field."""
+  muniEng: String
+}
+
+"""
+A filter to be used against `GvulSensIntersect` object types. All fields are combined with a logical ‘and.’
+"""
+input GvulSensIntersectFilter {
+  """Filter by the object’s `sensId` field."""
+  sensId: IntFilter
+
+  """Filter by the object’s `gvulId` field."""
+  gvulId: IntFilter
+
+  """Filter by the object’s `squareMeters` field."""
+  squareMeters: FloatFilter
+
+  """Filter by the object’s `muniHeb` field."""
+  muniHeb: StringFilter
+
+  """Filter by the object’s `muniEng` field."""
+  muniEng: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [GvulSensIntersectFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GvulSensIntersectFilter!]
+
+  """Negates the expression."""
+  not: GvulSensIntersectFilter
+}
+
+"""
+A filter to be used against Float fields. All fields are combined with a logical ‘and.’
+"""
+input FloatFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Float
+
+  """Not equal to the specified value."""
+  notEqualTo: Float
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Float
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Float
+
+  """Included in the specified list."""
+  in: [Float!]
+
+  """Not included in the specified list."""
+  notIn: [Float!]
+
+  """Less than the specified value."""
+  lessThan: Float
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Float
+
+  """Greater than the specified value."""
+  greaterThan: Float
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Float
+}
+
+"""A connection to a list of `PolygonReport` values."""
+type PolygonReportsConnection {
+  """A list of `PolygonReport` objects."""
+  nodes: [PolygonReport!]!
+
+  """
+  A list of edges which contains the `PolygonReport` and cursor to aid in pagination.
+  """
+  edges: [PolygonReportsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `PolygonReport` you could get from the connection."""
+  totalCount: Int!
+}
+
+type PolygonReport {
+  geom: GeometryPolygon!
+  pollutionReportId: Int!
+  type: String
+  squareMeters: Float!
+  percentageOfSens: Float!
+
+  """
+  Reads a single `PollutionReport` that is related to this `PolygonReport`.
+  """
+  pollutionReport: PollutionReport
+}
+
+"""A `PolygonReport` edge in the connection."""
+type PolygonReportsEdge {
   """A cursor for use in pagination."""
   cursor: Cursor
 
-  """The `GvulSensIntersect` at the end of the edge."""
-  node: GvulSensIntersect!
+  """The `PolygonReport` at the end of the edge."""
+  node: PolygonReport!
 }
 
 """Information about pagination in a connection."""
@@ -990,6 +1432,86 @@ type PageInfo {
 
   """When paginating forwards, the cursor to continue."""
   endCursor: Cursor
+}
+
+"""Methods to use when ordering `PolygonReport`."""
+enum PolygonReportsOrderBy {
+  NATURAL
+  GEOM_ASC
+  GEOM_DESC
+  POLLUTION_REPORT_ID_ASC
+  POLLUTION_REPORT_ID_DESC
+  TYPE_ASC
+  TYPE_DESC
+  SQUARE_METERS_ASC
+  SQUARE_METERS_DESC
+  PERCENTAGE_OF_SENS_ASC
+  PERCENTAGE_OF_SENS_DESC
+}
+
+"""
+A condition to be used against `PolygonReport` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input PolygonReportCondition {
+  """Checks for equality with the object’s `geom` field."""
+  geom: GeoJSON
+
+  """Checks for equality with the object’s `pollutionReportId` field."""
+  pollutionReportId: Int
+
+  """Checks for equality with the object’s `type` field."""
+  type: String
+
+  """Checks for equality with the object’s `squareMeters` field."""
+  squareMeters: Float
+
+  """Checks for equality with the object’s `percentageOfSens` field."""
+  percentageOfSens: Float
+}
+
+"""
+A filter to be used against `PolygonReport` object types. All fields are combined with a logical ‘and.’
+"""
+input PolygonReportFilter {
+  """Filter by the object’s `pollutionReportId` field."""
+  pollutionReportId: IntFilter
+
+  """Filter by the object’s `type` field."""
+  type: StringFilter
+
+  """Filter by the object’s `squareMeters` field."""
+  squareMeters: FloatFilter
+
+  """Filter by the object’s `percentageOfSens` field."""
+  percentageOfSens: FloatFilter
+
+  """Checks for all expressions in this list."""
+  and: [PolygonReportFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PolygonReportFilter!]
+
+  """Negates the expression."""
+  not: PolygonReportFilter
+}
+
+"""A `PollutionReport` edge in the connection."""
+type PollutionReportsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `PollutionReport` at the end of the edge."""
+  node: PollutionReport!
+}
+
+"""A `GvulSensIntersect` edge in the connection."""
+type GvulSensIntersectsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `GvulSensIntersect` at the end of the edge."""
+  node: GvulSensIntersect!
 }
 
 """A connection to a list of `Gvulot` values."""
@@ -1100,12 +1622,6 @@ type Pgmigration implements Node {
   runOn: Datetime!
 }
 
-"""
-A point in time as described by the [ISO
-8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
-"""
-scalar Datetime
-
 """A `Pgmigration` edge in the connection."""
 type PgmigrationsEdge {
   """A cursor for use in pagination."""
@@ -1164,410 +1680,6 @@ input PgmigrationFilter {
 
   """Negates the expression."""
   not: PgmigrationFilter
-}
-
-"""
-A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’
-"""
-input DatetimeFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: Datetime
-
-  """Not equal to the specified value."""
-  notEqualTo: Datetime
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Datetime
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: Datetime
-
-  """Included in the specified list."""
-  in: [Datetime!]
-
-  """Not included in the specified list."""
-  notIn: [Datetime!]
-
-  """Less than the specified value."""
-  lessThan: Datetime
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: Datetime
-
-  """Greater than the specified value."""
-  greaterThan: Datetime
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: Datetime
-}
-
-"""A connection to a list of `PollutionReport` values."""
-type PollutionReportsConnection {
-  """A list of `PollutionReport` objects."""
-  nodes: [PollutionReport!]!
-
-  """
-  A list of edges which contains the `PollutionReport` and cursor to aid in pagination.
-  """
-  edges: [PollutionReportsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """
-  The count of *all* `PollutionReport` you could get from the connection.
-  """
-  totalCount: Int!
-}
-
-type PollutionReport implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  geom: GeometryPoint
-  reporter: String
-  reporterImageUrl: String
-  isRelevant: Boolean
-  address: String
-  photoUrls: [String]
-  createdAt: Datetime!
-  municipalName: String
-
-  """Reads and enables pagination through a set of `PolygonReport`."""
-  polygonReports(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `PolygonReport`."""
-    orderBy: [PolygonReportsOrderBy!] = [NATURAL]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: PolygonReportCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: PolygonReportFilter
-  ): PolygonReportsConnection!
-}
-
-"""A connection to a list of `PolygonReport` values."""
-type PolygonReportsConnection {
-  """A list of `PolygonReport` objects."""
-  nodes: [PolygonReport!]!
-
-  """
-  A list of edges which contains the `PolygonReport` and cursor to aid in pagination.
-  """
-  edges: [PolygonReportsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `PolygonReport` you could get from the connection."""
-  totalCount: Int!
-}
-
-type PolygonReport {
-  geom: GeometryPolygon!
-  pollutionReportId: Int!
-  type: String
-
-  """
-  Reads a single `PollutionReport` that is related to this `PolygonReport`.
-  """
-  pollutionReport: PollutionReport
-}
-
-"""A `PolygonReport` edge in the connection."""
-type PolygonReportsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `PolygonReport` at the end of the edge."""
-  node: PolygonReport!
-}
-
-"""Methods to use when ordering `PolygonReport`."""
-enum PolygonReportsOrderBy {
-  NATURAL
-  GEOM_ASC
-  GEOM_DESC
-  POLLUTION_REPORT_ID_ASC
-  POLLUTION_REPORT_ID_DESC
-  TYPE_ASC
-  TYPE_DESC
-}
-
-"""
-A condition to be used against `PolygonReport` object types. All fields are
-tested for equality and combined with a logical ‘and.’
-"""
-input PolygonReportCondition {
-  """Checks for equality with the object’s `geom` field."""
-  geom: GeoJSON
-
-  """Checks for equality with the object’s `pollutionReportId` field."""
-  pollutionReportId: Int
-
-  """Checks for equality with the object’s `type` field."""
-  type: String
-}
-
-"""
-A filter to be used against `PolygonReport` object types. All fields are combined with a logical ‘and.’
-"""
-input PolygonReportFilter {
-  """Filter by the object’s `pollutionReportId` field."""
-  pollutionReportId: IntFilter
-
-  """Filter by the object’s `type` field."""
-  type: StringFilter
-
-  """Checks for all expressions in this list."""
-  and: [PolygonReportFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [PolygonReportFilter!]
-
-  """Negates the expression."""
-  not: PolygonReportFilter
-}
-
-"""A `PollutionReport` edge in the connection."""
-type PollutionReportsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `PollutionReport` at the end of the edge."""
-  node: PollutionReport!
-}
-
-"""Methods to use when ordering `PollutionReport`."""
-enum PollutionReportsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  GEOM_ASC
-  GEOM_DESC
-  REPORTER_ASC
-  REPORTER_DESC
-  REPORTER_IMAGE_URL_ASC
-  REPORTER_IMAGE_URL_DESC
-  IS_RELEVANT_ASC
-  IS_RELEVANT_DESC
-  ADDRESS_ASC
-  ADDRESS_DESC
-  PHOTO_URLS_ASC
-  PHOTO_URLS_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  MUNICIPAL_NAME_ASC
-  MUNICIPAL_NAME_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `PollutionReport` object types. All fields are
-tested for equality and combined with a logical ‘and.’
-"""
-input PollutionReportCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `geom` field."""
-  geom: GeoJSON
-
-  """Checks for equality with the object’s `reporter` field."""
-  reporter: String
-
-  """Checks for equality with the object’s `reporterImageUrl` field."""
-  reporterImageUrl: String
-
-  """Checks for equality with the object’s `isRelevant` field."""
-  isRelevant: Boolean
-
-  """Checks for equality with the object’s `address` field."""
-  address: String
-
-  """Checks for equality with the object’s `photoUrls` field."""
-  photoUrls: [String]
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-
-  """Checks for equality with the object’s `municipalName` field."""
-  municipalName: String
-}
-
-"""
-A filter to be used against `PollutionReport` object types. All fields are combined with a logical ‘and.’
-"""
-input PollutionReportFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `reporter` field."""
-  reporter: StringFilter
-
-  """Filter by the object’s `reporterImageUrl` field."""
-  reporterImageUrl: StringFilter
-
-  """Filter by the object’s `isRelevant` field."""
-  isRelevant: BooleanFilter
-
-  """Filter by the object’s `address` field."""
-  address: StringFilter
-
-  """Filter by the object’s `photoUrls` field."""
-  photoUrls: StringListFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Filter by the object’s `municipalName` field."""
-  municipalName: StringFilter
-
-  """Checks for all expressions in this list."""
-  and: [PollutionReportFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [PollutionReportFilter!]
-
-  """Negates the expression."""
-  not: PollutionReportFilter
-}
-
-"""
-A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
-"""
-input BooleanFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: Boolean
-
-  """Not equal to the specified value."""
-  notEqualTo: Boolean
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Boolean
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: Boolean
-
-  """Included in the specified list."""
-  in: [Boolean!]
-
-  """Not included in the specified list."""
-  notIn: [Boolean!]
-
-  """Less than the specified value."""
-  lessThan: Boolean
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: Boolean
-
-  """Greater than the specified value."""
-  greaterThan: Boolean
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: Boolean
-}
-
-"""
-A filter to be used against String List fields. All fields are combined with a logical ‘and.’
-"""
-input StringListFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: [String]
-
-  """Not equal to the specified value."""
-  notEqualTo: [String]
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: [String]
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: [String]
-
-  """Less than the specified value."""
-  lessThan: [String]
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: [String]
-
-  """Greater than the specified value."""
-  greaterThan: [String]
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: [String]
-
-  """Contains the specified list of values."""
-  contains: [String]
-
-  """Contained by the specified list of values."""
-  containedBy: [String]
-
-  """Overlaps the specified list of values."""
-  overlaps: [String]
-
-  """Any array item is equal to the specified value."""
-  anyEqualTo: String
-
-  """Any array item is not equal to the specified value."""
-  anyNotEqualTo: String
-
-  """Any array item is less than the specified value."""
-  anyLessThan: String
-
-  """Any array item is less than or equal to the specified value."""
-  anyLessThanOrEqualTo: String
-
-  """Any array item is greater than the specified value."""
-  anyGreaterThan: String
-
-  """Any array item is greater than or equal to the specified value."""
-  anyGreaterThanOrEqualTo: String
 }
 
 """A connection to a list of `PubSen` values."""
@@ -1783,6 +1895,27 @@ input UserFilter {
 
   """Negates the expression."""
   not: UserFilter
+}
+
+type GvulExtended {
+  id: Int
+  muniHeb: String
+  geom: Geom
+  gvulSensIntersectsByGvulId: [GvulIntersectExtended]
+}
+
+type Geom {
+  geojson: GeoJSON
+}
+
+type GvulIntersectExtended {
+  sens: PubSenExtended
+}
+
+type PubSenExtended {
+  id: Int
+  score: Float
+  geom: Geom
 }
 
 """
@@ -2182,6 +2315,12 @@ type CreatePollutionReportPayload {
   """
   query: Query
 
+  """Reads a single `PubSen` that is related to this `PollutionReport`."""
+  sens: PubSen
+
+  """Reads a single `Gvulot` that is related to this `PollutionReport`."""
+  gvul: Gvulot
+
   """An edge for our `PollutionReport`. May be used by Relay 1."""
   pollutionReportEdge(
     """The method to use when ordering `PollutionReport`."""
@@ -2212,6 +2351,8 @@ input PollutionReportInput {
   photoUrls: [String]
   createdAt: Datetime
   municipalName: String
+  sensId: Int!
+  gvulId: Int!
 }
 
 """The output of our create `PolygonReport` mutation."""
@@ -2259,6 +2400,8 @@ input PolygonReportInput {
   geom: GeoJSON!
   pollutionReportId: Int!
   type: String
+  squareMeters: Float!
+  percentageOfSens: Float!
 }
 
 """The output of our create `PubSen` mutation."""
@@ -2499,6 +2642,12 @@ type UpdatePollutionReportPayload {
   """
   query: Query
 
+  """Reads a single `PubSen` that is related to this `PollutionReport`."""
+  sens: PubSen
+
+  """Reads a single `Gvulot` that is related to this `PollutionReport`."""
+  gvul: Gvulot
+
   """An edge for our `PollutionReport`. May be used by Relay 1."""
   pollutionReportEdge(
     """The method to use when ordering `PollutionReport`."""
@@ -2538,6 +2687,8 @@ input PollutionReportPatch {
   photoUrls: [String]
   createdAt: Datetime
   municipalName: String
+  sensId: Int
+  gvulId: Int
 }
 
 """All input for the `updatePollutionReport` mutation."""
@@ -2803,6 +2954,12 @@ type DeletePollutionReportPayload {
   """
   query: Query
 
+  """Reads a single `PubSen` that is related to this `PollutionReport`."""
+  sens: PubSen
+
+  """Reads a single `Gvulot` that is related to this `PollutionReport`."""
+  gvul: Gvulot
+
   """An edge for our `PollutionReport`. May be used by Relay 1."""
   pollutionReportEdge(
     """The method to use when ordering `PollutionReport`."""
@@ -2989,6 +3146,7 @@ input SigninClientInput {
 input PolygonInput {
   geometry: GeoJSON!
   type: String!
+  squareMeters: Float!
 }
 
 """The `Upload` scalar type represents a file upload."""

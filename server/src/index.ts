@@ -31,6 +31,7 @@ async function startServer() {
     exportGqlSchemaPath: "schema.graphql",
     graphiql: true,
     enhanceGraphiql: true,
+    legacyRelations: "omit",
     allowExplain(req) {
       // TODO: customise condition!
       return true;
