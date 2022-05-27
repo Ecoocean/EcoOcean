@@ -1,5 +1,4 @@
 export const admin = require("firebase-admin");
-const serviceAccount = require("./keys/ecoOcean_firebase_key.json");
 const { makeQueryRunner } = require("./queryRunner");
 
 const dbUserName = process.env.DB_USERNAME;
@@ -8,13 +7,25 @@ const dbName = process.env.DB_NAME;
 const dbHost = process.env.DB_HOST;
 const dbPort = process.env.DB_PORT;
 
+let serviceAccount = null
+if (process.env.ENVIRONMENT === 'prod') {
+  const serviceAccountEnv = process.env.FIREBASE_SERVICE_KEY;
+  serviceAccount = JSON.parse(serviceAccountEnv);
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL:
+        "https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app",
+    storageBucket: "gs://ecoocean.appspot.com",
+  });
+} else {
+  admin.initializeApp({
+    projectId: "ecoocean",
+    databaseURL:
+        "https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app",
+    storageBucket: "gs://ecoocean.appspot.com",
+  });
+}
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL:
-    "https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app",
-  storageBucket: "gs://ecoocean.appspot.com",
-});
 
 export const auth = admin.auth();
 export const db = admin.firestore();
@@ -23,7 +34,7 @@ export const bucket = admin.storage().bucket();
 (async function (){
   if ( process.env.ENVIRONMENT === 'dev') {
     const runner = await makeQueryRunner(
-        process.env.DATABASE_URL || `postgres://${dbUserName}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`,
+        `postgres://${dbUserName}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`,
         "public"
     );
     try {

@@ -17,8 +17,8 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || ''
 };
 
-initializeApp(firebaseConfig);
 
+initializeApp(firebaseConfig);
 let auth = getAuth();
 if (process.env.REACT_APP_ENVIRONMENT === "dev") {
   connectAuthEmulator(auth,'http://localhost:9099/', { disableWarnings: true });
