@@ -20,6 +20,7 @@ jobs:
         with:
           node-version: 14.16
       - run: npm ci
+      - run: echo REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }} >> .env.production
       - run: npm run build
         env:
           CI: false
@@ -27,5 +28,5 @@ jobs:
         with:
           args: deploy --only hosting
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GCP_SA_KEY: ${{ secrets.RUN_SA_KEY }}
           PROJECT_PATH: "./admin"
