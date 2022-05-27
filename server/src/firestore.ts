@@ -9,7 +9,7 @@ const dbPort = process.env.DB_PORT;
 
 let serviceAccount = null
 if (process.env.ENVIRONMENT === 'prod') {
-  const serviceAccountEnv = process.env.FIREBASE_SERVICE_KEY;
+  const serviceAccountEnv = process.env.GOOGLE_APPLICATION_CREDENTIALS;
   serviceAccount = JSON.parse(serviceAccountEnv);
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
