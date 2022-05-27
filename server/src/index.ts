@@ -68,7 +68,7 @@ async function startServer() {
   const dbHost = process.env.DB_HOST;
   const dbPort = process.env.DB_PORT;
   const postgraphileMiddleware =  postgraphile(
-    process.env.DATABASE_URL || `postgres://${dbUserName}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`,
+    `postgres://${dbUserName}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`,
     "public",
     postgraphileOptions
   )
