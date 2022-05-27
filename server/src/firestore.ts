@@ -7,12 +7,9 @@ const dbName = process.env.DB_NAME;
 const dbHost = process.env.DB_HOST;
 const dbPort = process.env.DB_PORT;
 
-let serviceAccount = null
 if (process.env.ENVIRONMENT === 'prod') {
-  const serviceAccountEnv = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-  serviceAccount = JSON.parse(serviceAccountEnv);
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.applicationDefault(),
     databaseURL:
         "https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app",
     storageBucket: "gs://ecoocean.appspot.com",
