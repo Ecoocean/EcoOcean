@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 16.10
       - run: npm ci
-      - run: env-cmd -f .env.production REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }} react-app-rewired build
+      - run: REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }} npm run build
         env:
           CI: false
       - uses: w9jds/firebase-action@master
