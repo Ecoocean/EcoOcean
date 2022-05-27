@@ -1,0 +1,394 @@
+{
+  "stats": {
+    "suites": 3,
+    "tests": 10,
+    "passes": 10,
+    "pending": 0,
+    "failures": 0,
+    "start": "2022-05-27T09:00:05.153Z",
+    "end": "2022-05-27T09:02:25.489Z",
+    "duration": 113222,
+    "testsRegistered": 10,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "5d0589c4-ff64-4b53-9274-ac0927f888ec",
+      "title": "",
+      "fullFile": "cypress/integration/client/1-basic.spec.js/login.spec.js",
+      "file": "cypress/integration/client/1-basic.spec.js/login.spec.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "405dd38b-66cb-4e2e-a450-a1cbea2b5d44",
+          "title": "login to ecoocean client - positive scenario",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "login to ecoocean",
+              "fullTitle": "login to ecoocean client - positive scenario login to ecoocean",
+              "timedOut": null,
+              "duration": 15892,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.percySnapshot('login screen - client');\ncy.loginExistUser('random@gmail.com', '123456');\ncy.validateHomeScreenClient();\ncy.get('div[class=\"sidebar-pane active\"]', {\n  timeout: 10000\n}).should('be.visible');\ncy.waitForNetworkIdle(5000);\ncy.percySnapshot('home page client - side panel open');\ncy.get('div[class=\"sidebar-close\"]').click({\n  multiple: true,\n  force: true\n});\ncy.get('div[class=\"sidebar-pane active\"]').should('not.exist');\ncy.percySnapshot('home page client - side panel closed');",
+              "err": {},
+              "uuid": "aa8c1104-01d3-4ec8-8d21-607eff420db4",
+              "parentUUID": "405dd38b-66cb-4e2e-a450-a1cbea2b5d44",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "logout from ecoocean",
+              "fullTitle": "login to ecoocean client - positive scenario logout from ecoocean",
+              "timedOut": null,
+              "duration": 7399,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.loginExistUser(email, password);\ncy.validateHomeScreenClient();\ncy.logoutClient();\ncy.validateLoginScreen();",
+              "err": {},
+              "uuid": "083111e1-7a51-4441-9819-8169b063a962",
+              "parentUUID": "405dd38b-66cb-4e2e-a450-a1cbea2b5d44",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "aa8c1104-01d3-4ec8-8d21-607eff420db4",
+            "083111e1-7a51-4441-9819-8169b063a962"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 23291,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        },
+        {
+          "uuid": "81b54312-2905-4458-9a48-e4c1ebaeb575",
+          "title": "login to ecoocean client - negative scenario",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "assert failed login of a new user",
+              "fullTitle": "login to ecoocean client - negative scenario assert failed login of a new user",
+              "timedOut": null,
+              "duration": 4321,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.loginNewUser('automation@gmail.com', 'automation', '123456');\ncy.validateLoginScreen();\ncy.contains('User is not authorized — Please ask an admin to get access', {\n  timeout: 10000\n}).should('be.visible');\ncy.contains('Try with a different account', {\n  timeout: 10000\n}).should('be.visible');\ncy.percySnapshot('login page client - unauthorized user');",
+              "err": {},
+              "uuid": "dd1d85b0-c5a7-4fae-a312-ada39b5d219b",
+              "parentUUID": "81b54312-2905-4458-9a48-e4c1ebaeb575",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "dd1d85b0-c5a7-4fae-a312-ada39b5d219b"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 4321,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    },
+    {
+      "uuid": "2da23ff1-c344-4a1d-8c84-5370ef966a72",
+      "title": "",
+      "fullFile": "cypress/integration/client/1-basic.spec.js/reports.spec.js",
+      "file": "cypress/integration/client/1-basic.spec.js/reports.spec.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "35062f61-c6ff-48ce-841d-db01028bcc56",
+          "title": "reports in ecoocean client",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "create empty report and verify",
+              "fullTitle": "reports in ecoocean client create empty report and verify",
+              "timedOut": null,
+              "duration": 20031,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.clickSection('add-report');\ncy.get('div[id=\"select-municipal\"]').click({\n  timeout: 10000\n});\ncy.contains('הרצליה').click({\n  timeout: 10000\n});\ncy.wait(3000);\ncy.get('#mapId').click(50, 50);\ncy.wait(5000);\ncy.get('button').contains('Save').click({\n  timeout: 10000\n});\ncy.contains('Pollution Reports', {\n  timeout: 10000\n}).should('be.visible');\ncy.contains('Pollution report successfully submitted', {\n  timeout: 10000\n}).should('be.visible');\ncy.get('ul[id=\"report-list\"]').first().first().should('have.length', 1);",
+              "err": {},
+              "uuid": "e510870d-b42d-4821-b25c-011c47c9aca5",
+              "parentUUID": "35062f61-c6ff-48ce-841d-db01028bcc56",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "remove a report and verify",
+              "fullTitle": "reports in ecoocean client remove a report and verify",
+              "timedOut": null,
+              "duration": 19861,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.clickSection('add-report');\ncy.get('div[id=\"select-municipal\"]').click({\n  timeout: 10000\n});\ncy.contains('הרצליה').click({\n  timeout: 10000\n});\ncy.wait(3000);\ncy.get('#mapId').click(50, 50);\ncy.wait(5000);\ncy.get('button').contains('Save').click({\n  timeout: 10000\n});\ncy.contains('Pollution Reports', {\n  timeout: 10000\n}).should('be.visible');\ncy.contains('Pollution report successfully submitted', {\n  timeout: 10000\n}).should('be.visible');\ncy.get('ul[id=\"report-list\"]').first().first().should('have.length', 1);\ncy.get('button[id=\"delete-report-0\"]').click({\n  timeout: 10000\n});\ncy.contains('Pollution report successfully deleted', {\n  timeout: 10000\n}).should('be.visible');\ncy.get('button[id=\"delete-report-0\"]', {\n  timeout: 10000\n}).should('not.exist');\ncy.get('ul[id=\"report-list\"]').first().children().children().should('not.exist');",
+              "err": {},
+              "uuid": "eced1e2f-e871-48b3-ac09-62451a7c407d",
+              "parentUUID": "35062f61-c6ff-48ce-841d-db01028bcc56",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "click on report in the report list should open report modal",
+              "fullTitle": "reports in ecoocean client click on report in the report list should open report modal",
+              "timedOut": null,
+              "duration": 18696,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.clickSection('add-report');\ncy.get('div[id=\"select-municipal\"]').click({\n  timeout: 10000\n});\ncy.contains('הרצליה').click({\n  timeout: 10000\n});\ncy.wait(3000);\ncy.get('#mapId').click(50, 50);\ncy.wait(5000);\ncy.get('button').contains('Save').click({\n  timeout: 10000\n});\ncy.contains('Pollution Reports', {\n  timeout: 10000\n}).should('be.visible');\ncy.contains('Pollution report successfully submitted', {\n  timeout: 10000\n}).should('be.visible');\ncy.get('ul[id=\"report-list\"]').first().first().should('have.length', 1);\ncy.get('div[id=\"report-item-clickable-0\"]').click({\n  timeout: 10000\n});\ncy.contains('Pollution report', {\n  timeout: 10000\n}).should('be.visible');",
+              "err": {},
+              "uuid": "48d545a6-0b3a-4aab-b504-d8fcf6e5e059",
+              "parentUUID": "35062f61-c6ff-48ce-841d-db01028bcc56",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "e510870d-b42d-4821-b25c-011c47c9aca5",
+            "eced1e2f-e871-48b3-ac09-62451a7c407d",
+            "48d545a6-0b3a-4aab-b504-d8fcf6e5e059"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 58588,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    },
+    {
+      "uuid": "e8ffaeab-c706-42a9-b71a-b9a550014428",
+      "title": "",
+      "fullFile": "cypress/integration/admin/1-basic.spec.js/login.spec.js",
+      "file": "cypress/integration/admin/1-basic.spec.js/login.spec.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "e1c0c777-3f06-4d22-9465-809573382cdb",
+          "title": "login to ecoocean admin - positive scenario",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "login as admin to ecoocean",
+              "fullTitle": "login to ecoocean admin - positive scenario login as admin to ecoocean",
+              "timedOut": null,
+              "duration": 7514,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.percySnapshot('login screen - admin');\ncy.loginExistUser(adminUser.email, adminUser.password);\ncy.validateHomeScreenAdmin();\ncy.percySnapshot('home page admin');",
+              "err": {},
+              "uuid": "e0960f06-1504-469d-8dca-a1ef8b96f4ea",
+              "parentUUID": "e1c0c777-3f06-4d22-9465-809573382cdb",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "logout from ecoocean admin",
+              "fullTitle": "login to ecoocean admin - positive scenario logout from ecoocean admin",
+              "timedOut": null,
+              "duration": 6590,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.loginExistUser(adminUser.email, adminUser.password);\ncy.validateHomeScreenAdmin();\ncy.logoutAdmin();\ncy.validateLoginScreen();",
+              "err": {},
+              "uuid": "5ce26a40-11f4-407e-90c2-efc6ce735e0e",
+              "parentUUID": "e1c0c777-3f06-4d22-9465-809573382cdb",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "e0960f06-1504-469d-8dca-a1ef8b96f4ea",
+            "5ce26a40-11f4-407e-90c2-efc6ce735e0e"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 14104,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        },
+        {
+          "uuid": "0b905229-9e82-4f5f-a86a-87a856be8aea",
+          "title": "login to ecoocean - negative scenario",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "assert failed login of a new user",
+              "fullTitle": "login to ecoocean - negative scenario assert failed login of a new user",
+              "timedOut": null,
+              "duration": 6774,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.loginNewUser('automation@gmail.com', 'automation', '123456');\ncy.validateLoginScreen();\ncy.contains('User is not authorized — Please ask an admin to get access', {\n  timeout: 10000\n}).should('be.visible');\ncy.contains('Try with a different account', {\n  timeout: 10000\n}).should('be.visible');\ncy.percySnapshot('login page admin - unauthorized user');",
+              "err": {},
+              "uuid": "6ab12183-6231-4eb6-9ad2-c1740fb3631b",
+              "parentUUID": "0b905229-9e82-4f5f-a86a-87a856be8aea",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "assert failed login of a normal user",
+              "fullTitle": "login to ecoocean - negative scenario assert failed login of a normal user",
+              "timedOut": null,
+              "duration": 6144,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.loginExistUser(normalUser.email, normalUser.password);\ncy.validateLoginScreen();\ncy.contains('User is not authorized — Please ask an admin to get access', {\n  timeout: 10000\n}).should('be.visible');\ncy.contains('Try with a different account', {\n  timeout: 10000\n}).should('be.visible');",
+              "err": {},
+              "uuid": "966b161b-40de-46b4-9115-0ba3a4265f30",
+              "parentUUID": "0b905229-9e82-4f5f-a86a-87a856be8aea",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "6ab12183-6231-4eb6-9ad2-c1740fb3631b",
+            "966b161b-40de-46b4-9115-0ba3a4265f30"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 12918,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}
