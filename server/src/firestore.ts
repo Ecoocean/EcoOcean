@@ -8,11 +8,7 @@ const dbHost = process.env.DB_HOST;
 const dbPort = process.env.DB_PORT;
 
 if (process.env.ENVIRONMENT === 'prod') {
-  admin.initializeApp({
-    databaseURL:
-        "https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app",
-    storageBucket: "gs://ecoocean.appspot.com",
-  });
+  admin.initializeApp();
 } else {
   admin.initializeApp({
     projectId: "ecoocean",
