@@ -32,9 +32,11 @@ jobs:
     - name: Authorize Docker push
       run: gcloud auth configure-docker
 
+    - name: Copy service key
+      run: echo ${{ secrets.GCP_SERVICE_KEY }} > key.json
+
     - name: Build and Push Container
       run: |-
-        echo ${{ secrets.GCP_SERVICE_KEY }} > key.json
         docker build --build-arg db_username=${{ secrets.DB_USERNAME }} --build-arg db_password=${{ secrets.DB_PASSWORD }} --build-arg db_host=${{ secrets.DB_HOST }} --build-arg db_name=${{ secrets.DB_NAME }} -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
         
