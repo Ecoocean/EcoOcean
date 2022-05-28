@@ -27,5 +27,5 @@ jobs:
         with:
           args: deploy --only hosting
         env:
-          GCP_SA_KEY: ${{ secrets.RUN_SA_KEY }}
+          GCP_SA_KEY: ${{ secrets.GCP_SERVICE_KEY }}
           PROJECT_PATH: "./client"
