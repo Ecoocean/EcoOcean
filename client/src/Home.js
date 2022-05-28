@@ -7,12 +7,20 @@ import ShowReports from "./ShowReports";
 import { Helmet } from 'react-helmet';
 import 'leaflet-easyprint';
 import {useQuery, useReactiveVar} from "@apollo/client";
-import {dateEndFilterVar, dateStartFilterVar, gvulotVar, mainMapVar, sensVar} from "./cache";
+import {
+    dateEndFilterVar,
+    dateStartFilterVar,
+    gvulotVar,
+    loadingVar,
+    mainMapVar,
+    sensVar
+} from "./cache";
 import {GET_GVULOTS} from "./GraphQL/Queries";
+import {Backdrop, CircularProgress, Grid} from "@mui/material";
 
 
 export default function Home() {
-
+    const loadingApplication = useReactiveVar(loadingVar);
     const map = useReactiveVar(mainMapVar);
     const { data: dataGvulot } = useQuery(GET_GVULOTS, {
         fetchPolicy: "network-only",
@@ -41,6 +49,7 @@ export default function Home() {
 
 
     const mapReady = (map) =>{
+        loadingVar(false);
         mainMapVar(map);
         map.addControl(L.control.zoom({ position: 'bottomright' }));
         L.control.locate({
@@ -60,6 +69,26 @@ export default function Home() {
             <Helmet>
                 <title>EcoOcean</title>
             </Helmet>
+            <Backdrop
+                sx={{
+                    position: "absolute",
+                    color: "#fff",
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                }}
+                open={loadingApplication}
+            >
+                <Grid
+                    container
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    <Grid item>
+                        <CircularProgress color="inherit" />
+                    </Grid>
+                    <Grid item>Loading please wait ...</Grid>
+                </Grid>
+            </Backdrop>
             {map && <Sidebar map={map} />}
             <Map setMap={mapReady} >
                 <ShowReports />

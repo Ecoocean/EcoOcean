@@ -7,9 +7,9 @@ import {
     filteredPollutionReportsVar,
     mainMapVar,
     gvulotVar,
-    sensVar
+    sensVar, loadingVar
 } from "../cache";
-import {useLazyQuery} from "@apollo/client";
+import {useLazyQuery, useReactiveVar} from "@apollo/client";
 import {GET_GVULOTS, GET_LOCATION_REPORTS} from "../GraphQL/Queries";
 import {useEffect} from "react";
 export default function FiltersTab() {
@@ -28,6 +28,7 @@ export default function FiltersTab() {
 
     useEffect(() => {
         if (dataGvulot) {
+            loadingVar(false);
             gvulotVar(dataGvulot.getMunicipalsWithScore);
             const sens = dataGvulot.getMunicipalsWithScore.reduce((accu, curr) => {
                 const sensMapped = curr.gvulSensIntersectsByGvulId.map(({sens}) => sens);
@@ -47,6 +48,7 @@ export default function FiltersTab() {
                 defaultValue={dateStartFilterVar().toISOString().split('T')[0]}
                 sx={{ width: 220 }}
                 onChange = {(event) =>    {
+                    loadingVar(true);
                     dateStartFilterVar(new Date(Date.parse(event.target.value)));
                     const bounds = mainMapVar().getBounds();
                     getLocationReports({variables: {
@@ -84,6 +86,7 @@ export default function FiltersTab() {
                 defaultValue={dateEndFilterVar().toISOString().split('T')[0]}
                 sx={{ width: 220 }}
                 onChange = {(event) =>    {
+                    loadingVar(true);
                     dateEndFilterVar(new Date(Date.parse(event.target.value)));
                     const bounds = mainMapVar().getBounds();
                     getLocationReports({variables: {

@@ -16,6 +16,7 @@
     "@mui/styles": "^5.0.1",
     "@turf/turf": "^6.5.0",
     "apollo-upload-client": "^16.0.0",
+    "chroma-js": "^2.4.2",
     "env-cmd": "^10.1.0",
     "firebase": "^9.6.9",
     "graphql": "^15.6.0",

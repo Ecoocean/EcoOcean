@@ -6,6 +6,17 @@ import ListItem from "@mui/material/ListItem";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import List from "@mui/material/List";
+import { redGreenScaleBoxes } from './chromaColors';
+
+function calculateSeverity(score) {
+    if(score === 0){
+        return 'success'
+    }
+    if (score > 0 && score < 30){
+        return 'warning';
+    }
+    return 'error';
+}
 
 export default function MunicipalList() {
     return (
@@ -14,9 +25,9 @@ export default function MunicipalList() {
                 { gvulotVar() && gvulotVar().map((gvul, i) => {
                     return <Collapse key={i}>
                         <ListItem divider sx={{display: "inherit"}}>
-                            <Alert severity={ i % 3 === 0 ? "error" : i % 3 === 1 ? "warning" : "success"}>
+                            <Alert severity={calculateSeverity(gvul.score)} sx={{backgroundColor: redGreenScaleBoxes(gvul.score).hex()}}>
                                 <AlertTitle>{gvul.muniHeb}</AlertTitle>
-                                information regarding pollution status <strong>check it out!</strong>
+                                There {gvul.reportCount === 0 || gvul.reportCount === 1 ? 'is' : 'are'} currently <strong>{gvul.reportCount}</strong> reports in this area
                             </Alert>
                         </ListItem>
                     </Collapse>

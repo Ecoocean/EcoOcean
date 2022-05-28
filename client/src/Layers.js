@@ -5,22 +5,8 @@ import L from "leaflet";
 import {useMap} from "react-leaflet";
 import * as turf from '@turf/turf';
 import {gvulotVar, sensVar} from "./cache";
+import { redGreenScaleLayers } from "./chromaColors";
 
-
-
-function perc2color(perc) {
-    var r, g, b = 0;
-    if(perc < 50) {
-        r = 255;
-        g = Math.round(5.1 * perc);
-    }
-    else {
-        g = 255;
-        r = Math.round(510 - 5.10 * perc);
-    }
-    var h = r * 0x10000 + g * 0x100 + b * 0x1;
-    return '#' + ('000000' + h.toString(16)).slice(-6);
-}
 
 let controller = null
 const Layers = () => {
@@ -76,10 +62,10 @@ const Layers = () => {
                 controller.remove();
             }
             const gvulots = gvulot.map((gvul, i) => {
-                var myStyle = {
-                    "color": i % 3 === 0 ? "#EE4B2B" : i % 3 === 1 ? "#ff8c00" : "#0BDA51",
-                    "weight": 5,
-                    "opacity": 0.65
+                const myStyle = {
+                    "color": redGreenScaleLayers(gvul.score).hex(),
+                    "weight": 4,
+                    "opacity": 0.80
                 };
                 return L.geoJSON(gvul.geom.geojson, {
                     style: myStyle,
@@ -89,7 +75,7 @@ const Layers = () => {
             const pub_sens = sens.map((sens, i) => {
 
                 var myStyle = {
-                    "color": perc2color(100 - (sens.score * 5)),
+                    "color": redGreenScaleLayers(sens.score).hex(),
                     "weight": 5,
                     "opacity": 0.65
                 };

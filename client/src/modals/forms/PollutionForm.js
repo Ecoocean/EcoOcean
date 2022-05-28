@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import L from 'leaflet';
-import {useMutation, useReactiveVar} from "@apollo/client";
+import {useLazyQuery, useMutation, useReactiveVar} from "@apollo/client";
 import {CREATE_POLLUTION_REPORT} from "../../GraphQL/Mutations";
 import {setSnackBar} from "../../SnackBarUtils"
 import ImageUploaderComp from "../../ImageUploaderComp";
@@ -8,7 +8,15 @@ import MyLocationMap from "../../MyLocationMap.js";
 import { getAuth } from 'firebase/auth';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
-import {gvulotVar, locationMapVar, mainMapVar, reportPolyLayersVar, selectedBeachSegmentVar} from "../../cache";
+import {
+  dateEndFilterVar,
+  dateStartFilterVar,
+  gvulotVar, loadingVar,
+  locationMapVar,
+  mainMapVar,
+  reportPolyLayersVar,
+  selectedBeachSegmentVar, sensVar
+} from "../../cache";
 import 'firebase/auth';
 import {sideBarOpenTabVar} from "../../cache";
 import PollutionReportPickerModal  from "../PollutionReportPickerModal";
@@ -19,6 +27,7 @@ import {FormHelperText, InputLabel, Select} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import * as turf from '@turf/turf';
 import PolygonReportCard from "../../PolygonReportCard";
+import {GET_GVULOTS} from "../../GraphQL/Queries";
 
 let beachSegmentsLayer = null;
 let isBeachSegmentSelected = false;
@@ -47,6 +56,22 @@ const PollutionForm = ({ openTab }) => {
   const [gvulId, setGvulId] = useState(null);
   const [sensId, setSensId] = useState(null);
   const [emptyMunicipal, setEmptyMunicipal] = useState(false);
+  const [getGvulot, { data: dataGvulot }] = useLazyQuery(GET_GVULOTS, {
+    fetchPolicy: "network-only",
+  });
+
+  useEffect(() => {
+    if (dataGvulot) {
+      loadingVar(false);
+      gvulotVar(dataGvulot.getMunicipalsWithScore);
+      const sens = dataGvulot.getMunicipalsWithScore.reduce((accu, curr) => {
+        const sensMapped = curr.gvulSensIntersectsByGvulId.map(({sens}) => sens);
+        return [...accu, ...sensMapped]
+      }, []);
+
+      sensVar(sens);
+    }
+  }, [dataGvulot]);
 
 
   const handlePollutionReportPickerClose = (value) => {
@@ -171,18 +196,13 @@ const PollutionForm = ({ openTab }) => {
                 photoUrls: [],
                 gvulId: gvulId,
                 sensId: sensId,
-                // type: pollutionTypePickerRef.current.state.image.value,
                 geom: { "type": "Point", "coordinates": [ location.lng, location.lat ] },
-                // length: parseInt(pollutionProportiesRef.current.state.length),
-                // width : parseInt(pollutionProportiesRef.current.state.width),
-                // depth : parseInt(pollutionProportiesRef.current.state.depth),
-                // coverage : parseInt(pollutionProportiesRef.current.state.coverage),
-                // cleaningStatus : pollutionProportiesRef.current.state.cleaningStatus,
               }
             }
           }
         })
         if(!errors) {
+
           imageUploaderRef.current.reset();
           setGvulName('');
           setGvulId(null);
@@ -208,7 +228,17 @@ const PollutionForm = ({ openTab }) => {
               }
             }
           });
-
+          loadingVar(true);
+          getGvulot({
+            variables: {
+              filterReports: {
+                and: [
+                  {createdAt: {greaterThan: dateStartFilterVar().toISOString().split('T')[0]}},
+                  {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}}
+                ]
+              }
+            }
+          })
         }
       }
     } catch (err) {

@@ -21,6 +21,9 @@ export const filteredPollutionReportsVar = makeVar([]);
 //indicator for knowing when location is changed -> computing filtered reports
 export const loadingPollutionReportsVar = makeVar(false);
 
+//indicator for loading of entire application and refresh data
+export const loadingVar = makeVar(true);
+
 //the report that got clicked either in the list or in the map
 export const selectedReportVar = makeVar(null);
 

@@ -25,10 +25,6 @@ const typeDefs = gql`
     metadata: UserMetadata
   }
   
-  extend type Gvulot {
-    score: Int
-  }
-  
   type Geom {
     geojson: GeoJSON
   }
@@ -40,11 +36,14 @@ const typeDefs = gql`
   }
   
   type GvulIntersectExtended {
+    score: Float
     sens: PubSenExtended
   }
   
   type GvulExtended {
     id: Int
+    reportCount: Int
+    score: Float
     muniHeb: String
     geom: Geom
     gvulSensIntersectsByGvulId: [GvulIntersectExtended]
