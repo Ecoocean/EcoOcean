@@ -33,7 +33,7 @@ jobs:
       run: gcloud auth configure-docker
 
     - name: Copy service key
-      run: echo ${{ secrets.GCP_SERVICE_KEY }} > key.json
+      run: echo ${{ secrets.GCP_SERVICE_KEY }} > ./key.json && ls
 
     - name: Build and Push Container
       run: |-
