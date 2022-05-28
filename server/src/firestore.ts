@@ -9,7 +9,6 @@ const dbPort = process.env.DB_PORT;
 
 if (process.env.ENVIRONMENT === 'prod') {
   admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
     databaseURL:
         "https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app",
     storageBucket: "gs://ecoocean.appspot.com",
