@@ -8,7 +8,13 @@ const dbHost = process.env.DB_HOST;
 const dbPort = process.env.DB_PORT;
 
 if (process.env.ENVIRONMENT === 'prod') {
-  admin.initializeApp();
+  console.log(`google config ${process.env.GOOGLE_APPLICATION_CREDENTIALS}`)
+  admin.initializeApp({
+    projectId: "ecoocean",
+    databaseURL:
+        "https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app",
+    storageBucket: "gs://ecoocean.appspot.com",
+  });
 } else {
   admin.initializeApp({
     projectId: "ecoocean",
