@@ -4,6 +4,8 @@ export const GET_GVULOTS = gql`
   query getMunicipalsWithScore ($filterReports: PollutionReportFilter) {
     getMunicipalsWithScore (filterReports: $filterReports) { 
         id
+        score
+        reportCount
         muniHeb
         geom {
               geojson

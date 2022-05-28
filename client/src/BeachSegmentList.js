@@ -6,19 +6,16 @@ import ListItem from "@mui/material/ListItem";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import List from "@mui/material/List";
+import { redGreenScaleBoxes } from './chromaColors';
 
-function perc2color(perc) {
-    var r, g, b = 0;
-    if(perc < 50) {
-        r = 255;
-        g = Math.round(5.1 * perc);
+function calculateSeverity(score) {
+    if(score === 0){
+        return 'success'
     }
-    else {
-        g = 255;
-        r = Math.round(510 - 5.10 * perc);
+    if (score > 0 && score < 20){
+        return 'warning';
     }
-    var h = r * 0x10000 + g * 0x100 + b * 0x1;
-    return '#' + ('000000' + h.toString(16)).slice(-6);
+    return 'error';
 }
 
 export default function BeachSegmentList() {
@@ -30,7 +27,7 @@ export default function BeachSegmentList() {
 
                         return <Collapse key={`${i}${j}`}>
                             <ListItem divider sx={{display: "inherit"}}>
-                                <Alert severity={"error"} sx={{backgroundColor: perc2color(100 - (sens.score * 5) )}}>
+                                <Alert severity={calculateSeverity(sens.score)} sx={{backgroundColor: redGreenScaleBoxes(sens.score).hex()}}>
                                     <AlertTitle>{gvul.muniHeb} - area id: {sens.id}</AlertTitle>
                                     information regarding pollution status <strong>check it out!</strong>
                                 </Alert>

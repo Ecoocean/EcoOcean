@@ -187,6 +187,8 @@ export const PostgresPlugin = makeExtendSchemaPlugin(build => {
             }
 
             data.gvulots?.nodes.forEach((gvul) => {
+              gvul.score = 0;
+              gvul.reportCount = gvul.pollutionReportsByGvulId?.nodes.length;
               gvul.gvulSensIntersectsByGvulId?.nodes.forEach(({ sens }) => {
                 sens.score = 0;
                 gvul.pollutionReportsByGvulId?.nodes.forEach((report) => {
@@ -196,7 +198,14 @@ export const PostgresPlugin = makeExtendSchemaPlugin(build => {
                       }
                     })
                 });
+                gvul.score += sens.score
               });
+              gvul.gvulSensIntersectsByGvulId?.nodes.sort((sensA, sensB) => {
+                if (sensA.sens.score < sensB.sens.score) {
+                  return 1
+                }
+                return -1;
+              })
             });
 
             data.gvulots.nodes = data.gvulots?.nodes.map((gvul) => {
@@ -205,7 +214,13 @@ export const PostgresPlugin = makeExtendSchemaPlugin(build => {
                 gvulSensIntersectsByGvulId: gvul.gvulSensIntersectsByGvulId.nodes
               }
             })
-            return data.gvulots.nodes;
+            data.gvulots.nodes.sort((a,b) => {
+              if (a.score < b.score) {
+                return 1
+              }
+              return -1;
+            } );
+            return data.gvulots.nodes
           },
           allUsers: async (parent, args, context, info) => {
             let {users} = await auth.listUsers();

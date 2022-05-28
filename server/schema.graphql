@@ -834,7 +834,6 @@ type Gvulot implements Node {
     """
     filter: GvulSensIntersectFilter
   ): GvulSensIntersectsConnection!
-  score: Int
 }
 
 """A location in a connection that can be used for resuming pagination."""
@@ -1899,6 +1898,8 @@ input UserFilter {
 
 type GvulExtended {
   id: Int
+  reportCount: Int
+  score: Float
   muniHeb: String
   geom: Geom
   gvulSensIntersectsByGvulId: [GvulIntersectExtended]
@@ -1909,6 +1910,7 @@ type Geom {
 }
 
 type GvulIntersectExtended {
+  score: Float
   sens: PubSenExtended
 }
 

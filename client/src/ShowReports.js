@@ -3,7 +3,7 @@ import L from 'leaflet';
 import { Marker } from 'react-leaflet'
 import {  Tooltip, useMapEvents, useMap } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-markercluster";
-import { GET_LOCATION_REPORTS } from "./GraphQL/Queries";
+import {GET_GVULOTS, GET_LOCATION_REPORTS} from "./GraphQL/Queries";
 import Typography from "@mui/material/Typography";
 import { PollutionReportModal } from "./modals/PollutionReportModal";
 import {  useLazyQuery, useReactiveVar, useSubscription } from "@apollo/client";
@@ -18,7 +18,7 @@ import {
     loadingPollutionReportsVar,
     selectedReportVar,
     selectedMapReportVar,
-    sideBarCollapsedVar, dateStartFilterVar, dateEndFilterVar
+    sideBarCollapsedVar, dateStartFilterVar, dateEndFilterVar, loadingVar, gvulotVar, sensVar
 } from "./cache";
 
 
@@ -51,6 +51,21 @@ function ShowReports() {
     const [getLocationReports, { data: dataLocal }] = useLazyQuery(GET_LOCATION_REPORTS, {
         fetchPolicy: "network-only",
     });
+    const [getGvulot, { data: dataGvulot }] = useLazyQuery(GET_GVULOTS, {
+        fetchPolicy: "network-only",
+    });
+
+    useEffect(() => {
+        if (dataGvulot) {
+            gvulotVar(dataGvulot.getMunicipalsWithScore);
+            const sens = dataGvulot.getMunicipalsWithScore.reduce((accu, curr) => {
+                const sensMapped = curr.gvulSensIntersectsByGvulId.map(({sens}) => sens);
+                return [...accu, ...sensMapped]
+            }, []);
+
+            sensVar(sens);
+        }
+    }, [dataGvulot]);
 
 
     useEffect( () => {
@@ -91,6 +106,16 @@ function ShowReports() {
 
 
     const IncomingReport = async ({ subscriptionData: { data } }) => {
+        getGvulot({
+            variables: {
+                filterReports: {
+                    and: [
+                        {createdAt: {greaterThan: dateStartFilterVar().toISOString().split('T')[0]}},
+                        {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}}
+                    ]
+                }
+            }
+        })
         if (
             data.listen.relatedNode.geom.y > bounds.getSouthEast().lat &&
             data.listen.relatedNode.geom.y < bounds.getNorthWest().lat &&
