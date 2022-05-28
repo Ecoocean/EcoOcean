@@ -19,7 +19,7 @@ if (process.env.ENVIRONMENT === 'prod') {
     projectId: "ecoocean",
     databaseURL:
         "https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app",
-    storageBucket: "gs://ecoocean.appspot.com",
+    storageBucket: "http:localhost:9199",
   });
 }
 

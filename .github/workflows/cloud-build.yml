@@ -27,7 +27,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@v0.2.0
       with:
         project_id: ecoocean
-        service_account_key: ${{ secrets.RUN_SA_KEY }}
+        service_account_key: ${{ secrets.GCP_SERVICE_KEY }}
 
     - name: Authorize Docker push
       run: gcloud auth configure-docker
