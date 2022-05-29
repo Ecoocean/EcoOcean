@@ -59,7 +59,8 @@ export default function FiltersTab() {
                             filter: {
                                 and: [
                                     {createdAt: {greaterThan: dateStartFilterVar().toISOString().split('T')[0]}},
-                                    {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}}
+                                    {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}},
+                                    {isRelevant: {equalTo: 'true'}}
                                 ]
                             }
                     }});
@@ -68,7 +69,8 @@ export default function FiltersTab() {
                             filterReports: {
                                 and: [
                                     {createdAt: {greaterThan: dateStartFilterVar().toISOString().split('T')[0]}},
-                                    {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}}
+                                    {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}},
+                                    {isRelevant: {equalTo: 'true'}}
                                 ]
                             }
                         }
