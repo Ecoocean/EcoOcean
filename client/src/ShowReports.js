@@ -97,7 +97,7 @@ function ShowReports() {
                 and: [
                     {createdAt: {greaterThan: dateStartFilterVar().toISOString().split('T')[0]}},
                     {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}},
-                    {isRelevant: {equalTo: 'true'}}
+                    {isRelevant: {equalTo: true}}
                 ]
             }
         };
