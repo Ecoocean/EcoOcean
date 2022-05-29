@@ -8,10 +8,12 @@ const dbHost = process.env.DB_HOST;
 const dbPort = process.env.DB_PORT;
 
 if (process.env.ENVIRONMENT === 'prod') {
-  const serviceAccount = require("./key.json");
-  console.log(`google config ${serviceAccount}`)
+  const response = await fetch('./key.json');
+  console.log(response);
+  const json = await response.json();
+  console.log(`google config ${json}`)
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert(json),
     databaseURL:
         "https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app",
     storageBucket: "gs://ecoocean.appspot.com",
