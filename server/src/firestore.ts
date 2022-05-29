@@ -12,7 +12,6 @@ if (process.env.ENVIRONMENT === 'prod') {
   const buff = new Buffer(serviceKeyBase, 'base64');
   const text = buff.toString();
   const json = JSON.parse(text);
-  console.log(`google config ${json}`)
   admin.initializeApp({
     credential: admin.credential.cert(json),
     databaseURL:
