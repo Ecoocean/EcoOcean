@@ -7,25 +7,27 @@ const dbName = process.env.DB_NAME;
 const dbHost = process.env.DB_HOST;
 const dbPort = process.env.DB_PORT;
 
-if (process.env.ENVIRONMENT === 'prod') {
-  const response = await fetch('./key.json');
-  console.log(response);
-  const json = await response.json();
-  console.log(`google config ${json}`)
-  admin.initializeApp({
-    credential: admin.credential.cert(json),
-    databaseURL:
-        "https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app",
-    storageBucket: "gs://ecoocean.appspot.com",
-  });
-} else {
-  admin.initializeApp({
-    projectId: "ecoocean",
-    databaseURL:
-        "https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app",
-    storageBucket: "http:localhost:9199",
-  });
-}
+(async () => {
+  if (process.env.ENVIRONMENT === 'prod') {
+    const response = await fetch('./key.json');
+    console.log(response);
+    const json = await response.json();
+    console.log(`google config ${json}`)
+    admin.initializeApp({
+      credential: admin.credential.cert(json),
+      databaseURL:
+          "https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app",
+      storageBucket: "gs://ecoocean.appspot.com",
+    });
+  } else {
+    admin.initializeApp({
+      projectId: "ecoocean",
+      databaseURL:
+          "https://ecoocean-default-rtdb.europe-west1.firebasedatabase.app",
+      storageBucket: "http:localhost:9199",
+    });
+  }
+})();
 
 
 export const auth = admin.auth();
