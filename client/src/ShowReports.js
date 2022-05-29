@@ -112,7 +112,8 @@ function ShowReports() {
                 filterReports: {
                     and: [
                         {createdAt: {greaterThan: dateStartFilterVar().toISOString().split('T')[0]}},
-                        {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}}
+                        {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}},
+                        {isRelevant: {equalTo: true}}
                     ]
                 }
             }
@@ -135,7 +136,17 @@ function ShowReports() {
     };
 
     const IrrelevantReport = async({ subscriptionData: { data } }) => {
-
+        getGvulot({
+            variables: {
+                filterReports: {
+                    and: [
+                        {createdAt: {greaterThan: dateStartFilterVar().toISOString().split('T')[0]}},
+                        {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}},
+                        {isRelevant: {equalTo: true}}
+                    ]
+                }
+            }
+        })
         if (
             data.listen.relatedNode.geom.y > bounds.getSouthEast().lat &&
             data.listen.relatedNode.geom.y  < bounds.getNorthWest().lat &&
@@ -197,17 +208,20 @@ function ShowReports() {
     const handleClose = () => {
         setOpenInfoWindow(false);
     };
-
+    let timer = null;
     useMapEvents({
+
         zoomanim: () => {
-            new Promise(() => {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
                 onMapChange()
-            })
+            }, 1250)
         },
         dragend: () => {
-            new Promise(() => {
-                onMapChange();
-            })
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                onMapChange()
+            }, 1250)
         }
     });
 
