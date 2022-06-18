@@ -17,7 +17,6 @@ const Map = props => {
             maxZoom={19}
             whenCreated={props.setMap}>
              {props.children}
-            <Layers/>
          </MapContainer>
       )
    }, [])

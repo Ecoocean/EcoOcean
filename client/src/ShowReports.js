@@ -18,22 +18,12 @@ import {
     loadingPollutionReportsVar,
     selectedReportVar,
     selectedMapReportVar,
-    sideBarCollapsedVar, dateStartFilterVar, dateEndFilterVar, loadingVar, gvulotVar, sensVar
+    sideBarCollapsedVar, dateStartFilterVar, dateEndFilterVar, gvulotVar, sensVar
 } from "./cache";
+import generateLayers from "./Layers";
 
 
 // Create marker icon according to the official leaflet documentation
-const yellowMarker = L.icon({
-    iconUrl: yellowFilledMarker,
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-});
-
-const greenMarker = L.icon({
-    iconUrl: greenFilledMarker,
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-});
 
 const redMarker = L.icon({
     iconUrl: redFilledMarker,
@@ -107,7 +97,7 @@ function ShowReports() {
 
 
     const IncomingReport = async ({ subscriptionData: { data } }) => {
-        getGvulot({
+        await getGvulot({
             variables: {
                 filterReports: {
                     and: [
@@ -117,7 +107,8 @@ function ShowReports() {
                     ]
                 }
             }
-        })
+        });
+        generateLayers();
         if (
             data.listen.relatedNode.geom.y > bounds.getSouthEast().lat &&
             data.listen.relatedNode.geom.y < bounds.getNorthWest().lat &&
@@ -136,7 +127,7 @@ function ShowReports() {
     };
 
     const IrrelevantReport = async({ subscriptionData: { data } }) => {
-        getGvulot({
+        await getGvulot({
             variables: {
                 filterReports: {
                     and: [
@@ -146,7 +137,8 @@ function ShowReports() {
                     ]
                 }
             }
-        })
+        });
+        generateLayers();
         if (
             data.listen.relatedNode.geom.y > bounds.getSouthEast().lat &&
             data.listen.relatedNode.geom.y  < bounds.getNorthWest().lat &&

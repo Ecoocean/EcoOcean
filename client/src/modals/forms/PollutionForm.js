@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import L from 'leaflet';
-import { useMutation, useReactiveVar} from "@apollo/client";
+import {useLazyQuery, useMutation, useReactiveVar} from "@apollo/client";
 import {CREATE_POLLUTION_REPORT} from "../../GraphQL/Mutations";
 import {setSnackBar} from "../../SnackBarUtils"
 import ImageUploaderComp from "../../ImageUploaderComp";
@@ -12,6 +12,7 @@ import {
   gvulotVar,
   locationMapVar,
   mainMapVar,
+    loadingVar,
   reportPolyLayersVar,
   selectedBeachSegmentVar
 } from "../../cache";
@@ -25,6 +26,9 @@ import {FormHelperText, InputLabel, Select} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import * as turf from '@turf/turf';
 import PolygonReportCard from "../../PolygonReportCard";
+import {GET_GVULOTS} from "../../GraphQL/Queries";
+import generateLayers from "../../Layers";
+
 
 let beachSegmentsLayer = null;
 let isBeachSegmentSelected = false;
@@ -53,6 +57,7 @@ const PollutionForm = ({ openTab }) => {
   const [gvulId, setGvulId] = useState(null);
   const [sensId, setSensId] = useState(null);
   const [emptyMunicipal, setEmptyMunicipal] = useState(false);
+
 
   const handlePollutionReportPickerClose = (value) => {
     selectedPolygon.bindPopup(value).openPopup();
@@ -158,6 +163,7 @@ const PollutionForm = ({ openTab }) => {
       return;
     }
     try {
+
       if (
         imageUploaderRef.current
       ) {
@@ -212,6 +218,8 @@ const PollutionForm = ({ openTab }) => {
       }
     } catch (err) {
       setSnackBar(err, 'error');
+    } finally {
+      loadingVar(false);
     }
   };
 
@@ -320,9 +328,6 @@ const PollutionForm = ({ openTab }) => {
                 </Select>
               {emptyMunicipal && <FormHelperText style={{color: 'red'}}>This is required!</FormHelperText>}
             </FormControl>
-            {Array.from(polygonReports.values()).map((poly) => {
-              return <PolygonReportCard poly={poly} />
-            })}
               <ImageUploaderComp ref={imageUploaderRef}/>
               <LoadingButton
                   onClick={AddPollutionReport}
