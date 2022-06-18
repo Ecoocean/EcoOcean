@@ -24,17 +24,6 @@ import generateLayers from "./Layers";
 
 
 // Create marker icon according to the official leaflet documentation
-const yellowMarker = L.icon({
-    iconUrl: yellowFilledMarker,
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-});
-
-const greenMarker = L.icon({
-    iconUrl: greenFilledMarker,
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-});
 
 const redMarker = L.icon({
     iconUrl: redFilledMarker,

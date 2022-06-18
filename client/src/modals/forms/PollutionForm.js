@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import L from 'leaflet';
-import { useMutation, useReactiveVar} from "@apollo/client";
+import {useLazyQuery, useMutation, useReactiveVar} from "@apollo/client";
 import {CREATE_POLLUTION_REPORT} from "../../GraphQL/Mutations";
 import {setSnackBar} from "../../SnackBarUtils"
 import ImageUploaderComp from "../../ImageUploaderComp";
@@ -12,6 +12,7 @@ import {
   gvulotVar,
   locationMapVar,
   mainMapVar,
+    loadingVar,
   reportPolyLayersVar,
   selectedBeachSegmentVar
 } from "../../cache";
@@ -56,6 +57,7 @@ const PollutionForm = ({ openTab }) => {
   const [gvulId, setGvulId] = useState(null);
   const [sensId, setSensId] = useState(null);
   const [emptyMunicipal, setEmptyMunicipal] = useState(false);
+
 
   const handlePollutionReportPickerClose = (value) => {
     selectedPolygon.bindPopup(value).openPopup();
@@ -212,18 +214,6 @@ const PollutionForm = ({ openTab }) => {
               }
             }
           });
-          loadingVar(true);
-          await getGvulot({
-            variables: {
-              filterReports: {
-                and: [
-                  {createdAt: {greaterThan: dateStartFilterVar().toISOString().split('T')[0]}},
-                  {createdAt: {lessThan: dateEndFilterVar().toISOString().split('T')[0]}}
-                ]
-              }
-            }
-          });
-          generateLayers();
         }
       }
     } catch (err) {
