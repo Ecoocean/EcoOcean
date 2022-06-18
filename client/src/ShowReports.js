@@ -18,8 +18,9 @@ import {
     loadingPollutionReportsVar,
     selectedReportVar,
     selectedMapReportVar,
-    sideBarCollapsedVar, dateStartFilterVar, dateEndFilterVar, loadingVar, gvulotVar, sensVar
+    sideBarCollapsedVar, dateStartFilterVar, dateEndFilterVar, gvulotVar, sensVar
 } from "./cache";
+import generateLayers from "./Layers";
 
 
 // Create marker icon according to the official leaflet documentation
@@ -107,7 +108,7 @@ function ShowReports() {
 
 
     const IncomingReport = async ({ subscriptionData: { data } }) => {
-        getGvulot({
+        await getGvulot({
             variables: {
                 filterReports: {
                     and: [
@@ -117,7 +118,8 @@ function ShowReports() {
                     ]
                 }
             }
-        })
+        });
+        generateLayers();
         if (
             data.listen.relatedNode.geom.y > bounds.getSouthEast().lat &&
             data.listen.relatedNode.geom.y < bounds.getNorthWest().lat &&
@@ -136,7 +138,7 @@ function ShowReports() {
     };
 
     const IrrelevantReport = async({ subscriptionData: { data } }) => {
-        getGvulot({
+        await getGvulot({
             variables: {
                 filterReports: {
                     and: [
@@ -146,7 +148,8 @@ function ShowReports() {
                     ]
                 }
             }
-        })
+        });
+        generateLayers();
         if (
             data.listen.relatedNode.geom.y > bounds.getSouthEast().lat &&
             data.listen.relatedNode.geom.y  < bounds.getNorthWest().lat &&

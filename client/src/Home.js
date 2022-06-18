@@ -6,23 +6,25 @@ import L from 'leaflet';
 import ShowReports from "./ShowReports";
 import { Helmet } from 'react-helmet';
 import 'leaflet-easyprint';
-import {useQuery, useReactiveVar} from "@apollo/client";
+import {useLazyQuery, useReactiveVar} from "@apollo/client";
 import {
     dateEndFilterVar,
     dateStartFilterVar,
     gvulotVar,
     loadingVar,
     mainMapVar,
+    clearMapVar,
     sensVar
 } from "./cache";
 import {GET_GVULOTS} from "./GraphQL/Queries";
 import {Backdrop, CircularProgress, Grid} from "@mui/material";
+import generateLayers from './Layers';
 
 
 export default function Home() {
     const loadingApplication = useReactiveVar(loadingVar);
     const map = useReactiveVar(mainMapVar);
-    const { data: dataGvulot } = useQuery(GET_GVULOTS, {
+    const [getGvulot, { data: dataGvulot }] = useLazyQuery(GET_GVULOTS, {
         fetchPolicy: "network-only",
         variables: {
             filterReports: {
@@ -49,7 +51,7 @@ export default function Home() {
     }, [dataGvulot]);
 
 
-    const mapReady = (map) =>{
+    const mapReady = async (map) =>{
         loadingVar(false);
         mainMapVar(map);
         map.addControl(L.control.zoom({ position: 'bottomright' }));
@@ -63,6 +65,10 @@ export default function Home() {
             position: 'bottomright',
             sizeModes: ['A4Portrait', 'A4Landscape']
         }).addTo(map);
+
+        await getGvulot();
+
+        generateLayers();
     }
 
     return (

@@ -28,6 +28,7 @@ import FormControl from "@mui/material/FormControl";
 import * as turf from '@turf/turf';
 import PolygonReportCard from "../../PolygonReportCard";
 import {GET_GVULOTS} from "../../GraphQL/Queries";
+import generateLayers from "../../Layers";
 
 let beachSegmentsLayer = null;
 let isBeachSegmentSelected = false;
@@ -178,6 +179,7 @@ const PollutionForm = ({ openTab }) => {
       return;
     }
     try {
+
       if (
         imageUploaderRef.current
       ) {
@@ -229,7 +231,7 @@ const PollutionForm = ({ openTab }) => {
             }
           });
           loadingVar(true);
-          getGvulot({
+          await getGvulot({
             variables: {
               filterReports: {
                 and: [
@@ -238,11 +240,14 @@ const PollutionForm = ({ openTab }) => {
                 ]
               }
             }
-          })
+          });
+          generateLayers();
         }
       }
     } catch (err) {
       setSnackBar(err, 'error');
+    } finally {
+      loadingVar(false);
     }
   };
 
@@ -351,9 +356,6 @@ const PollutionForm = ({ openTab }) => {
                 </Select>
               {emptyMunicipal && <FormHelperText style={{color: 'red'}}>This is required!</FormHelperText>}
             </FormControl>
-            {Array.from(polygonReports.values()).map((poly) => {
-              return <PolygonReportCard poly={poly} />
-            })}
               <ImageUploaderComp ref={imageUploaderRef}/>
               <LoadingButton
                   onClick={AddPollutionReport}
