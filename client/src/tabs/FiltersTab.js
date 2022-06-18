@@ -9,7 +9,7 @@ import {
     gvulotVar,
     sensVar, loadingVar
 } from "../cache";
-import {useLazyQuery, useReactiveVar} from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import {GET_GVULOTS, GET_LOCATION_REPORTS} from "../GraphQL/Queries";
 import {useEffect} from "react";
 export default function FiltersTab() {
