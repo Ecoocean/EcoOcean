@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import L from 'leaflet';
 import MapSmall from "./MapSmall";
 import 'leaflet.locatecontrol';
@@ -10,23 +10,27 @@ import { locationMapVar, sideBarOpenTabVar } from "./cache";
 import './MyLocationMap.scss';
 
 
-
+let lc;
 export default function MyLocationMap({onLocationFound}) {
     const mapInstance = useReactiveVar(locationMapVar);
-    const [lc, setLc] = useState(null);
-    const [loaded, setLoaded] = useState(false);
     const openTab = useReactiveVar(sideBarOpenTabVar);
+
+
+    useEffect(() => {
+        return () => {
+            lc?.stop();
+        }
+    }, [])
 
 
     const mapReady = (map) =>{
         L.PM.setOptIn(true);
         map.addControl(L.control.zoom({ position: 'bottomright' }));
 
-        const lc = L.control.locate({
+        lc = L.control.locate({
             position: 'topright',
             locateOptions: {
                 enableHighAccuracy: true}}).addTo(map);
-        setLc(lc);
 
         map.on('locationfound', function (e) {
             onLocationFound(e.latlng.lng, e.latlng.lat);
@@ -67,21 +71,13 @@ export default function MyLocationMap({onLocationFound}) {
         map.addControl(searchLayer);
 
         locationMapVar(map);
+        lc.start();
     }
     if(mapInstance) {
         mapInstance._onResize();
     }
 
-    if (openTab === 'add-report' && mapInstance && !loaded){
-        setLoaded(true);
-        setTimeout(() => {
-
-            // request location update and set location
-            lc.start();
-        }, 800);
-    }
-
     return (
-        <MapSmall setMap={mapReady} />
+        openTab === 'add-report' && <MapSmall setMap={mapReady} />
     )
 }
